@@ -8,8 +8,6 @@
 	mc:Ignorable="d">
 	<UserControl.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
     <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" Name="MainGrid">

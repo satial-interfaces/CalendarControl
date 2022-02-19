@@ -16,13 +16,14 @@ public class ColorConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is Status s)
+        if (value is not Status s) return Colors.Transparent;
+        switch (s)
         {
-            if (s == Status.Information)
+            case Status.Information:
                 return Colors.Green;
-            if (s == Status.Warning)
+            case Status.Warning:
                 return Colors.Orange;
-            if (s == Status.Error)
+            case Status.Error:
                 return Colors.Red;
         }
 
@@ -42,7 +43,7 @@ public enum Status
     Error
 }
 
-class CalendarControlItem
+internal class CalendarControlItem
 {
     public DateTime Begin { get; set; }
     public DateTime End { get; set; }
@@ -119,7 +120,7 @@ public partial class MainWindow : Window
             var begin = GetRandom(-168 * heads * 4, 168 * tails * 4) / 4.0d;
             var length = GetRandom(1, 8);
 
-            var item = new CalendarControlItem()
+            var item = new CalendarControlItem
             {
                 Begin = beginOfWeek.AddHours(begin),
                 End = beginOfWeek.AddHours(begin + length),
@@ -130,9 +131,9 @@ public partial class MainWindow : Window
         }
         calendarControl.Items = list;
         var newList = new List<string>();
-        for (var i = 0; i < list.Count; i++)
+        foreach (var i in list)
         {
-            newList.Add(list[i].Text + ": " + list[i].Begin.ToShortTimeString() + " - " + list[i].End.ToShortTimeString());
+            newList.Add(i.Text + ": " + i.Begin.ToShortTimeString() + " - " + i.End.ToShortTimeString());
         }
         textBox.Text = StringsToString(newList, Environment.NewLine);
     }

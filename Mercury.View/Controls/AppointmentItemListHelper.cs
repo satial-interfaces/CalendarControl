@@ -8,7 +8,7 @@ internal static class AppointmentItemListHelper
     /// Applies the indentation of the appointment list (based on avoiding overlap)
     /// </summary>
     /// <param name="list">Appointment list to process</param>
-    public static void ApplyIdentation(IList<AppointmentItem> list)
+    public static void ApplyIndentation(IEnumerable<AppointmentItem> list)
     {
         var listOfLists = new List<List<AppointmentItem>>();
 
@@ -43,7 +43,7 @@ internal static class AppointmentItemListHelper
     /// <param name="listOfLists">List with indentations</param>
     /// <param name="item">Item to check</param>
     /// <returns>The index or -1 otherwise</returns>
-    static int GetIndent(List<List<AppointmentItem>> listOfLists, AppointmentItem item)
+    static int GetIndent(IReadOnlyList<List<AppointmentItem>> listOfLists, AppointmentItem item)
     {
        for (var i = 0; i < listOfLists.Count; i++)
        {

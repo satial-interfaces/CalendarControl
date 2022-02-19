@@ -13,7 +13,7 @@ public static class AvaloniaObjectHelper
     /// Get an observable value
     /// </summary>
     /// <param name="target">Target to get value from</param>
-    /// <param name="binding">Specific bidning</param>
+    /// <param name="binding">Specific binding</param>
     /// <param name="source">Source value</param>
     /// <param name="defaultValue">Default value to use if not fetched</param>
     /// <typeparam name="T">Type of the value</typeparam>
@@ -23,8 +23,8 @@ public static class AvaloniaObjectHelper
         if (binding is not Binding bind) return defaultValue;
         bind.Source = source;
         var instancedBinding = bind.Initiate(target, null);
-        if (instancedBinding == null || instancedBinding.Observable == null) return defaultValue;
-        T result = defaultValue;
+        if (instancedBinding?.Observable == null) return defaultValue;
+        var result = defaultValue;
 
         instancedBinding.Observable.Subscribe(x =>
         {

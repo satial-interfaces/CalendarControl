@@ -8,28 +8,28 @@ namespace Mercury.View;
 /// </summary>
 public abstract class CalendarControlItemTemplate : AvaloniaObject
 {
-    [AssignBinding]
     /// <summary>
     /// Binding provided by the item defintion
     /// </summary>
-    public virtual IBinding? Binding { get; set; }
+    [AssignBinding]
+    public IBinding? Binding { get; set; }
 }
 
 /// <summary>
-/// This class represents the Begin item defintion
+/// This class represents the Begin item definition
 /// </summary>
 public class BeginItem : CalendarControlItemTemplate { }
 
 /// <summary>
-/// This class represents the End item defintion
+/// This class represents the End item definition
 /// </summary>
 public class EndItem : CalendarControlItemTemplate { }
 
 /// <summary>
-/// This class represents the Text item defintion
+/// This class represents the Text item definition
 /// </summary>
 public class TextItem : CalendarControlItemTemplate { }
 /// <summary>
-/// This class represents the Text item defintion
+/// This class represents the Text item definition
 /// </summary>
 public class ColorItem : CalendarControlItemTemplate { }

@@ -45,12 +45,10 @@ internal static class DateTimeHelper
 
         foreach (var cal in CultureInfo.CurrentCulture.OptionalCalendars)
         {
-            if (cal is GregorianCalendar)
-            {
-                var dtfi = new CultureInfo(CultureInfo.CurrentCulture.Name).DateTimeFormat;
-                dtfi.Calendar = cal;
-                return dtfi;
-            }
+            if (cal is not GregorianCalendar) continue;
+            var dtfi = new CultureInfo(CultureInfo.CurrentCulture.Name).DateTimeFormat;
+            dtfi.Calendar = cal;
+            return dtfi;
         }
 
         // if there are no GregorianCalendars in the OptionalCalendars

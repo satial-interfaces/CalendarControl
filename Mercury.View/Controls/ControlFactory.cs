@@ -10,7 +10,7 @@ namespace Mercury.View;
 public static class ControlFactory
 {
     /// <summary>
-    /// Created a coloumn
+    /// Creates a colomn
     /// </summary>
     /// <returns>Created column</returns>
    public static Grid CreateColumn() => new();
@@ -24,6 +24,7 @@ public static class ControlFactory
     /// <summary>
     /// Creates an appointment
     /// </summary>
+    /// <param name="begin">Begin of the appointment</param>
     /// <param name="text">Text to add to appointment</param>
     /// <param name="color">Color to add to appointment</param>
     /// <param name="index">Index to set to appointment</param>

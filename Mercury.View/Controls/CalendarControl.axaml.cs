@@ -18,10 +18,10 @@ namespace Mercury.View;
 /// <summary>
 /// This class represents a calendar control (week view)
 /// </summary>
-public partial class CalendarControl : UserControl
+public class CalendarControl : UserControl
 {
     /// <summary>First day of the week property</summary>
-    public static readonly StyledProperty<DayOfWeek> FirstDayOfWeekProperty = AvaloniaProperty.Register<CalendarControl, DayOfWeek>(nameof(FirstDayOfWeek), defaultValue: DateTimeHelper.GetCurrentDateFormat().FirstDayOfWeek);
+    public static readonly StyledProperty<DayOfWeek> FirstDayOfWeekProperty = AvaloniaProperty.Register<CalendarControl, DayOfWeek>(nameof(FirstDayOfWeek), DateTimeHelper.GetCurrentDateFormat().FirstDayOfWeek);
     /// <summary>Items property</summary>
     public static readonly DirectProperty<CalendarControl, IEnumerable> ItemsProperty = AvaloniaProperty.RegisterDirect<CalendarControl, IEnumerable>(nameof(Items), o => o.Items, (o, v) => o.Items = v);
     /// <summary>Current week property</summary>
@@ -66,7 +66,7 @@ public partial class CalendarControl : UserControl
         }
 
         int index;
-        if (e.Pointer?.Captured is AppointmentControl appointment)
+        if (e.Pointer.Captured is AppointmentControl appointment)
         {
             appointment.IsSelected = true;
             ClearSelection(appointment);
@@ -86,7 +86,7 @@ public partial class CalendarControl : UserControl
     }
 
     /// <summary>
-    /// Clear the selection bit for the other appointsments.
+    /// Clear the selection bit for the other appointments.
     /// </summary>
     /// <param name="skip">Appointment to skip</param>
     void ClearSelection(AppointmentControl? skip)
@@ -104,7 +104,7 @@ public partial class CalendarControl : UserControl
     /// Items changed event
     /// </summary>
     /// <param name="e">Argument for the event</param>
-    protected virtual void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
+    protected void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
     {
         ClearItemsGrid();
         if (e.NewValue is not IEnumerable items) return;
@@ -115,10 +115,10 @@ public partial class CalendarControl : UserControl
     /// Current week changed event
     /// </summary>
     /// <param name="e">Argument for the event</param>
-    protected virtual void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
+    protected void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
     {
-        if (e.NewValue is not DateTime currentWeek) return;
-        CreateWeek(currentWeek);
+        if (e.NewValue is not DateTime dateTime) return;
+        CreateWeek(dateTime);
         UpdateItems(Items);
     }
 
@@ -131,24 +131,22 @@ public partial class CalendarControl : UserControl
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 
         var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
-        var endWeek = currentWeek.GetEndWeek(FirstDayOfWeek);
 
         var weekList = Convert(items).Where(x => x.IsInCurrentWeek(beginWeek)).OrderBy(x => x.Begin);
         for (var i = 0; i < daysPerWeek; i++)
         {
             if (itemsGrid.Children[i] is not Grid dayColumn) continue;
 
-            var today = beginWeek.AddDays(i);
             var todayList = weekList.Where(x => x.IsInDay(beginWeek.AddDays(i))).ToList();
-            AppointmentItemListHelper.ApplyIdentation(todayList);
+            AppointmentItemListHelper.ApplyIndentation(todayList);
             var rowDefinitions = new RowDefinitions();
 
             var previous = double.NaN;
             var dayControls = new List<IControl?>();
-            int j = 0;
+            var j = 0;
             while (j < todayList.Count)
             {
-                var (begin, length) = todayList[j].GetFractionOfDay();
+                var (begin, _) = todayList[j].GetFractionOfDay();
 
                 var emptyLength = begin - (!double.IsNaN(previous) ? previous : 0.0d);
                 if (emptyLength > 0.0d)
@@ -165,7 +163,7 @@ public partial class CalendarControl : UserControl
             }
 
             // Tail
-            if (double.IsNaN(previous) || (previous < 1.0d))
+            if (double.IsNaN(previous) || previous < 1.0d)
             {
                 dayControls.Add(null);
                 rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d), GridUnitType.Star));
@@ -198,22 +196,22 @@ public partial class CalendarControl : UserControl
         var count = AppointmentGroupHelper.GetGroupCount(list, beginIndex);
         var end = AppointmentGroupHelper.GetEnd(list, beginIndex, count);
         var length = end - begin;
-        var identationCount = AppointmentGroupHelper.GetIdentationCount(list, beginIndex, count);
-        var grid = ControlFactory.CreateGrid(identationCount);
+        var indentationCount = AppointmentGroupHelper.GetIndentationCount(list, beginIndex, count);
+        var grid = ControlFactory.CreateGrid(indentationCount);
 
-        for (var i = 0; i < identationCount; i++)
+        for (var i = 0; i < indentationCount; i++)
         {
             if (grid.Children[i] is not Grid g)
                 continue;
-            var identItems = AppointmentGroupHelper.GetIdentationItems(list, beginIndex, count, i);
+            var identItems = AppointmentGroupHelper.GetIndentationItems(list, beginIndex, count, i);
             if (identItems.Count == 0)
                 continue;
             var groupControls = new List<IControl?>();
             var rowDefinitions = new RowDefinitions();
             var previous = double.NaN;
-            for (var j = 0; j < identItems.Count; j++)
+            foreach (var indentItem in identItems)
             {
-                var (b, l) = identItems[j].GetFractionOfDay();
+                var (b, l) = indentItem.GetFractionOfDay();
                 // Within the group
                 b = (b - begin) / length;
                 l /= length;
@@ -225,12 +223,12 @@ public partial class CalendarControl : UserControl
                     rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
                 }
 
-                groupControls.Add(ControlFactory.CreateAppointment(identItems[j].Begin, identItems[j].Text, identItems[j].Color, identItems[j].Index));
+                groupControls.Add(ControlFactory.CreateAppointment(indentItem.Begin, indentItem.Text, indentItem.Color, indentItem.Index));
                 rowDefinitions.Add(new RowDefinition(l, GridUnitType.Star));
                 previous = b + l;
             }
             // Tail
-            if (double.IsNaN(previous) || (previous < 1.0d))
+            if (double.IsNaN(previous) || previous < 1.0d)
             {
                 groupControls.Add(null);
                 rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d), GridUnitType.Star));
@@ -352,15 +350,15 @@ public partial class CalendarControl : UserControl
     /// <summary>
     /// Creates the week UI for the given current week
     /// </summary>
-    /// <param name="currentWeek">The current week</param>
-    void CreateWeek(DateTime currentWeek)
+    /// <param name="week">The current week</param>
+    void CreateWeek(DateTime week)
     {
         CreateHourTexts();
-        CreateDayTexts(currentWeek);
+        CreateDayTexts(week);
 
         var weekGrid = this.FindControl<Grid>("WeekGrid");
         weekGrid.Children.Clear();
-        var columnDefintions = new ColumnDefinitions();
+        var columnDefinitions = new ColumnDefinitions();
         for (var i = 0; i < daysPerWeek; i++)
         {
             var dayColumn = ControlFactory.CreateColumn();
@@ -373,25 +371,25 @@ public partial class CalendarControl : UserControl
                 rowDefinitions.Add(new RowDefinition(1.0d, GridUnitType.Star));
             }
             dayColumn.RowDefinitions = rowDefinitions;
-            columnDefintions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
+            columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             weekGrid.Children.Add(dayColumn);
             Grid.SetColumn(dayColumn, i);
         }
-        weekGrid.ColumnDefinitions = columnDefintions;
+        weekGrid.ColumnDefinitions = columnDefinitions;
         ClearItemsGrid();
     }
 
     /// <summary>
     /// Creates the day texts
     /// </summary>
-    /// <param name="currentWeek">The current week</param>
-    void CreateDayTexts(DateTime currentWeek)
+    /// <param name="week">The current week</param>
+    void CreateDayTexts(DateTime week)
     {
         var dayGrid = this.FindControl<Grid>("DayGrid");
         dayGrid.Children.Clear();
         var columnDefintions = new ColumnDefinitions();
         var firstDayOfWeek = FirstDayOfWeek;
-        var beginWeek = currentWeek.GetBeginWeek(firstDayOfWeek);
+        var beginWeek = week.GetBeginWeek(firstDayOfWeek);
         for (var i = 0; i < daysPerWeek; i++)
         {
             var day = AddDay(firstDayOfWeek, i);
@@ -447,7 +445,7 @@ public partial class CalendarControl : UserControl
     public IEnumerable Items { get => _items; set => SetAndRaise(ItemsProperty, ref _items, value); }
     /// <summary>Current week property</summary>
 	public DateTime CurrentWeek { get => currentWeek; set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value); }
-    /// <summary>Item defintion</summary>
+    /// <summary>Item definition</summary>
     public ObservableCollection<CalendarControlItemTemplate> ItemTemplate { get; } = new();
     /// <summary>Selected index</summary>
 	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }

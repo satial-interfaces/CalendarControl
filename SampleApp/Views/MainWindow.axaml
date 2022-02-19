@@ -30,13 +30,13 @@
                 <l:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
             </l:CalendarControl.ItemTemplate>
         </l:CalendarControl>
-        <StackPanel Grid.Row="1" Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">
             <Button Click="RandomButtonClick">Random</Button>
             <Button Click="PreviousButtonClick">&lt; Previous</Button>
             <Button Click="ThisWeekButtonClick">This week</Button>
             <Button Click="NextButtonClick">Next &gt;</Button>
             <TextBlock Name="Info" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
-        <TextBox Name="TextBox" Grid.Column="1" Width="200"></TextBox>
+        <TextBox Name="TextBox" Grid.Row="0" Grid.Column="1" Width="200"></TextBox>
     </Grid>
 </Window>

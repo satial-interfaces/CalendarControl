@@ -1,11 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using FluentAvalonia.Styling;
 
 namespace SampleApp;
 
-public partial class App : Application
+public class App : Application
 {
     public override void Initialize()
     {

@@ -11,33 +11,34 @@ internal class AppointmentItem
     /// <summary>
     /// The begin
     /// </summary>
-    public DateTime Begin { get; set; }
+    public DateTime Begin { get; init; }
     /// <summary>
     /// The end
     /// </summary>
-    public DateTime End { get; set; }
+    public DateTime End { get; init; }
     /// <summary>
     /// The length
     /// </summary>
-    public TimeSpan Length { get { return End - Begin; } }
+    public TimeSpan Length => End - Begin;
+
     /// <summary>
     /// The text
     /// </summary>
-    public string Text { get; set; } = "";
+    public string Text { get; init; } = "";
     /// <summary>
     /// The color. Colors.Transparent means used the default
     /// </summary>
-    public Color Color { get; set; }
+    public Color Color { get; init; }
     /// <summary>
     /// The index in the list
     /// </summary>
-    public int Index { get; set; }
+    public int Index { get; init; }
     /// <summary>
     /// The indentation
     /// </summary>
     public int Indent
     {
-        get { return indent; }
+        get => indent;
         set { if (value >= 0) indent = value; }
     }
     /// <summary>
@@ -77,11 +78,11 @@ internal class AppointmentItem
     /// <summary>
     /// Checks if this instance has overlap with another instance
     /// </summary>
-    /// <param name="other">Other instance to chekc with</param>
+    /// <param name="other">Other instance to check with</param>
     /// <returns>True if it has and false otherwise</returns>
     public bool HasOverlap(AppointmentItem other)
     {
-        return (other.Begin >= Begin && other.Begin < End) || (Begin >= other.Begin && Begin < other.End);
+        return other.Begin >= Begin && other.Begin < End || Begin >= other.Begin && Begin < other.End;
     }
     /// <summary>
     /// Check if a given item is in the given week.

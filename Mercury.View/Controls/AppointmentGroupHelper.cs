@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Mercury.View;
@@ -22,12 +21,12 @@ internal static class AppointmentGroupHelper
         for (var i = beginIndex + 1; i < list.Count; i++)
         {
             var (b, l) = list[i].GetFractionOfDay();
+            if (list[i].Indent == 0 && b > end)
+                break;
+
             var e = b + l;
             if (e > end)
                 end = e;
-            if (list[i].Indent == 0 && b > e)
-                break;
-
             count++;
         }
         return count;
@@ -40,8 +39,8 @@ internal static class AppointmentGroupHelper
     /// <param name="beginIndex">Begin index of group</param>
     /// <param name="count">Count of group</param>
     /// <param name="ident">Indentation to get count for</param>
-    /// <returns>List with items matching the identation</returns>
-    public static IList<AppointmentItem> GetIdentationItems(IList<AppointmentItem> list, int beginIndex, int count, int ident)
+    /// <returns>List with items matching the indentation</returns>
+    public static IList<AppointmentItem> GetIndentationItems(IList<AppointmentItem> list, int beginIndex, int count, int ident)
     {
         var result = new List<AppointmentItem>();
         for (var i = beginIndex; i < beginIndex + count; i++)
@@ -81,7 +80,7 @@ internal static class AppointmentGroupHelper
     /// <param name="beginIndex">Begin index of group</param>
     /// <param name="count">Count of group</param>
     /// <returns>Indentation count</returns>
-    public static int GetIdentationCount(IList<AppointmentItem> list, int beginIndex, int count)
+    public static int GetIndentationCount(IList<AppointmentItem> list, int beginIndex, int count)
     {
         var result = 0;
         for (var i = beginIndex; i < beginIndex + count; i++)
