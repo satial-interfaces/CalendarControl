@@ -5,7 +5,7 @@ namespace Mercury.View;
 /// <summary>
 /// This class contains IEnumerable methods.
 /// </summary>
-internal static class IEnumerableHelper
+internal static class EnumerableHelper
 {
     /// <summary>
     /// Determines whether a sequence contains any elements.
