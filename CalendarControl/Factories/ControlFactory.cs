@@ -19,10 +19,10 @@ public static class ControlFactory
    public static Grid CreateColumn() => new();
 
     /// <summary>
-    /// Creates a weekend control
+    /// Creates a workday/weekend control
     /// </summary>
-    /// <returns>Created control or a default border otherwise</returns>
-    public static Control CreateWeekendControl(DayOfWeek dayOfWeek)
+    /// <returns>Created control</returns>
+    public static Control CreateDayState(DayOfWeek dayOfWeek)
     {
         var dayState = DateTimeHelper.GetDayState(CultureInfo.CurrentCulture, dayOfWeek);
         if (dayState == DateTimeHelper.DayState.WorkDay) return new Border();
