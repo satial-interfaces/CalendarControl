@@ -5,7 +5,7 @@ using Avalonia.Data;
 namespace Mercury.View;
 
 /// <summary>
-/// This class provides avalonia object functions
+/// This class provides Avalonia object functions
 /// </summary>
 public static class AvaloniaObjectHelper
 {

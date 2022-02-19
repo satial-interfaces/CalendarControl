@@ -17,17 +17,13 @@ public class ColorConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not Status s) return Colors.Transparent;
-        switch (s)
+        return s switch
         {
-            case Status.Information:
-                return Colors.Green;
-            case Status.Warning:
-                return Colors.Orange;
-            case Status.Error:
-                return Colors.Red;
-        }
-
-        return Colors.Transparent;
+            Status.Information => Colors.Green,
+            Status.Warning => Colors.Orange,
+            Status.Error => Colors.Red,
+            _ => Colors.Transparent,
+        };
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

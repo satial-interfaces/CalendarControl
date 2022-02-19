@@ -82,7 +82,7 @@ internal class AppointmentItem
     /// <returns>True if it has and false otherwise</returns>
     public bool HasOverlap(AppointmentItem other)
     {
-        return other.Begin >= Begin && other.Begin < End || Begin >= other.Begin && Begin < other.End;
+        return (other.Begin >= Begin && other.Begin < End) || (Begin >= other.Begin && Begin < other.End);
     }
     /// <summary>
     /// Check if a given item is in the given week.

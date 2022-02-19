@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mercury.View;
 
@@ -59,13 +60,8 @@ internal static class AppointmentItemListHelper
     /// <param name="list">List to check in</param>
     /// <param name="item">Item to check</param>
     /// <returns>True if it fits and false otherwise</returns>
-    static bool FitsIn(List<AppointmentItem> list, AppointmentItem item)
+    static bool FitsIn(IEnumerable<AppointmentItem> list, AppointmentItem item)
     {
-        foreach (var i in list)
-        {
-            if (i.HasOverlap(item)) return false;
-        }
-
-        return true;
+        return list.All(i => !i.HasOverlap(item));
     }
 }

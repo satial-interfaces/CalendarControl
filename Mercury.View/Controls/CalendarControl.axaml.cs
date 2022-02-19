@@ -107,8 +107,8 @@ public class CalendarControl : UserControl
     protected void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
     {
         ClearItemsGrid();
-        if (e.NewValue is not IEnumerable items) return;
-        UpdateItems(items);
+        if (e.NewValue is not IEnumerable enumerable) return;
+        UpdateItems(enumerable);
     }
 
     /// <summary>
@@ -171,11 +171,9 @@ public class CalendarControl : UserControl
 
             dayColumn.RowDefinitions = rowDefinitions;
             dayColumn.Children.Clear();
-            foreach (var dayControl in dayControls)
-            {
-                if (dayControl != null)
-                    dayColumn.Children.Add(dayControl);
-            }
+            foreach (var dayControl in dayControls.Where(x => x != null))
+                dayColumn.Children.Add(dayControl);
+
             for (var k = 0; k < dayControls.Count; k++)
             {
                 if (dayControls[k] != null)
@@ -243,18 +241,19 @@ public class CalendarControl : UserControl
     /// <summary>
     /// Converts the given items to a handleable format
     /// </summary>
-    /// <param name="items">Items to process</param>
+    /// <param name="enumerable">Items to process</param>
     /// <returns>Internal handleable format</returns>
-    IEnumerable<AppointmentItem> Convert(IEnumerable items)
+    IEnumerable<AppointmentItem> Convert(IEnumerable enumerable)
     {
         var result = new List<AppointmentItem>();
 
-        var enumerator = items.GetEnumerator();
+        var enumerator = enumerable.GetEnumerator();
         if (!enumerator.MoveNext())
             return result;
 
         var i = 0;
         var obj = enumerator.Current;
+        if (obj == null) return result;
 
         var begin = GetBinding<BeginItem>();
         var end = GetBinding<EndItem>();
@@ -278,6 +277,8 @@ public class CalendarControl : UserControl
         {
             i++;
             obj = enumerator.Current;
+            if (obj == null)
+                return new List<AppointmentItem>();
             item = CreateItem(obj, begin, end, text, color, i);
             if (item == null)
                 return new List<AppointmentItem>();
