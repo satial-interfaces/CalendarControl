@@ -3,8 +3,17 @@ using Avalonia.Controls;
 
 namespace Mercury.View;
 
+/// <summary>
+/// This class contains control helper methods
+/// </summary>
 public static class ControlHelper
 {
+    /// <summary>
+    /// Adds controls to the rows of a grid
+    /// </summary>
+    /// <param name="grid">Grid to add to</param>
+    /// <param name="controls">Controls to add</param>
+    /// <param name="rowDefinitions">Row definitions</param>
     public static void AddControlsToRows(Grid grid, List<IControl?> controls, RowDefinitions rowDefinitions)
     {
         grid.RowDefinitions = rowDefinitions;

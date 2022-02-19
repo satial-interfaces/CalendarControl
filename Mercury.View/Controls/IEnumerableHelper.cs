@@ -1,6 +1,10 @@
 using System.Collections;
 
 namespace Mercury.View;
+
+/// <summary>
+/// This class contains IEnumerable methods.
+/// </summary>
 internal static class IEnumerableHelper
 {
     /// <summary>

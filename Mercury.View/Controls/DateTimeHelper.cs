@@ -4,7 +4,7 @@ using System.Globalization;
 namespace Mercury.View;
 
 /// <summary>
-/// Date/time helper class: it provides extension methods
+/// Date/time helper class: it provides methods and extension methods
 /// </summary>
 internal static class DateTimeHelper
 {

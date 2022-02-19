@@ -45,6 +45,11 @@ public static class ControlFactory
         return border;
     }
 
+    /// <summary>
+    /// Creates a grid with a given column count
+    /// </summary>
+    /// <param name="columnCount">Column count to assign</param>
+    /// <returns>The grid</returns>
     public static Grid CreateGrid(int columnCount)
     {
         var grid = new Grid();

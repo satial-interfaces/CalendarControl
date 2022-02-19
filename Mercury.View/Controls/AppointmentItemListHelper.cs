@@ -4,48 +4,64 @@ namespace Mercury.View;
 
 internal static class AppointmentItemListHelper
 {
+    /// <summary>
+    /// Applies the indentation of the appointment list (based on avoiding overlap)
+    /// </summary>
+    /// <param name="list">Appointment list to process</param>
     public static void ApplyIdentation(IList<AppointmentItem> list)
     {
-        var indents = new List<List<AppointmentItem>>();
+        var listOfLists = new List<List<AppointmentItem>>();
 
         foreach (var item in list)
         {
-            var index = GetIndex(indents, item);
-            List<AppointmentItem> indent;
+            var index = GetIndent(listOfLists, item);
+            List<AppointmentItem> indentList;
             if (index >= 0)
             {
-                indent = indents[index];
+                indentList = listOfLists[index];
             }
             else
             {
-                indent = new List<AppointmentItem>();
-                indents.Add(indent);
+                indentList = new List<AppointmentItem>();
+                listOfLists.Add(indentList);
             }
-            indent.Add(item);
+            indentList.Add(item);
         }
 
-        for (var i = 0; i < indents.Count; i++)
+        for (var i = 0; i < listOfLists.Count; i++)
         {
-            foreach (var item in indents[i])
+            foreach (var item in listOfLists[i])
             {
                 item.Indent = i;
             }
         }
     }
 
-    static int GetIndex(List<List<AppointmentItem>> indents, AppointmentItem item)
+    /// <summary>
+    /// Gets the index of the list in which the given item fits
+    /// </summary>
+    /// <param name="listOfLists">List with indentations</param>
+    /// <param name="item">Item to check</param>
+    /// <returns>The index or -1 otherwise</returns>
+    static int GetIndent(List<List<AppointmentItem>> listOfLists, AppointmentItem item)
     {
-       for (var i = 0; i < indents.Count; i++)
+       for (var i = 0; i < listOfLists.Count; i++)
        {
-           if (FitsIn(indents[i], item)) return i;
+           if (FitsIn(listOfLists[i], item)) return i;
        }
 
        return -1;
     }
 
-    static bool FitsIn(List<AppointmentItem> items, AppointmentItem item)
+    /// <summary>
+    /// Checks if the given item fits in the list (has no overlap)
+    /// </summary>
+    /// <param name="list">List to check in</param>
+    /// <param name="item">Item to check</param>
+    /// <returns>True if it fits and false otherwise</returns>
+    static bool FitsIn(List<AppointmentItem> list, AppointmentItem item)
     {
-        foreach (var i in items)
+        foreach (var i in list)
         {
             if (i.HasOverlap(item)) return false;
         }
