@@ -8,7 +8,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using CalendarControl;
+using CalendarControl.Controls;
 
 namespace SampleApp;
 
@@ -86,23 +86,23 @@ public partial class MainWindow : Window
     }
     protected void PreviousButtonClick(object? sender, RoutedEventArgs e)
     {
-        var calendarControl = this.FindControl<CalendarControl.CalendarControl>("CalendarControl");
+        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
     }
     protected void ThisWeekButtonClick(object? sender, RoutedEventArgs e)
     {
-        var calendarControl = this.FindControl<CalendarControl.CalendarControl>("CalendarControl");
+        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         calendarControl.CurrentWeek = DateTime.Now;
     }
     protected void NextButtonClick(object? sender, RoutedEventArgs e)
     {
-        var calendarControl = this.FindControl<CalendarControl.CalendarControl>("CalendarControl");
+        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
     }
 
     void RandomCalendar()
     {
-        var calendarControl = this.FindControl<CalendarControl.CalendarControl>("CalendarControl");
+        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         var textBox = this.FindControl<TextBox>("TextBox");
         calendarControl.CurrentWeek = DateTime.Now;
         var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek);

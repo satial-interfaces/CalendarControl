@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace CalendarControl;
+namespace CalendarControl.Helpers;
 
 /// <summary>
 /// This class contains IEnumerable methods.

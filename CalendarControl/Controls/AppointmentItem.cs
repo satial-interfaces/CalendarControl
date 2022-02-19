@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Media;
 
-namespace CalendarControl;
+namespace CalendarControl.Controls;
 
 /// <summary>
 /// This class represents an item (appointment) from the calendar control

@@ -1,8 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Media;
+using CalendarControl.Controls;
 
-namespace CalendarControl;
+namespace CalendarControl.Factories;
 
 /// <summary>
 /// This class contains control factory methods.

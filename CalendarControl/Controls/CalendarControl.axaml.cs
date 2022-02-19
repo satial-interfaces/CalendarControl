@@ -12,8 +12,10 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using CalendarControl.Factories;
+using CalendarControl.Helpers;
 
-namespace CalendarControl;
+namespace CalendarControl.Controls;
 
 /// <summary>
 /// This class represents a calendar control (week view)

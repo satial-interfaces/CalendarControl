@@ -2,7 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Data;
 
-namespace CalendarControl;
+namespace CalendarControl.Helpers;
 
 /// <summary>
 /// This class provides Avalonia object functions

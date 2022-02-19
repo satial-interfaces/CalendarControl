@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace CalendarControl;
+namespace CalendarControl.Helpers;
 
 /// <summary>
 /// Date/time helper class: it provides methods and extension methods

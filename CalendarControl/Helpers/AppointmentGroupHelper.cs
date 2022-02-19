@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using CalendarControl.Controls;
 
-namespace CalendarControl;
+namespace CalendarControl.Helpers;
 
 /// <summary>
 /// This class contains appointment group methods

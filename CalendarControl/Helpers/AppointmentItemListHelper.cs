@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using CalendarControl.Controls;
 
-namespace CalendarControl;
+namespace CalendarControl.Helpers;
 
 internal static class AppointmentItemListHelper
 {
