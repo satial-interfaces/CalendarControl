@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Media;
 using CalendarControl.Controls;
+using CalendarControl.Helpers;
 
 namespace CalendarControl.Factories;
 
@@ -17,9 +19,19 @@ public static class ControlFactory
    public static Grid CreateColumn() => new();
 
     /// <summary>
+    /// Creates a weekend control
+    /// </summary>
+    /// <returns>Created control or a default border otherwise</returns>
+    public static Border CreateWeekendControl(DayOfWeek dayOfWeek)
+    {
+        if (DateTimeHelper.GetDayState(CultureInfo.CurrentCulture, dayOfWeek) == DateTimeHelper.DayState.WorkDay) return new Border();
+        return new WeekendControl();
+    }
+
+    /// <summary>
     /// Creates a background cell
     /// </summary>
-    /// <returns>Created cell</returns>
+    /// <returns>Created control</returns>
     public static Border CreateHourCell() => new HourCell();
 
     /// <summary>

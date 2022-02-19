@@ -92,56 +92,66 @@ internal static class DateTimeHelper
 	/// <param name="dayOfWeek">The Day of the week to return the state of.</param>
 	/// <returns>The weekday/weekend state of the passed in day of the week.</returns>
 	public static DayState GetDayState(CultureInfo obj, DayOfWeek dayOfWeek)
-	{
-		var items = obj.Name.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
-		if (items.Length < 1) return default;
-		switch (items[^1])
-		{
-			case "DZ": // Algeria
-			case "BH": // Bahrain
-			case "BD": // Bangladesh
-			case "EG": // Egypt
-			case "IQ": // Iraq
-			case "IL": // Israel
-			case "JO": // Jordan
-			case "KW": // Kuwait
-			case "LY": // Libya
-			// Northern Malaysia (only in the states of Kelantan, Terengganu, and Kedah)
-			case "MV": // Maldives
-			case "MR": // Mauritania
-			case "NP": // Nepal
-			case "OM": // Oman
-			case "QA": // Qatar
-			case "SA": // Saudi Arabia
-			case "SD": // Sudan
-			case "SY": // Syria
-			case "AE": // U.A.E.
-			case "YE": // Yemen
-				return dayOfWeek is DayOfWeek.Thursday or DayOfWeek.Friday
-					? DayState.Weekend
-					: DayState.WorkDay;
+    {
+        var items = obj.Name.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+        if (items.Length < 1) return DefaultDayState(dayOfWeek);
+        switch (items[^1])
+        {
+            case "DZ": // Algeria
+            case "BH": // Bahrain
+            case "BD": // Bangladesh
+            case "EG": // Egypt
+            case "IQ": // Iraq
+            case "IL": // Israel
+            case "JO": // Jordan
+            case "KW": // Kuwait
+            case "LY": // Libya
+                       // Northern Malaysia (only in the states of Kelantan, Terengganu, and Kedah)
+            case "MV": // Maldives
+            case "MR": // Mauritania
+            case "NP": // Nepal
+            case "OM": // Oman
+            case "QA": // Qatar
+            case "SA": // Saudi Arabia
+            case "SD": // Sudan
+            case "SY": // Syria
+            case "AE": // U.A.E.
+            case "YE": // Yemen
+                return dayOfWeek is DayOfWeek.Thursday or DayOfWeek.Friday
+                    ? DayState.Weekend
+                    : DayState.WorkDay;
 
-			case "AF": // Afghanistan
-			case "IR": // Iran
-				if (dayOfWeek == DayOfWeek.Thursday)
-					return DayState.WorkdayMorning;
-				return dayOfWeek == DayOfWeek.Friday ? DayState.Weekend : DayState.WorkDay;
+            case "AF": // Afghanistan
+            case "IR": // Iran
+                if (dayOfWeek == DayOfWeek.Thursday)
+                    return DayState.WorkdayMorning;
+                return dayOfWeek == DayOfWeek.Friday ? DayState.Weekend : DayState.WorkDay;
 
-			case "BN": // Brunei Darussalam
-				return dayOfWeek is DayOfWeek.Friday or DayOfWeek.Sunday
-					? DayState.Weekend
-					: DayState.WorkDay;
+            case "BN": // Brunei Darussalam
+                return dayOfWeek is DayOfWeek.Friday or DayOfWeek.Sunday
+                    ? DayState.Weekend
+                    : DayState.WorkDay;
 
-			case "MX": // Mexico
-			case "TH": // Thailand
-				if (dayOfWeek == DayOfWeek.Saturday)
-					return DayState.WorkdayMorning;
-				return dayOfWeek == DayOfWeek.Sunday
-					? DayState.Weekend
-					: DayState.WorkDay;
-		}
+            case "MX": // Mexico
+            case "TH": // Thailand
+                if (dayOfWeek == DayOfWeek.Saturday)
+                    return DayState.WorkdayMorning;
+                return dayOfWeek == DayOfWeek.Sunday
+                    ? DayState.Weekend
+                    : DayState.WorkDay;
+        }
 
-		// most common Saturday/Sunday
-		return dayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? DayState.Weekend : DayState.WorkDay;
-	}
+        // most common Saturday/Sunday
+        return DefaultDayState(dayOfWeek);
+    }
+
+	/// <summary>
+	/// Gets the default day stete
+	/// </summary>
+	/// <param name="dayOfWeek">Day of the week to check</param>
+	/// <returns>The day state</returns>
+    static DayState DefaultDayState(DayOfWeek dayOfWeek)
+    {
+        return dayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? DayState.Weekend : DayState.WorkDay;
+    }
 }

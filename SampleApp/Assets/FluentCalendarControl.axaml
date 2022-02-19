@@ -34,4 +34,7 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefault}" />
 		<Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
 	</Style>
+	<Style Selector="l|WeekendControl">
+		<Setter Property="Background" Value="{DynamicResource ControlStrokeColorDefault}" />
+	</Style>
 </Styles>

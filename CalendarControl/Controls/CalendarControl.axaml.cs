@@ -361,9 +361,12 @@ public class CalendarControl : UserControl
 
         var weekGrid = this.FindControl<Grid>("WeekGrid");
         weekGrid.Children.Clear();
+
         var columnDefinitions = new ColumnDefinitions();
+        var firstDayOfWeek = FirstDayOfWeek;
         for (var i = 0; i < daysPerWeek; i++)
         {
+            var weekendColumn = ControlFactory.CreateWeekendControl(AddDay(firstDayOfWeek, i));
             var dayColumn = ControlFactory.CreateColumn();
             var rowDefinitions = new RowDefinitions();
             for (var j = 0; j < hoursPerDay; j++)
@@ -375,8 +378,10 @@ public class CalendarControl : UserControl
             }
             dayColumn.RowDefinitions = rowDefinitions;
             columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
+            weekGrid.Children.Add(weekendColumn);
             weekGrid.Children.Add(dayColumn);
             Grid.SetColumn(dayColumn, i);
+            Grid.SetColumn(weekendColumn, i);
         }
         weekGrid.ColumnDefinitions = columnDefinitions;
         ClearItemsGrid();
