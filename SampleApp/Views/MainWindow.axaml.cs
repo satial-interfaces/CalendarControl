@@ -50,7 +50,9 @@ internal class CalendarControlItem
 
 public partial class MainWindow : Window
 {
+#pragma warning disable CS8618
     public MainWindow()
+#pragma warning restore CS8618
     {
         InitializeComponent();
 #if DEBUG
@@ -61,6 +63,7 @@ public partial class MainWindow : Window
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
+        calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         RandomCalendar();
     }
 
@@ -87,24 +90,19 @@ public partial class MainWindow : Window
     }
     protected void PreviousButtonClick(object? sender, RoutedEventArgs e)
     {
-        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
     }
     protected void ThisWeekButtonClick(object? sender, RoutedEventArgs e)
     {
-        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         calendarControl.CurrentWeek = DateTime.Now;
     }
     protected void NextButtonClick(object? sender, RoutedEventArgs e)
     {
-        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
     }
 
     void RandomCalendar()
     {
-        var calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
-        var textBox = this.FindControl<TextBox>("TextBox");
         calendarControl.CurrentWeek = DateTime.Now;
         var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek);
 
@@ -127,39 +125,11 @@ public partial class MainWindow : Window
             list.Add(item);
         }
         calendarControl.Items = list;
-        var newList = list.ConvertAll(i => i.Text + ": " + i.Begin.ToShortTimeString() + " - " + i.End.ToShortTimeString());
-        textBox.Text = StringsToString(newList, Environment.NewLine);
     }
 
-	static string StringsToString(IEnumerable<string?> list, string terminator)
-	{
-		var result = new StringBuilder();
-		using var enumerator = list.GetEnumerator();
-		var i = 0;
-		while (enumerator.MoveNext())
-		{
-			var value = enumerator.Current;
-			if (value == null) continue;
-			if (i > 0)
-				result.Append(terminator);
-			result.Append(value);
-			i++;
-		}
+    static int GetRandom(int minVal, int maxVal) => random.Next(minVal, maxVal + 1);
 
-		return result.ToString();
-	}
-
-	static int GetRandom(int minVal, int maxVal)
-	{
-		var result = random.Next(minVal, maxVal + 1);
-		return result;
-	}
-
-    static Status GetRandom()
-    {
-        var i = GetRandom((int)Status.None, (int)Status.Error);
-        return (Status)i;
-    }
+    static Status GetRandom() => (Status)GetRandom((int)Status.None, (int)Status.Error);
 
     static DateTime GetBeginWeek(DateTime dateTime, DayOfWeek firstDayOfWeek)
     {
@@ -169,5 +139,6 @@ public partial class MainWindow : Window
         return begin.Date;
     }
 
+    CalendarControl.Controls.CalendarControl calendarControl;
     static readonly Random random = new();
 }

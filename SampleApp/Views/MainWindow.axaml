@@ -35,6 +35,5 @@
             <Button Click="NextButtonClick">Next &gt;</Button>
             <TextBlock Name="Info" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
-        <TextBox Name="TextBox" Grid.Row="0" Grid.Column="1" Width="200"></TextBox>
     </Grid>
 </Window>

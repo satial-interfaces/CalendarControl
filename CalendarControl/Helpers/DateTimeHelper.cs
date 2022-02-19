@@ -139,7 +139,6 @@ internal static class DateTimeHelper
 				return dayOfWeek == DayOfWeek.Sunday
 					? DayState.Weekend
 					: DayState.WorkDay;
-
 		}
 
 		// most common Saturday/Sunday
