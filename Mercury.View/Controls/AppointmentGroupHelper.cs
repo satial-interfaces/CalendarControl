@@ -38,14 +38,14 @@ internal static class AppointmentGroupHelper
     /// <param name="list">List to search in</param>
     /// <param name="beginIndex">Begin index of group</param>
     /// <param name="count">Count of group</param>
-    /// <param name="ident">Indentation to get count for</param>
+    /// <param name="indent">Indentation to get count for</param>
     /// <returns>List with items matching the indentation</returns>
-    public static IList<AppointmentItem> GetIndentationItems(IList<AppointmentItem> list, int beginIndex, int count, int ident)
+    public static IList<AppointmentItem> GetIndentationItems(IList<AppointmentItem> list, int beginIndex, int count, int indent)
     {
         var result = new List<AppointmentItem>();
         for (var i = beginIndex; i < beginIndex + count; i++)
         {
-            if (list[i].Indent == ident)
+            if (list[i].Indent == indent)
                 result.Add(list[i]);
         }
         return result;

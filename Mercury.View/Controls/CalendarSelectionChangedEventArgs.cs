@@ -18,5 +18,5 @@ public class CalendarSelectionChangedEventArgs : RoutedEventArgs
     /// Property representing the selected index. -1 means not selected.
     /// </summary>
     /// <value>The selected index (zero-based) or -1 if deselected.</value>
-    public int SelectedIndex { get; set; }
+    public int SelectedIndex { get; init; }
 }

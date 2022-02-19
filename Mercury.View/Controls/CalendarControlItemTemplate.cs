@@ -9,7 +9,7 @@ namespace Mercury.View;
 public abstract class CalendarControlItemTemplate : AvaloniaObject
 {
     /// <summary>
-    /// Binding provided by the item defintion
+    /// Binding provided by the item definition
     /// </summary>
     [AssignBinding]
     public IBinding? Binding { get; set; }

@@ -10,7 +10,7 @@ namespace Mercury.View;
 public static class ControlFactory
 {
     /// <summary>
-    /// Creates a colomn
+    /// Creates a column
     /// </summary>
     /// <returns>Created column</returns>
    public static Grid CreateColumn() => new();

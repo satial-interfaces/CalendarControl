@@ -203,13 +203,13 @@ public class CalendarControl : UserControl
         {
             if (grid.Children[i] is not Grid g)
                 continue;
-            var identItems = AppointmentGroupHelper.GetIndentationItems(list, beginIndex, count, i);
-            if (identItems.Count == 0)
+            var indentItems = AppointmentGroupHelper.GetIndentationItems(list, beginIndex, count, i);
+            if (indentItems.Count == 0)
                 continue;
             var groupControls = new List<IControl?>();
             var rowDefinitions = new RowDefinitions();
             var previous = double.NaN;
-            foreach (var indentItem in identItems)
+            foreach (var indentItem in indentItems)
             {
                 var (b, l) = indentItem.GetFractionOfDay();
                 // Within the group
@@ -334,17 +334,17 @@ public class CalendarControl : UserControl
     {
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
         itemsGrid.Children.Clear();
-        var columnDefintions = new ColumnDefinitions();
+        var columnDefinitions = new ColumnDefinitions();
         for (var i = 0; i < daysPerWeek; i++)
         {
             var dayColumn = ControlFactory.CreateColumn();
             var rowDefinitions = new RowDefinitions();
             dayColumn.RowDefinitions = rowDefinitions;
-            columnDefintions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
+            columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             itemsGrid.Children.Add(dayColumn);
             Grid.SetColumn(dayColumn, i);
         }
-        itemsGrid.ColumnDefinitions = columnDefintions;
+        itemsGrid.ColumnDefinitions = columnDefinitions;
     }
 
     /// <summary>
@@ -387,7 +387,7 @@ public class CalendarControl : UserControl
     {
         var dayGrid = this.FindControl<Grid>("DayGrid");
         dayGrid.Children.Clear();
-        var columnDefintions = new ColumnDefinitions();
+        var columnDefinitions = new ColumnDefinitions();
         var firstDayOfWeek = FirstDayOfWeek;
         var beginWeek = week.GetBeginWeek(firstDayOfWeek);
         for (var i = 0; i < daysPerWeek; i++)
@@ -395,11 +395,11 @@ public class CalendarControl : UserControl
             var day = AddDay(firstDayOfWeek, i);
             var text = DateTimeHelper.DayOfWeekToString(day) + " " + beginWeek.AddDays(i).Day;
             var dayText = new TextBlock { Text = text };
-            columnDefintions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
+            columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             dayGrid.Children.Add(dayText);
             Grid.SetColumn(dayText, i);
         }
-        dayGrid.ColumnDefinitions = columnDefintions;
+        dayGrid.ColumnDefinitions = columnDefinitions;
     }
 
     /// <summary>
