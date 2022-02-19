@@ -22,9 +22,28 @@ public static class ControlFactory
     /// Creates a weekend control
     /// </summary>
     /// <returns>Created control or a default border otherwise</returns>
-    public static Border CreateWeekendControl(DayOfWeek dayOfWeek)
+    public static Control CreateWeekendControl(DayOfWeek dayOfWeek)
     {
-        if (DateTimeHelper.GetDayState(CultureInfo.CurrentCulture, dayOfWeek) == DateTimeHelper.DayState.WorkDay) return new Border();
+        var dayState = DateTimeHelper.GetDayState(CultureInfo.CurrentCulture, dayOfWeek);
+        if (dayState == DateTimeHelper.DayState.WorkDay) return new Border();
+        if (dayState == DateTimeHelper.DayState.WorkdayMorning)
+        {
+            var grid = new Grid
+            {
+                RowDefinitions = new RowDefinitions
+                {
+                    new RowDefinition(1.0d, GridUnitType.Star),
+                    new RowDefinition(1.0d, GridUnitType.Star)
+                }
+            };
+            var border = new Border();
+            var weekendControl = new WeekendControl();
+            grid.Children.Add(border);
+            grid.Children.Add(weekendControl);
+            Grid.SetRow(border, 0);
+            Grid.SetRow(weekendControl, 1);
+            return grid;
+        }
         return new WeekendControl();
     }
 
