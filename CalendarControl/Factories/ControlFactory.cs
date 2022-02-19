@@ -51,7 +51,11 @@ public static class ControlFactory
     /// Creates a background cell
     /// </summary>
     /// <returns>Created control</returns>
-    public static Border CreateHourCell() => new HourCell();
+    public static Border CreateHourCell()
+    {
+        return new HourCell();
+        // return hour >= 6 && hour < 18 ? new HourCell() : new Border();
+    }
 
     /// <summary>
     /// Creates an appointment
