@@ -1,0 +1,10 @@
+<Application
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:f="using:FluentAvalonia.Styling"
+    x:Class="SampleApp.App">
+    <Application.Styles>
+        <f:FluentAvaloniaTheme />
+        <StyleInclude Source="avares://SampleApp/Assets/FluentCalendarControl.axaml" />
+    </Application.Styles>
+</Application>

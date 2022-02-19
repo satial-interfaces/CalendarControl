@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserControl
+	x:Class="Mercury.View.CalendarControl"
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,*" Name="MainGrid">
+        <Grid Grid.Column="0" Grid.Row="1" Name="HourGrid" />
+        <Grid Grid.Column="1" Grid.Row="0" Name="DayGrid" />
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid Name="WeekGrid" />
+            <Grid Name="ItemsGrid" />
+        </Grid>
+    </Grid>
+</UserControl>

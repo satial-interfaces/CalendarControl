@@ -1,0 +1,42 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:l="clr-namespace:Mercury.View;assembly=Mercury.View"
+    xmlns:v="clr-namespace:SampleApp"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="SampleApp.MainWindow"
+    Title="SampleApp">
+    <Window.Styles>
+    </Window.Styles>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <v:ColorConverter x:Key="ColorConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="8,8,8,8" ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
+        <l:CalendarControl
+            Name="CalendarControl"
+            SelectionChanged="CalendarControlSelectionChanged" >
+            <l:CalendarControl.ItemTemplate>
+                <l:BeginItem Binding="{Binding Begin}" />
+                <l:EndItem Binding="{Binding End}" />
+                <l:TextItem Binding="{Binding Text}" />
+                <l:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
+            </l:CalendarControl.ItemTemplate>
+        </l:CalendarControl>
+        <StackPanel Grid.Row="1" Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">
+            <Button Click="RandomButtonClick">Random</Button>
+            <Button Click="PreviousButtonClick">&lt; Previous</Button>
+            <Button Click="ThisWeekButtonClick">This week</Button>
+            <Button Click="NextButtonClick">Next &gt;</Button>
+            <TextBlock Name="Info" VerticalAlignment="Center"></TextBlock>
+        </StackPanel>
+        <TextBox Name="TextBox" Grid.Column="1" Width="200"></TextBox>
+    </Grid>
+</Window>

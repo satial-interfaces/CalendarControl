@@ -1,0 +1,37 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+	xmlns:l="clr-namespace:Mercury.View;assembly=Mercury.View"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}" />
+    </Styles.Resources>
+	<Style Selector="l|CalendarControl">
+	</Style>
+	<Style Selector="l|CalendarControl TextBlock">
+		<Setter Property="Margin" Value="4,0,4,0" />
+	</Style>
+	<Style Selector="l|AppointmentControl">
+		<Setter Property="Background" Value="{DynamicResource SystemAccentBrush}" />
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+	</Style>
+	<Style Selector="l|AppointmentControl Border">
+		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
+	</Style>
+	<Style Selector="l|AppointmentControl:selected Border">
+		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
+		<Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
+	</Style>
+	<Style Selector="l|AppointmentControl TextBlock">
+		<Setter Property="Margin" Value="4,4,4,0" />
+		<Setter Property="Foreground" Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+	</Style>
+	<Style Selector="l|AppointmentControl">
+		<Setter Property="Margin" Value="0,0,2,0" />
+	</Style>
+	<Style Selector="l|HourCell">
+		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefault}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
+	</Style>
+</Styles>
