@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class extends Border (by its name)

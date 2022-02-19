@@ -1,6 +1,6 @@
 using Avalonia.Interactivity;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// Expansion of the RoutedEventArgs class by providing a selected index;

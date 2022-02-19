@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Media;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class contains control factory methods.

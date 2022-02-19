@@ -2,7 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Data;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class provides Avalonia object functions

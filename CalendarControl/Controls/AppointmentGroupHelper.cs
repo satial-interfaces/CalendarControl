@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class contains appointment group methods

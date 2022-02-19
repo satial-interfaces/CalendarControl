@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class represents an appointment and extends Border by adding an index

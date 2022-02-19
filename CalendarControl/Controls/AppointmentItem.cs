@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Media;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class represents an item (appointment) from the calendar control

@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class contains IEnumerable methods.

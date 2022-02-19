@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class contains control helper methods

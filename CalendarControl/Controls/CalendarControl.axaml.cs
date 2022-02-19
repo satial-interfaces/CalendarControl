@@ -13,7 +13,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class represents a calendar control (week view)

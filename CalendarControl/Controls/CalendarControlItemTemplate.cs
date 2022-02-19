@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Data;
 
-namespace Mercury.View;
+namespace CalendarControl;
 
 /// <summary>
 /// This class contains the base (abstract) for the item template.
