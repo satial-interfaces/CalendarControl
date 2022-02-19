@@ -127,7 +127,7 @@ public partial class MainWindow : Window
             list.Add(item);
         }
         calendarControl.Items = list;
-        var newList = list.Select(i => i.Text + ": " + i.Begin.ToShortTimeString() + " - " + i.End.ToShortTimeString()).ToList();
+        var newList = list.ConvertAll(i => i.Text + ": " + i.Begin.ToShortTimeString() + " - " + i.End.ToShortTimeString());
         textBox.Text = StringsToString(newList, Environment.NewLine);
     }
 

@@ -7,6 +7,7 @@ project.lock.json
 nupkg/
 
 # User-specific files
+.idea/
 *.suo
 *.user
 *.userosscache
