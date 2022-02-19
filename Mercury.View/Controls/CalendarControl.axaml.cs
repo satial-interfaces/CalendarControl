@@ -434,7 +434,7 @@ public class CalendarControl : UserControl
     const int hoursPerDay = 24;
     /// <summary>Current week</summary>
     DateTime currentWeek = DateTime.Now;
-    IEnumerable _items = new AvaloniaList<object>();
+    IEnumerable items = new AvaloniaList<object>();
     /// <summary>
     /// State of the left mouse button
     /// </summary>
@@ -442,7 +442,7 @@ public class CalendarControl : UserControl
     /// <summary>First day of the week property</summary>
 	public DayOfWeek FirstDayOfWeek { get => GetValue(FirstDayOfWeekProperty); set => SetValue(FirstDayOfWeekProperty, value); }
     /// <summary>Items property</summary>
-    public IEnumerable Items { get => _items; set => SetAndRaise(ItemsProperty, ref _items, value); }
+    public IEnumerable Items { get => items; set => SetAndRaise(ItemsProperty, ref items, value); }
     /// <summary>Current week property</summary>
 	public DateTime CurrentWeek { get => currentWeek; set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value); }
     /// <summary>Item definition</summary>
