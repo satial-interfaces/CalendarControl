@@ -127,14 +127,14 @@ public class CalendarControl : UserControl
     /// <summary>
     /// Updated the view with the given items
     /// </summary>
-    /// <param name="items">Items to process</param>
-    void UpdateItems(IEnumerable items)
+    /// <param name="enumerable">Items to process</param>
+    void UpdateItems(IEnumerable enumerable)
     {
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 
         var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 
-        var weekList = Convert(items).Where(x => x.IsInCurrentWeek(beginWeek)).OrderBy(x => x.Begin);
+        var weekList = Convert(enumerable).Where(x => x.IsInCurrentWeek(beginWeek)).OrderBy(x => x.Begin);
         for (var i = 0; i < daysPerWeek; i++)
         {
             if (itemsGrid.Children[i] is not Grid dayColumn) continue;

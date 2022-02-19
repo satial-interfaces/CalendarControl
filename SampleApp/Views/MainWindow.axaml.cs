@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Avalonia;
 using Avalonia.Controls;
@@ -126,11 +127,7 @@ public partial class MainWindow : Window
             list.Add(item);
         }
         calendarControl.Items = list;
-        var newList = new List<string>();
-        foreach (var i in list)
-        {
-            newList.Add(i.Text + ": " + i.Begin.ToShortTimeString() + " - " + i.End.ToShortTimeString());
-        }
+        var newList = list.Select(i => i.Text + ": " + i.Begin.ToShortTimeString() + " - " + i.End.ToShortTimeString()).ToList();
         textBox.Text = StringsToString(newList, Environment.NewLine);
     }
 
@@ -152,12 +149,6 @@ public partial class MainWindow : Window
 		return result.ToString();
 	}
 
-	/// <summary>
-	///     Gets a random int.
-	/// </summary>
-	/// <param name="minVal">Minimum value.</param>
-	/// <param name="maxVal">Maximum value (inclusive).</param>
-	/// <returns>The random int.</returns>
 	static int GetRandom(int minVal, int maxVal)
 	{
 		var result = random.Next(minVal, maxVal + 1);

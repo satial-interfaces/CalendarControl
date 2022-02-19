@@ -43,19 +43,20 @@ internal static class DateTimeHelper
         if (CultureInfo.CurrentCulture.Calendar is GregorianCalendar)
             return CultureInfo.CurrentCulture.DateTimeFormat;
 
-        foreach (var cal in CultureInfo.CurrentCulture.OptionalCalendars)
+        DateTimeFormatInfo dateTimeFormat;
+        foreach (var calendar in CultureInfo.CurrentCulture.OptionalCalendars)
         {
-            if (cal is not GregorianCalendar) continue;
-            var dateTimeFormat = new CultureInfo(CultureInfo.CurrentCulture.Name).DateTimeFormat;
-            dateTimeFormat.Calendar = cal;
+            if (calendar is not GregorianCalendar) continue;
+            dateTimeFormat = new CultureInfo(CultureInfo.CurrentCulture.Name).DateTimeFormat;
+            dateTimeFormat.Calendar = calendar;
             return dateTimeFormat;
         }
 
         // if there are no GregorianCalendars in the OptionalCalendars
-        // list, use the invariant dtfi
-        var dt = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
-        dt.Calendar = new GregorianCalendar();
-        return dt;
+        // list, use the invariant date time format
+        dateTimeFormat = new CultureInfo(CultureInfo.InvariantCulture.Name).DateTimeFormat;
+        dateTimeFormat.Calendar = new GregorianCalendar();
+        return dateTimeFormat;
     }
 
     /// <summary>
