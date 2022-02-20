@@ -21,8 +21,8 @@
         <l:CalendarControl
             Name="CalendarControl"
             SelectionChanged="CalendarControlSelectionChanged"
-            BeginOfTheDay="6:0:0"
-            EndOfTheDay="18:0:0" >
+            BeginOfTheDay="06:00"
+            EndOfTheDay="18:00" >
             <l:CalendarControl.ItemTemplate>
                 <l:BeginItem Binding="{Binding Begin}" />
                 <l:EndItem Binding="{Binding End}" />

@@ -83,7 +83,7 @@ internal static class DateTimeHelper
     /// </summary>
     /// <param name="dayOfWeek">Day of the week to convert</param>
     /// <returns>The string</returns>
-    public static string DayOfWeekToString(DayOfWeek dayOfWeek) => GetCurrentDateFormat().DayNames[(int)dayOfWeek];
+    public static string DayOfWeekToString(DayOfWeek dayOfWeek) => GetCurrentDateFormat().AbbreviatedDayNames[(int)dayOfWeek];
 
 	/// <summary>
 	/// Return if the passed in day of the week is a weekend. note: state pulled from http://en.wikipedia.org/wiki/Workweek_and_weekend
