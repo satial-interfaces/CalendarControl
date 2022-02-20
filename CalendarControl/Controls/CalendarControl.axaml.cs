@@ -71,6 +71,8 @@ public class CalendarControl : UserControl
 
         var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
         scrollViewer.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
+        CreateWeek(CurrentWeek);
+        UpdateItems(Items);
     }
 
     /// <inheritdoc />
