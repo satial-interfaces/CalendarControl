@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Media;
 
-namespace CalendarControl.Controls;
+namespace CalendarControl.Controls{
 
 /// <summary>
 /// This class represents an item (appointment) from the calendar control
@@ -94,4 +94,5 @@ internal class AppointmentItem
     /// The indentation
     /// </summary>
     int indent;
+}
 }

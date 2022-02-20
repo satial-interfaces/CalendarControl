@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace CalendarControl.Helpers;
+namespace CalendarControl.Helpers{
 
 /// <summary>
 /// Date/time helper class: it provides methods and extension methods
@@ -154,4 +154,5 @@ internal static class DateTimeHelper
     {
         return dayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? DayState.Weekend : DayState.WorkDay;
     }
+}
 }
