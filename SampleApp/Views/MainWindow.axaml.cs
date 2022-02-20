@@ -119,7 +119,7 @@ public partial class MainWindow : Window
             {
                 Begin = beginOfWeek.AddHours(begin),
                 End = beginOfWeek.AddHours(begin + length),
-                Text = $"App{i}",
+                Text = $"Appointment {i}",
                 Status = GetRandom()
             };
             list.Add(item);
