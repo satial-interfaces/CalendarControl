@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Data;
 
-namespace CalendarControl.Controls;
+namespace CalendarControl.Controls{
 
 /// <summary>
 /// This class contains the base (abstract) for the item template.
@@ -33,3 +33,4 @@ public class TextItem : CalendarControlItemTemplate { }
 /// This class represents the Text item definition
 /// </summary>
 public class ColorItem : CalendarControlItemTemplate { }
+}

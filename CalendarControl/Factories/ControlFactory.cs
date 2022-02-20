@@ -5,7 +5,7 @@ using Avalonia.Media;
 using CalendarControl.Controls;
 using CalendarControl.Helpers;
 
-namespace CalendarControl.Factories;
+namespace CalendarControl.Factories{
 
 /// <summary>
 /// This class contains control factory methods.
@@ -100,4 +100,5 @@ public static class ControlFactory
             Grid.SetColumn(grid.Children[i] as Control, i);
         return grid;
     }
+}
 }

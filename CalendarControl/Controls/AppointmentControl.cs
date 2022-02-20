@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 
-namespace CalendarControl.Controls;
+namespace CalendarControl.Controls{
 
 /// <summary>
 /// This class represents an appointment and extends Border by adding an index
@@ -28,4 +28,5 @@ public class AppointmentControl : Border, ISelectable
     /// Is selected
     /// </summary>
     bool isSelected;
+}
 }

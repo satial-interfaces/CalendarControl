@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 
-namespace SampleApp;
+namespace SampleApp{
 
 public class App : Application
 {
@@ -23,4 +23,5 @@ public class App : Application
 
         base.OnFrameworkInitializationCompleted();
     }
+}
 }

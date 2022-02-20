@@ -2,7 +2,7 @@ using System;
 using Avalonia;
 using Avalonia.Data;
 
-namespace CalendarControl.Helpers;
+namespace CalendarControl.Helpers{
 
 /// <summary>
 /// This class provides Avalonia object functions
@@ -32,4 +32,5 @@ public static class AvaloniaObjectHelper
         });
         return result;
     }
+}
 }
