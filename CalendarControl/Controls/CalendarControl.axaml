@@ -2,7 +2,7 @@
 <UserControl
 	x:Class="CalendarControl.Controls.CalendarControl"
 	xmlns="https://github.com/avaloniaui"
-	xmlns:l="clr-namespace:CalendarControl.Controls"
+	xmlns:l="clr-namespace:CalendarControl.Converters"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,6 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <l:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
+                    <l:DoubleToDoubleDoubleConverter x:Key="DoubleToDoubleDoubleConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
@@ -20,7 +21,7 @@
         <Grid Grid.Row="0" Name="DayGrid" Margin="{Binding #HourGrid.Bounds.Width, Converter={StaticResource DoubleToLeftMarginConverter}}" />
         <Grid Grid.Row="1">
 			<ScrollViewer VerticalScrollBarVisibility="Auto" >
-				<Grid Height="1000" ColumnDefinitions="Auto,*">
+				<Grid Height="{Binding $parent[ScrollViewer].Bounds.Height, Converter={StaticResource DoubleToDoubleDoubleConverter}}" ColumnDefinitions="Auto,*">
 			        <Grid Grid.Column="0" Name="HourGrid" />
 					<Grid Grid.Column="1" Name="WeekGrid" />
 					<Grid Grid.Column="1" Name="ItemsGrid" />
