@@ -20,8 +20,10 @@
     <Grid RowDefinitions="Auto,*" Name="MainGrid">
         <Grid Grid.Row="0" Name="DayGrid" Margin="{Binding #HourGrid.Bounds.Width, Converter={StaticResource DoubleToLeftMarginConverter}}" />
         <Grid Grid.Row="1">
-			<ScrollViewer VerticalScrollBarVisibility="Auto" >
-				<Grid Height="{Binding $parent[ScrollViewer].Bounds.Height, Converter={StaticResource DoubleToDoubleDoubleConverter}}" ColumnDefinitions="Auto,*">
+			<ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto" >
+				<Grid
+					Name="ScrollableGrid"
+					ColumnDefinitions="Auto,*">
 			        <Grid Grid.Column="0" Name="HourGrid" />
 					<Grid Grid.Column="1" Name="WeekGrid" />
 					<Grid Grid.Column="1" Name="ItemsGrid" />

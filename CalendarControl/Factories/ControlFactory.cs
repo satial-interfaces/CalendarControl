@@ -54,7 +54,6 @@ public static class ControlFactory
     public static Border CreateHourCell()
     {
         return new HourCell();
-        // return hour >= 6 && hour < 18 ? new HourCell() : new Border();
     }
 
     /// <summary>

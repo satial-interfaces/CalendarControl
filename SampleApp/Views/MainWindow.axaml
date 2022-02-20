@@ -20,7 +20,9 @@
     <Grid Margin="8,8,8,8" ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
         <l:CalendarControl
             Name="CalendarControl"
-            SelectionChanged="CalendarControlSelectionChanged" >
+            SelectionChanged="CalendarControlSelectionChanged"
+            BeginOfTheDay="6:0:0"
+            EndOfTheDay="18:0:0" >
             <l:CalendarControl.ItemTemplate>
                 <l:BeginItem Binding="{Binding Begin}" />
                 <l:EndItem Binding="{Binding End}" />

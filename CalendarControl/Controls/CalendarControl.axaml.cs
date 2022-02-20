@@ -12,6 +12,7 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using CalendarControl.Factories;
 using CalendarControl.Helpers;
 
@@ -28,11 +29,30 @@ public class CalendarControl : UserControl
     public static readonly DirectProperty<CalendarControl, IEnumerable> ItemsProperty = AvaloniaProperty.RegisterDirect<CalendarControl, IEnumerable>(nameof(Items), o => o.Items, (o, v) => o.Items = v);
     /// <summary>Current week property</summary>
     public static readonly DirectProperty<CalendarControl, DateTime> CurrentWeekProperty = AvaloniaProperty.RegisterDirect<CalendarControl, DateTime>(nameof(CurrentWeek), o => o.CurrentWeek, (o, v) => o.CurrentWeek = v);
+    /// <summary>The begin of the day property</summary>
+    public static readonly DirectProperty<CalendarControl, TimeSpan> BeginOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(BeginOfTheDay), o => o.BeginOfTheDay, (o, v) => o.BeginOfTheDay = v);
+    /// <summary>The end of the day property</summary>
+    public static readonly DirectProperty<CalendarControl, TimeSpan> EndOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(EndOfTheDay), o => o.EndOfTheDay, (o, v) => o.EndOfTheDay = v);
     /// <summary>The selected index property</summary>
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
     /// <summary>The selection changed event</summary>
     public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
-
+    /// <summary>First day of the week property</summary>
+	public DayOfWeek FirstDayOfWeek { get => GetValue(FirstDayOfWeekProperty); set => SetValue(FirstDayOfWeekProperty, value); }
+    /// <summary>Items property</summary>
+    public IEnumerable Items { get => items; set => SetAndRaise(ItemsProperty, ref items, value); }
+    /// <summary>Current week property</summary>
+	public DateTime CurrentWeek { get => currentWeek; set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value); }
+    /// <summary>Begin of the day property</summary>
+	public TimeSpan BeginOfTheDay { get => beginOfTheDay; set => SetAndRaise(BeginOfTheDayProperty, ref beginOfTheDay, value); }
+    /// <summary>End of the day property</summary>
+	public TimeSpan EndOfTheDay { get => endOfTheDay; set => SetAndRaise(EndOfTheDayProperty, ref endOfTheDay, value); }
+    /// <summary>Item definition</summary>
+    public ObservableCollection<CalendarControlItemTemplate> ItemTemplate { get; } = new();
+    /// <summary>Selected index</summary>
+	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
+    /// <summary>Occurs when selection changed</summary>
+    public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
     /// <summary>
     /// Initializes static members of the <see cref="CalendarControl"/> class.
     /// </summary>
@@ -42,12 +62,15 @@ public class CalendarControl : UserControl
         CurrentWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.CurrentWeekChanged(e));
     }
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="CalendarControl" /> class.
-	/// </summary>
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CalendarControl" /> class.
+    /// </summary>
     public CalendarControl()
     {
         AvaloniaXamlLoader.Load(this);
+
+        var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
+        scrollViewer.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
     }
 
     /// <inheritdoc />
@@ -85,6 +108,29 @@ public class CalendarControl : UserControl
         SelectedIndex = index;
         var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index };
         RaiseEvent(eventArgs);
+    }
+
+    /// <summary>
+    /// Scroll viewer bounds changed: adjust scrollable grid as weell
+    /// </summary>
+    /// <param name="rect">Rectangle of the scroll viewer</param>
+    void OnScrollViewerBoundsChanged(Rect rect)
+    {
+        var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
+        var scrollableGrid = this.FindControl<Grid>("ScrollableGrid");
+
+        if (BeginOfTheDay.TotalDays >= 0.0d && EndOfTheDay.TotalDays < 24.0d && EndOfTheDay > BeginOfTheDay)
+        {
+            var length = (EndOfTheDay - BeginOfTheDay).TotalDays;
+            var height = 1.0d / length * rect.Height;
+            scrollableGrid.Height = height;
+
+            Dispatcher.UIThread.Post(() => scrollViewer.Offset = new Vector(0.0d, BeginOfTheDay.TotalDays * height));
+        }
+        else
+        {
+            scrollableGrid.Height = rect.Height;
+        }
     }
 
     /// <summary>
@@ -442,21 +488,12 @@ public class CalendarControl : UserControl
     const int hoursPerDay = 24;
     /// <summary>Current week</summary>
     DateTime currentWeek = DateTime.Now;
+    /// <summary>Begin of the day</summary>
+    TimeSpan beginOfTheDay = new(0, 0, 0);
+    /// <summary>End of the day</summary>
+    TimeSpan endOfTheDay = new(0, 0, 0);
+    /// <summary>Items</summary>
     IEnumerable items = new AvaloniaList<object>();
-    /// <summary>
-    /// State of the left mouse button
-    /// </summary>
+    /// <summary>State of the left mouse button</summary>
     bool leftButtonDown;
-    /// <summary>First day of the week property</summary>
-	public DayOfWeek FirstDayOfWeek { get => GetValue(FirstDayOfWeekProperty); set => SetValue(FirstDayOfWeekProperty, value); }
-    /// <summary>Items property</summary>
-    public IEnumerable Items { get => items; set => SetAndRaise(ItemsProperty, ref items, value); }
-    /// <summary>Current week property</summary>
-	public DateTime CurrentWeek { get => currentWeek; set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value); }
-    /// <summary>Item definition</summary>
-    public ObservableCollection<CalendarControlItemTemplate> ItemTemplate { get; } = new();
-    /// <summary>Selected index</summary>
-	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
-    /// <summary>Occurs when selection changed</summary>
-    public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
 }
