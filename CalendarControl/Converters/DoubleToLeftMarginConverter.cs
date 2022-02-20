@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 
-namespace CalendarControl.Controls;
+namespace CalendarControl.Converters;
 
 /// <summary>
 /// Double (width) to Margin.Left converter
