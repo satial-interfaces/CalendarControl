@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 namespace CalendarControl.Helpers;
 
@@ -16,5 +17,17 @@ internal static class EnumerableHelper
     {
         var enumerator = source.GetEnumerator();
         return enumerator.MoveNext();
+    }
+    /// <summary>
+    /// Creates a list with objects from an enumerable
+    /// </summary>
+    /// <param name="source">The IEnumerable to convert.</param>
+    /// <returns>The list</returns>
+    public static IList<object> ToList(this IEnumerable source)
+    {
+        var result = new List<object>();
+        foreach (var obj in source)
+            result.Add(obj);
+        return result;
     }
 }

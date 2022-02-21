@@ -75,6 +75,32 @@ public class CalendarControl : UserControl
         UpdateItems(Items);
     }
 
+    /// <summary>
+    /// Scrolls the specified item into view.
+    /// </summary>
+    /// <param name="index">The index of the item.</param>
+    public void ScrollIntoView(int index)
+    {
+        if (index < 0) return;
+
+        var list = items.ToList();
+        if (index >= list.Count) return;
+
+        ScrollIntoView(list, index);
+    }
+
+    /// <summary>
+    /// Scrolls the specified item into view.
+    /// </summary>
+    /// <param name="item">The item</param>
+    public void ScrollIntoView(object item)
+    {
+        var list = items.ToList();
+        var index = list.IndexOf(item);
+        if (index < 0) return;
+        ScrollIntoView(list, index);
+    }
+
     /// <inheritdoc />
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
@@ -133,6 +159,30 @@ public class CalendarControl : UserControl
         {
             scrollableGrid.Height = rect.Height;
         }
+    }
+
+    /// <summary>
+    /// Scrolls the specified item into view.
+    /// </summary>
+    /// <param name="list">List of the item</param>
+    /// <param name="index">Index of the item</param>
+    void ScrollIntoView(IList<object> list, int index)
+    {
+        var begin = GetBinding<BeginItem>();
+        var end = GetBinding<EndItem>();
+        var text = GetBinding<TextItem>();
+        var color = GetBinding<ColorItem>();
+
+        if (begin == null)
+            return;
+        if (end == null)
+            return;
+        if (text == null)
+            return;
+
+        var item2 = CreateItem(list[index], begin, end, text, color, 0);
+        if (item2 == null) return;
+        CurrentWeek = item2.Begin;
     }
 
     /// <summary>

@@ -24,8 +24,9 @@
 		<Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 	</Style>
 	<Style Selector="l|AppointmentControl TextBlock">
-		<Setter Property="Margin" Value="4,4,4,0" />
 		<Setter Property="Foreground" Value="{DynamicResource TextOnAccentFillColorPrimaryBrush}" />
+		<Setter Property="Margin" Value="4,4,4,0" />
+		<Setter Property="TextWrapping" Value="Wrap" />
 	</Style>
 	<Style Selector="l|AppointmentControl">
 		<Setter Property="Margin" Value="0,0,2,0" />
