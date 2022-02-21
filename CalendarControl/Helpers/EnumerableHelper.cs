@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace CalendarControl.Helpers{
+namespace CalendarControl.Helpers;
 
 /// <summary>
 /// This class contains IEnumerable methods.
@@ -17,5 +17,4 @@ internal static class EnumerableHelper
         var enumerator = source.GetEnumerator();
         return enumerator.MoveNext();
     }
-}
 }

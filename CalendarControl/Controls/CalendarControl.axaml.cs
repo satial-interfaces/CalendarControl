@@ -16,7 +16,7 @@ using Avalonia.Threading;
 using CalendarControl.Factories;
 using CalendarControl.Helpers;
 
-namespace CalendarControl.Controls{
+namespace CalendarControl.Controls;
 
 /// <summary>
 /// This class represents a calendar control (week view)
@@ -498,5 +498,4 @@ public class CalendarControl : UserControl
     IEnumerable items = new AvaloniaList<object>();
     /// <summary>State of the left mouse button</summary>
     bool leftButtonDown;
-}
 }

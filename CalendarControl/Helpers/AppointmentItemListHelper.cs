@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CalendarControl.Controls;
 
-namespace CalendarControl.Helpers{
+namespace CalendarControl.Helpers;
 
 internal static class AppointmentItemListHelper
 {
@@ -65,5 +65,4 @@ internal static class AppointmentItemListHelper
     {
         return list.All(i => !i.HasOverlap(item));
     }
-}
 }

@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 
-namespace CalendarControl.Converters{
+namespace CalendarControl.Converters;
 
 /// <summary>
 /// Double (height) to 2X converter
@@ -23,5 +23,4 @@ class DoubleToDoubleDoubleConverter : IValueConverter
     {
         return BindingOperations.DoNothing;
     }
-}
 }

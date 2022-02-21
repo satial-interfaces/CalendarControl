@@ -11,7 +11,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CalendarControl.Controls;
 
-namespace SampleApp{
+namespace SampleApp;
 
 public class ColorConverter : IValueConverter
 {
@@ -141,5 +141,4 @@ public partial class MainWindow : Window
 
     CalendarControl.Controls.CalendarControl calendarControl;
     static readonly Random random = new();
-}
 }

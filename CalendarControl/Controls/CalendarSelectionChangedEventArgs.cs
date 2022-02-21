@@ -1,6 +1,6 @@
 using Avalonia.Interactivity;
 
-namespace CalendarControl.Controls{
+namespace CalendarControl.Controls;
 
 /// <summary>
 /// Expansion of the RoutedEventArgs class by providing a selected index;
@@ -19,5 +19,4 @@ public class CalendarSelectionChangedEventArgs : RoutedEventArgs
     /// </summary>
     /// <value>The selected index (zero-based) or -1 if deselected.</value>
     public int SelectedIndex { get; init; }
-}
 }

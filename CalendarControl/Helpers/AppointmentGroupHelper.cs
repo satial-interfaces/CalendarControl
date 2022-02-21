@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CalendarControl.Controls;
 
-namespace CalendarControl.Helpers{
+namespace CalendarControl.Helpers;
 
 /// <summary>
 /// This class contains appointment group methods
@@ -92,5 +92,4 @@ internal static class AppointmentGroupHelper
 
         return result + 1;
     }
-}
 }
