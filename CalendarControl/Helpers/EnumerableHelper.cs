@@ -23,7 +23,7 @@ internal static class EnumerableHelper
     /// </summary>
     /// <param name="source">The IEnumerable to convert.</param>
     /// <returns>The list</returns>
-    public static IList<object> ToList(this IEnumerable source)
+    public static List<object> ToList(this IEnumerable source)
     {
         var result = new List<object>();
         foreach (var obj in source)

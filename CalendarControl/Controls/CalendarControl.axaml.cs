@@ -35,6 +35,8 @@ public class CalendarControl : UserControl
     public static readonly DirectProperty<CalendarControl, TimeSpan> EndOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(EndOfTheDay), o => o.EndOfTheDay, (o, v) => o.EndOfTheDay = v);
     /// <summary>The selected index property</summary>
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
+    /// <summary>The selected item property</summary>
+    public static readonly StyledProperty<object> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object>(nameof(SelectedItem), null);
     /// <summary>The selection changed event</summary>
     public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
     /// <summary>First day of the week property</summary>
@@ -51,6 +53,8 @@ public class CalendarControl : UserControl
     public ObservableCollection<CalendarControlItemTemplate> ItemTemplate { get; } = new();
     /// <summary>Selected index</summary>
 	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
+    /// <summary>Selected item</summary>
+	public object SelectedItem { get => GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
     /// <summary>Occurs when selection changed</summary>
     public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
     /// <summary>
@@ -60,6 +64,8 @@ public class CalendarControl : UserControl
     {
         ItemsProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.ItemsChanged(e));
         CurrentWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.CurrentWeekChanged(e));
+        SelectedIndexProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedIndexChanged(e));
+        SelectedItemProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedItemChanged(e));
     }
 
     /// <summary>
@@ -117,8 +123,7 @@ public class CalendarControl : UserControl
         int index;
         if (e.Pointer.Captured is AppointmentControl appointment)
         {
-            appointment.IsSelected = true;
-            ClearSelection(appointment);
+            ClearSelection(null);
             index = appointment.Index;
         }
         else
@@ -210,6 +215,35 @@ public class CalendarControl : UserControl
         if (e.NewValue is not DateTime dateTime) return;
         CreateWeek(dateTime);
         UpdateItems(Items);
+    }
+
+    /// <summary>
+    /// Selected index changed event
+    /// </summary>
+    /// <param name="e">Argument for the event</param>
+    void SelectedIndexChanged(AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.NewValue is not int index) return;
+
+        var itemsGrid = this.FindControl<Grid>("ItemsGrid");
+        var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().FirstOrDefault(x => x.Index == index);
+        if (appointment != null)
+            appointment.IsSelected = true;
+    }
+
+    /// <summary>
+    /// Selected item changed event
+    /// </summary>
+    /// <param name="e">Argument for the event</param>
+    void SelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.NewValue is not object obj) return;
+        var index = Items.ToList().FindIndex(x => x == obj);
+
+        var itemsGrid = this.FindControl<Grid>("ItemsGrid");
+        var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().FirstOrDefault(x => x.Index == index);
+        if (appointment != null)
+            appointment.IsSelected = true;
     }
 
     /// <summary>
