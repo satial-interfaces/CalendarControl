@@ -141,7 +141,7 @@ public class CalendarControl : ContentControl, IStyleable
     }
 
     /// <summary>
-    /// Scroll viewer bounds changed: adjust scrollable grid as weell
+    /// Scroll viewer bounds changed: adjust scrollable grid as well
     /// </summary>
     /// <param name="rect">Rectangle of the scroll viewer</param>
     void OnScrollViewerBoundsChanged(Rect rect)

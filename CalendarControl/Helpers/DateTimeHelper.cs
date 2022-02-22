@@ -146,7 +146,7 @@ internal static class DateTimeHelper
     }
 
 	/// <summary>
-	/// Gets the default day stete
+	/// Gets the default day state
 	/// </summary>
 	/// <param name="dayOfWeek">Day of the week to check</param>
 	/// <returns>The day state</returns>

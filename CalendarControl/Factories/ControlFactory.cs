@@ -32,8 +32,8 @@ public static class ControlFactory
             {
                 RowDefinitions = new RowDefinitions
                 {
-                    new RowDefinition(1.0d, GridUnitType.Star),
-                    new RowDefinition(1.0d, GridUnitType.Star)
+                    new(1.0d, GridUnitType.Star),
+                    new(1.0d, GridUnitType.Star)
                 }
             };
             var border = new Border();

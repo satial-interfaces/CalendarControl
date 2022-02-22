@@ -12,7 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <l:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
-                    <l:DoubleToDoubleDoubleConverter x:Key="DoubleToDoubleDoubleConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

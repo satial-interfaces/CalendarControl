@@ -9,7 +9,7 @@ namespace CalendarControl.Converters;
 /// <summary>
 /// Double (width) to Margin.Left converter
 /// </summary>
-class DoubleToLeftMarginConverter : IValueConverter
+internal class DoubleToLeftMarginConverter : IValueConverter
 {
     /// <inheritdoc />
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
