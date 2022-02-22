@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<UserControl
+<ContentControl
 	x:Class="CalendarControl.Controls.CalendarControl"
 	xmlns="https://github.com/avaloniaui"
 	xmlns:l="clr-namespace:CalendarControl.Converters"
@@ -7,7 +7,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
-	<UserControl.Resources>
+	<ContentControl.Resources>
 		<ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
@@ -16,7 +16,7 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
-	</UserControl.Resources>
+	</ContentControl.Resources>
     <Grid RowDefinitions="Auto,*" Name="MainGrid">
         <Grid Grid.Row="0" Name="DayGrid" Margin="{Binding #HourGrid.Bounds.Width, Converter={StaticResource DoubleToLeftMarginConverter}}" />
         <Grid Grid.Row="1">
@@ -31,4 +31,4 @@
 			</ScrollViewer>
         </Grid>
     </Grid>
-</UserControl>
+</ContentControl>

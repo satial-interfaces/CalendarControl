@@ -12,6 +12,7 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using CalendarControl.Factories;
 using CalendarControl.Helpers;
@@ -21,8 +22,11 @@ namespace CalendarControl.Controls;
 /// <summary>
 /// This class represents a calendar control (week view)
 /// </summary>
-public class CalendarControl : UserControl
+public class CalendarControl : ContentControl, IStyleable
 {
+    /// <inheritdoc />
+    Type IStyleable.StyleKey => typeof(ContentControl);
+
     /// <summary>First day of the week property</summary>
     public static readonly StyledProperty<DayOfWeek> FirstDayOfWeekProperty = AvaloniaProperty.Register<CalendarControl, DayOfWeek>(nameof(FirstDayOfWeek), DateTimeHelper.GetCurrentDateFormat().FirstDayOfWeek);
     /// <summary>Items property</summary>
