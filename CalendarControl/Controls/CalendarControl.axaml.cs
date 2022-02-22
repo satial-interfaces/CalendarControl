@@ -81,12 +81,8 @@ public class CalendarControl : UserControl
     /// <param name="index">The index of the item.</param>
     public void ScrollIntoView(int index)
     {
-        if (index < 0) return;
-
-        var list = items.ToList();
-        if (index >= list.Count) return;
-
-        ScrollIntoView(list, index);
+        if (index < 0 || index >= internalItems.Count) return;
+        ScrollIntoView(internalItems, index);
     }
 
     /// <summary>
@@ -95,10 +91,10 @@ public class CalendarControl : UserControl
     /// <param name="item">The item</param>
     public void ScrollIntoView(object item)
     {
-        var list = items.ToList();
-        var index = list.IndexOf(item);
+        if (item is not AppointmentItem appointmentItem) return;
+        var index = internalItems.IndexOf(appointmentItem);
         if (index < 0) return;
-        ScrollIntoView(list, index);
+        ScrollIntoView(internalItems, index);
     }
 
     /// <inheritdoc />
@@ -166,23 +162,15 @@ public class CalendarControl : UserControl
     /// </summary>
     /// <param name="list">List of the item</param>
     /// <param name="index">Index of the item</param>
-    void ScrollIntoView(IList<object> list, int index)
+    void ScrollIntoView(IList<AppointmentItem> list, int index)
     {
-        var begin = GetBinding<BeginItem>();
-        var end = GetBinding<EndItem>();
-        var text = GetBinding<TextItem>();
-        var color = GetBinding<ColorItem>();
+        CurrentWeek = list[index].Begin;
 
-        if (begin == null)
-            return;
-        if (end == null)
-            return;
-        if (text == null)
-            return;
+        var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
+        var scrollViewerRect = scrollViewer.Bounds;
 
-        var item2 = CreateItem(list[index], begin, end, text, color, 0);
-        if (item2 == null) return;
-        CurrentWeek = item2.Begin;
+        var begin = (list[index].Begin - list[index].Begin.Date).TotalDays;
+        scrollViewer.Offset = new Vector(0.0d, begin * scrollViewerRect.Height);
     }
 
     /// <summary>
@@ -232,7 +220,8 @@ public class CalendarControl : UserControl
 
         var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 
-        var weekList = Convert(enumerable).Where(x => x.IsInCurrentWeek(beginWeek)).OrderBy(x => x.Begin);
+        internalItems = Convert(enumerable);
+        var weekList = internalItems.Where(x => x.IsInCurrentWeek(beginWeek)).OrderBy(x => x.Begin);
         for (var i = 0; i < daysPerWeek; i++)
         {
             if (itemsGrid.Children[i] is not Grid dayColumn) continue;
@@ -343,7 +332,7 @@ public class CalendarControl : UserControl
     /// </summary>
     /// <param name="enumerable">Items to process</param>
     /// <returns>Internal handleable format</returns>
-    IEnumerable<AppointmentItem> Convert(IEnumerable enumerable)
+    IList<AppointmentItem> Convert(IEnumerable enumerable)
     {
         var result = new List<AppointmentItem>();
 
@@ -546,6 +535,8 @@ public class CalendarControl : UserControl
     TimeSpan endOfTheDay = new(0, 0, 0);
     /// <summary>Items</summary>
     IEnumerable items = new AvaloniaList<object>();
+    /// <summary>Items</summary>
+    IList<AppointmentItem> internalItems = new List<AppointmentItem>();
     /// <summary>State of the left mouse button</summary>
     bool leftButtonDown;
 }

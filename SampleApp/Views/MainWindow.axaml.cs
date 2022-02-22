@@ -93,6 +93,7 @@ public partial class MainWindow : Window
     protected void ThisWeekButtonClick(object? sender, RoutedEventArgs e)
     {
         calendarControl.CurrentWeek = DateTime.Now;
+        calendarControl.ScrollIntoView(0);
     }
     protected void NextButtonClick(object? sender, RoutedEventArgs e)
     {
