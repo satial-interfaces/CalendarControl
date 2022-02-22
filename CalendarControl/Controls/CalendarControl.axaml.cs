@@ -135,8 +135,6 @@ public class CalendarControl : UserControl
         leftButtonDown = false;
         base.OnPointerReleased(e);
         SelectedIndex = index;
-        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index };
-        RaiseEvent(eventArgs);
     }
 
     /// <summary>
@@ -229,6 +227,9 @@ public class CalendarControl : UserControl
         var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().FirstOrDefault(x => x.Index == index);
         if (appointment != null)
             appointment.IsSelected = true;
+
+        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index };
+        RaiseEvent(eventArgs);
     }
 
     /// <summary>
@@ -244,6 +245,9 @@ public class CalendarControl : UserControl
         var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().FirstOrDefault(x => x.Index == index);
         if (appointment != null)
             appointment.IsSelected = true;
+
+        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index };
+        RaiseEvent(eventArgs);
     }
 
     /// <summary>
