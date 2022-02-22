@@ -140,6 +140,7 @@ public class CalendarControl : UserControl
     /// <param name="rect">Rectangle of the scroll viewer</param>
     void OnScrollViewerBoundsChanged(Rect rect)
     {
+        if (rect.Height < 0) return;
         var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
         var scrollableGrid = this.FindControl<Grid>("ScrollableGrid");
 
@@ -149,7 +150,8 @@ public class CalendarControl : UserControl
             var height = 1.0d / length * rect.Height;
             scrollableGrid.Height = height;
 
-            Dispatcher.UIThread.Post(() => scrollViewer.Offset = new Vector(0.0d, BeginOfTheDay.TotalDays * height));
+            if (scrollViewer.Offset.Y == 0.0d)
+                Dispatcher.UIThread.Post(() => scrollViewer.Offset = new Vector(0.0d, BeginOfTheDay.TotalDays * height));
         }
         else
         {
