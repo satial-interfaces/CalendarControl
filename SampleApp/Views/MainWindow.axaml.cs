@@ -98,6 +98,24 @@ public partial class MainWindow : Window
     {
         calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
     }
+    protected void NewButtonClick(object? sender, RoutedEventArgs e)
+    {
+        var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek).AddDays(7);
+        var begin = GetRandom(0, 24 * 4) / 4.0d;
+        var length = GetRandom(1, 8);
+
+        var item = new CalendarControlItem
+        {
+            Begin = beginOfWeek.AddHours(begin),
+            End = beginOfWeek.AddHours(begin + length),
+            Text = $"New Appointment {list.Count}",
+            Status = GetRandom()
+        };
+        list.Add(item);
+        list = new List<CalendarControlItem>(list);
+        calendarControl.Items = list;
+        calendarControl.ScrollIntoView(item);
+    }
 
     void RandomCalendar()
     {

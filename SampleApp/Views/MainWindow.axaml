@@ -35,6 +35,7 @@
             <Button Click="PreviousButtonClick">&lt; Previous</Button>
             <Button Click="ThisWeekButtonClick">This week</Button>
             <Button Click="NextButtonClick">Next &gt;</Button>
+            <Button Click="NewButtonClick">New</Button>
             <TextBlock Name="Info" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
     </Grid>

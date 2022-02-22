@@ -36,7 +36,7 @@ public class CalendarControl : UserControl
     /// <summary>The selected index property</summary>
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
     /// <summary>The selected item property</summary>
-    public static readonly StyledProperty<object> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object>(nameof(SelectedItem), null);
+    public static readonly StyledProperty<object> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object>(nameof(SelectedItem));
     /// <summary>The selection changed event</summary>
     public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
     /// <summary>First day of the week property</summary>
@@ -97,9 +97,8 @@ public class CalendarControl : UserControl
     /// <param name="item">The item</param>
     public void ScrollIntoView(object item)
     {
-        if (item is not AppointmentItem appointmentItem) return;
-        var index = internalItems.IndexOf(appointmentItem);
-        if (index < 0) return;
+        var index = items.ToList().IndexOf(item);
+        if (index < 0 || index >= internalItems.Count) return;
         ScrollIntoView(internalItems, index);
     }
 
@@ -228,7 +227,11 @@ public class CalendarControl : UserControl
         if (appointment != null)
             appointment.IsSelected = true;
 
-        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index };
+        object? item = null;
+        var list = items.ToList();
+        if (index >= 0 && index < list.Count)
+            item = list[index];
+        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index, SelectedItem = item };
         RaiseEvent(eventArgs);
     }
 
@@ -246,7 +249,7 @@ public class CalendarControl : UserControl
         if (appointment != null)
             appointment.IsSelected = true;
 
-        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index };
+        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index, SelectedItem = obj };
         RaiseEvent(eventArgs);
     }
 

@@ -19,4 +19,9 @@ public class CalendarSelectionChangedEventArgs : RoutedEventArgs
     /// </summary>
     /// <value>The selected index (zero-based) or -1 if deselected.</value>
     public int SelectedIndex { get; init; }
+    /// <summary>
+    /// Property representing the selected object. Null means not selected.
+    /// </summary>
+    /// <value>The selected object or null if deselected.</value>
+    public object? SelectedItem { get; init; }
 }
