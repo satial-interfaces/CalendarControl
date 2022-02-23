@@ -58,14 +58,12 @@ public partial class MainWindow : Window
 #endif
     }
 
-    private void InitializeComponent()
+    void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
         calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
         RandomCalendar();
     }
-
-    List<CalendarControlItem> list = new();
 
     protected void CalendarControlSelectionChanged(object? sender, CalendarSelectionChangedEventArgs e)
 	{
@@ -154,7 +152,7 @@ public partial class MainWindow : Window
         var begin = diff <= 0 ? dateTime.AddDays(diff) : dateTime.AddDays(diff - 7);
         return begin.Date;
     }
-
+    List<CalendarControlItem> list = new();
     CalendarControl.Controls.CalendarControl calendarControl;
     static readonly Random random = new();
 }
