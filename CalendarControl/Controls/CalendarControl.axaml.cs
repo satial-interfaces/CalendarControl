@@ -123,18 +123,8 @@ public class CalendarControl : ContentControl, IStyleable
             return;
         }
 
-        int index;
-        if (e.Pointer.Captured is AppointmentControl appointment)
-        {
-            ClearSelection(null);
-            index = appointment.Index;
-        }
-        else
-        {
-            ClearSelection(null);
-            index = -1;
-        }
-
+        ClearSelection();
+        var index = e.Pointer.Captured is AppointmentControl appointment ? appointment.Index : -1;
         leftButtonDown = false;
         base.OnPointerReleased(e);
         SelectedIndex = index;
@@ -184,16 +174,11 @@ public class CalendarControl : ContentControl, IStyleable
     /// <summary>
     /// Clear the selection bit for the other appointments.
     /// </summary>
-    /// <param name="skip">Appointment to skip</param>
-    void ClearSelection(AppointmentControl? skip)
+    void ClearSelection()
     {
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-        var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>();
-        foreach (var appointment in appointments)
-        {
-            if (appointment == skip) continue;
+        foreach (var appointment in itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>())
             appointment.IsSelected = false;
-        }
     }
 
     /// <summary>
