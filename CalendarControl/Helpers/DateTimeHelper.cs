@@ -37,8 +37,15 @@ internal static class DateTimeHelper
     {
         var dayOfWeek = (int)obj.DayOfWeek;
         var diff = (int)firstDayOfWeek - dayOfWeek;
-        var begin = diff <= 0 ? obj.AddDays(diff) : obj.AddDays(diff - 7);
-        return begin.Date;
+        try
+        {
+            var begin = diff <= 0 ? obj.AddDays(diff) : obj.AddDays(diff - 7);
+            return begin.Date;
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return obj;
+        }
     }
 
     /// <summary>
@@ -49,8 +56,15 @@ internal static class DateTimeHelper
     /// <returns>End of the week</returns>
     public static DateTime GetEndWeek(this DateTime obj, DayOfWeek firstDayOfWeek)
     {
-        var end = GetBeginWeek(obj, firstDayOfWeek).AddDays(7).AddTicks(-1);
-        return end;
+        try
+        {
+            var end = GetBeginWeek(obj, firstDayOfWeek).AddDays(7).AddTicks(-1);
+            return end;
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return obj;
+        }
     }
 
     /// <summary>
