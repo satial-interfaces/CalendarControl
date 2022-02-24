@@ -249,7 +249,6 @@ public class CalendarControl : ContentControl, IStyleable
     void UpdateItems(IEnumerable enumerable)
     {
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-
         var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 
         internalItems = Convert(enumerable);
@@ -262,44 +261,76 @@ public class CalendarControl : ContentControl, IStyleable
             AppointmentItemListHelper.ApplyIndentation(todayList);
             var rowDefinitions = new RowDefinitions();
 
-            var previous = double.NaN;
+            var previousEnd = double.NaN;
             var dayControls = new List<IControl?>();
             var j = 0;
             while (j < todayList.Count)
             {
                 var (begin, _) = todayList[j].GetFractionOfDay();
-
-                var emptyLength = begin - (!double.IsNaN(previous) ? previous : 0.0d);
-                if (emptyLength > 0.0d)
-                {
-                    dayControls.Add(null);
-                    rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
-                }
+                AddEmptyRow(rowDefinitions, dayControls, previousEnd, begin);
 
                 var appointmentGroup = GetAppointmentGroup(todayList, j);
                 dayControls.Add(appointmentGroup.Control);
                 rowDefinitions.Add(new RowDefinition(appointmentGroup.Length, GridUnitType.Star));
-                previous = appointmentGroup.Begin + appointmentGroup.Length;
+                previousEnd = appointmentGroup.Begin + appointmentGroup.Length;
                 j = appointmentGroup.Index;
             }
 
             // Tail
-            if (double.IsNaN(previous) || previous < 1.0d)
-            {
-                dayControls.Add(null);
-                rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d), GridUnitType.Star));
-            }
+            AddEmptyRowTail(rowDefinitions, dayControls, previousEnd);
+            AddRows(dayColumn, rowDefinitions, dayControls);
+        }
+    }
 
-            dayColumn.RowDefinitions = rowDefinitions;
-            dayColumn.Children.Clear();
-            foreach (var dayControl in dayControls.Where(x => x != null))
-                dayColumn.Children.Add(dayControl);
+    /// <summary>
+    /// Adds an empty row for the tail (if applicable)
+    /// </summary>
+    /// <param name="rowDefinitions">List of row definitions to add to</param>
+    /// <param name="controls">List of controls to add to</param>
+    /// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
+    static void AddEmptyRowTail(RowDefinitions rowDefinitions, List<IControl?> controls, double previousEnd)
+    {
+        if (!double.IsNaN(previousEnd) && previousEnd >= 1.0d)
+            return;
 
-            for (var k = 0; k < dayControls.Count; k++)
-            {
-                if (dayControls[k] != null)
-                    Grid.SetRow(dayControls[k] as Control, k);
-            }
+        controls.Add(null);
+        rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d), GridUnitType.Star));
+    }
+
+    /// <summary>
+    /// Adds an empty row (if applicable)
+    /// </summary>
+    /// <param name="rowDefinitions">List of row definitions to add to</param>
+    /// <param name="controls">List of controls to add to</param>
+    /// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
+    /// <param name="begin">Begin of the current appointment (as a fraction of the day)</param>
+    static void AddEmptyRow(RowDefinitions rowDefinitions, List<IControl?> controls, double previousEnd, double begin)
+    {
+        var emptyLength = begin - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d);
+        if (emptyLength <= 0.0d)
+            return;
+
+        controls.Add(null);
+        rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
+    }
+
+    /// <summary>
+    /// Adds controls to the given grid's rows
+    /// </summary>
+    /// <param name="grid">Grid to add to</param>
+    /// <param name="rowDefinitions">List of row definitions</param>
+    /// <param name="controls">Controls to adds</param>
+    static void AddRows(Grid grid, RowDefinitions rowDefinitions, List<IControl?> controls)
+    {
+        grid.RowDefinitions = rowDefinitions;
+        grid.Children.Clear();
+        foreach (var control in controls.Where(x => x != null))
+            grid.Children.Add(control);
+
+        for (var i = 0; i < controls.Count; i++)
+        {
+            if (controls[i] != null)
+                Grid.SetRow(controls[i] as Control, i);
         }
     }
 
