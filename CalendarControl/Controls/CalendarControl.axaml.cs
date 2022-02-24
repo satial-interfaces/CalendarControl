@@ -124,7 +124,9 @@ public class CalendarControl : ContentControl, IStyleable
         }
 
         ClearSelection();
-        var index = e.Pointer.Captured is AppointmentControl appointment ? appointment.Index : -1;
+        var control = e.Pointer.Captured as ILogical;
+        var appointment = control?.FindLogicalAncestorOfType<AppointmentControl>();
+        var index = appointment != null ? appointment.Index : -1;
         leftButtonDown = false;
         base.OnPointerReleased(e);
         SelectedIndex = index;
