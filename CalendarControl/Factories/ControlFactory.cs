@@ -64,29 +64,6 @@ public static class ControlFactory
     {
         var border = new AppointmentControl { Index = item.Index };
         border.DataContext = item;
-        if (item.Color != Colors.Transparent)
-        {
-            border[!Border.BackgroundProperty] = new Binding("Color")
-            {
-                Converter = OneWayConverter<Color, IBrush>.GetInstance((v, _, _) => new SolidColorBrush(v))
-            };
-        }
-
-        var textBlock = new TextBlock();
-        textBlock[!TextBlock.TextProperty] = new Binding("Text")
-        {
-            Converter = OneWayConverter<string, string>.GetInstance((v, p, _) =>
-            {
-                if (p is not AppointmentItem i) return "";
-                return i.Begin.ToShortTimeString() + Environment.NewLine + v;
-            }),
-            ConverterParameter = item
-        };
-        var grid = new Grid();
-        grid.Children.Add(new Border());
-        grid.Children.Add(textBlock);
-
-        border.Child = grid;
         return border;
     }
 
