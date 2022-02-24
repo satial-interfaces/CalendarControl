@@ -25,10 +25,11 @@ public static class AvaloniaObjectHelper
         var instancedBinding = bind.Initiate(target, null);
         if (instancedBinding?.Observable == null) return defaultValue;
         var result = defaultValue;
-        instancedBinding.Observable.Subscribe(x =>
+        var disposable = instancedBinding.Observable.Subscribe(x =>
         {
             if (x != null) result = (T)x;
         });
+        disposable.Dispose();
         return result;
     }
 }
