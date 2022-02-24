@@ -372,7 +372,7 @@ public class CalendarControl : ContentControl, IStyleable
                     rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
                 }
 
-                groupControls.Add(ControlFactory.CreateAppointment(indentItem.Begin, indentItem.Text, indentItem.Color, indentItem.Index));
+                groupControls.Add(ControlFactory.CreateAppointment(indentItem));
                 rowDefinitions.Add(new RowDefinition(l, GridUnitType.Star));
                 previous = b + l;
             }

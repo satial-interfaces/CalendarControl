@@ -1,8 +1,10 @@
 using System;
 using System.Globalization;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using CalendarControl.Controls;
+using CalendarControl.Converters;
 using CalendarControl.Helpers;
 
 namespace CalendarControl.Factories;
@@ -54,22 +56,32 @@ public static class ControlFactory
     }
 
     /// <summary>
-    /// Creates an appointment
+    /// Creates an appointment control for the given item
     /// </summary>
-    /// <param name="begin">Begin of the appointment</param>
-    /// <param name="text">Text to add to appointment</param>
-    /// <param name="color">Color to add to appointment</param>
-    /// <param name="index">Index to set to appointment</param>
+    /// <param name="item">Appointment item to create control for</param>
     /// <returns>Created appointment</returns>
-    public static Border CreateAppointment(DateTime begin, string text, Color color, int index)
+    public static Border CreateAppointment(AppointmentItem item)
     {
-        var border = new AppointmentControl { Index = index };
-        if (color != Colors.Transparent)
+        var border = new AppointmentControl { Index = item.Index };
+        border.DataContext = item;
+        if (item.Color != Colors.Transparent)
         {
-            border.Background = new SolidColorBrush(color);
+            border[!Border.BackgroundProperty] = new Binding("Color")
+            {
+                Converter = OneWayConverter<Color, IBrush>.GetInstance((v, _, _) => new SolidColorBrush(v))
+            };
         }
 
-        var textBlock = new TextBlock { Text = begin.ToShortTimeString() + Environment.NewLine + text };
+        var textBlock = new TextBlock();
+        textBlock[!TextBlock.TextProperty] = new Binding("Text")
+        {
+            Converter = OneWayConverter<string, string>.GetInstance((v, p, _) =>
+            {
+                if (p is not AppointmentItem i) return "";
+                return i.Begin.ToShortTimeString() + Environment.NewLine + v;
+            }),
+            ConverterParameter = item
+        };
         var grid = new Grid();
         grid.Children.Add(new Border());
         grid.Children.Add(textBlock);

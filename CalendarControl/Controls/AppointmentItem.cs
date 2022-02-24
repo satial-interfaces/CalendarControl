@@ -6,7 +6,7 @@ namespace CalendarControl.Controls;
 /// <summary>
 /// This class represents an item (appointment) from the calendar control
 /// </summary>
-internal class AppointmentItem
+public class AppointmentItem
 {
     /// <summary>
     /// The begin
