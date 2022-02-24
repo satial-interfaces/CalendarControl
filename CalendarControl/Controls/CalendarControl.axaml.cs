@@ -263,8 +263,7 @@ public class CalendarControl : ContentControl, IStyleable
 
             var previousEnd = double.NaN;
             var dayControls = new List<IControl?>();
-            var j = 0;
-            while (j < todayList.Count)
+            var j = 0; while (j < todayList.Count)
             {
                 var (begin, _) = todayList[j].GetFractionOfDay();
                 AddEmptyRow(rowDefinitions, dayControls, previousEnd, begin);
@@ -288,7 +287,7 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="rowDefinitions">List of row definitions to add to</param>
     /// <param name="controls">List of controls to add to</param>
     /// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
-    static void AddEmptyRowTail(RowDefinitions rowDefinitions, List<IControl?> controls, double previousEnd)
+    static void AddEmptyRowTail(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd)
     {
         if (!double.IsNaN(previousEnd) && previousEnd >= 1.0d)
             return;
@@ -304,7 +303,7 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="controls">List of controls to add to</param>
     /// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
     /// <param name="begin">Begin of the current appointment (as a fraction of the day)</param>
-    static void AddEmptyRow(RowDefinitions rowDefinitions, List<IControl?> controls, double previousEnd, double begin)
+    static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd, double begin)
     {
         var emptyLength = begin - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d);
         if (emptyLength <= 0.0d)
@@ -320,7 +319,7 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="grid">Grid to add to</param>
     /// <param name="rowDefinitions">List of row definitions</param>
     /// <param name="controls">Controls to adds</param>
-    static void AddRows(Grid grid, RowDefinitions rowDefinitions, List<IControl?> controls)
+    static void AddRows(Grid grid, RowDefinitions rowDefinitions, IReadOnlyList<IControl?> controls)
     {
         grid.RowDefinitions = rowDefinitions;
         grid.Children.Clear();
@@ -412,13 +411,8 @@ public class CalendarControl : ContentControl, IStyleable
         var text = GetBinding<TextItem>();
         var color = GetBinding<ColorItem>();
 
-        if (begin == null)
+        if (begin == null || end == null || text == null)
             return result;
-        if (end == null)
-            return result;
-        if (text == null)
-            return result;
-
         var item = CreateItem(obj, begin, end, text, color, i);
         if (item == null)
             return result;
@@ -491,8 +485,7 @@ public class CalendarControl : ContentControl, IStyleable
         for (var i = 0; i < daysPerWeek; i++)
         {
             var dayColumn = ControlFactory.CreateColumn();
-            var rowDefinitions = new RowDefinitions();
-            dayColumn.RowDefinitions = rowDefinitions;
+            dayColumn.RowDefinitions = new RowDefinitions();
             columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             itemsGrid.Children.Add(dayColumn);
             Grid.SetColumn(dayColumn, i);

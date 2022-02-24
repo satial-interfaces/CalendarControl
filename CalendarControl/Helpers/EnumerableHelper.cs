@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CalendarControl.Helpers;
 
@@ -25,9 +26,6 @@ internal static class EnumerableHelper
     /// <returns>The list</returns>
     public static List<object> ToList(this IEnumerable source)
     {
-        var result = new List<object>();
-        foreach (var obj in source)
-            result.Add(obj);
-        return result;
+        return Enumerable.ToList(source.Cast<object>());
     }
 }

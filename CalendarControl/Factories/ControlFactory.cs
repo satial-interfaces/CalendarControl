@@ -26,25 +26,22 @@ public static class ControlFactory
     {
         var dayState = DateTimeHelper.GetDayState(CultureInfo.CurrentCulture, dayOfWeek);
         if (dayState == DateTimeHelper.DayState.WorkDay) return new Border();
-        if (dayState == DateTimeHelper.DayState.WorkdayMorning)
+        if (dayState != DateTimeHelper.DayState.WorkdayMorning) return new WeekendControl();
+        var grid = new Grid
         {
-            var grid = new Grid
+            RowDefinitions = new RowDefinitions
             {
-                RowDefinitions = new RowDefinitions
-                {
-                    new(1.0d, GridUnitType.Star),
-                    new(1.0d, GridUnitType.Star)
-                }
-            };
-            var border = new Border();
-            var weekendControl = new WeekendControl();
-            grid.Children.Add(border);
-            grid.Children.Add(weekendControl);
-            Grid.SetRow(border, 0);
-            Grid.SetRow(weekendControl, 1);
-            return grid;
-        }
-        return new WeekendControl();
+                new(1.0d, GridUnitType.Star),
+                new(1.0d, GridUnitType.Star)
+            }
+        };
+        var border = new Border();
+        var weekendControl = new WeekendControl();
+        grid.Children.Add(border);
+        grid.Children.Add(weekendControl);
+        Grid.SetRow(border, 0);
+        Grid.SetRow(weekendControl, 1);
+        return grid;
     }
 
     /// <summary>
