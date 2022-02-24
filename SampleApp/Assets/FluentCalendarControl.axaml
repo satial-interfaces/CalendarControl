@@ -4,36 +4,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
         <SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}" />
-        <Template x:Key="FluentAppointmentControl">
-			<Grid>
-				<Border
-					BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-					BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
-					CornerRadius="{DynamicResource ControlCornerRadius}">
-					<Border.Background>
-						<SolidColorBrush Color="{Binding Color}" />
-					</Border.Background>
-				</Border>
-				<StackPanel>
-					<TextBlock
-						Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
-						Margin="4,4,4,0"
-						Text="{Binding Begin, StringFormat={}{0:t}}"
-						TextWrapping="Wrap" />
-					<TextBlock
-						Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
-						Margin="4,4,4,0"
-						Text="{Binding Text}"
-						TextWrapping="Wrap" />
-				</StackPanel>
-			</Grid>
-		</Template>
     </Styles.Resources>
 	<Style Selector="l|CalendarControl">
 	</Style>
 	<Style Selector="l|AppointmentControl">
 		<Setter Property="Background" Value="{DynamicResource SystemAccentBrush}" />
-        <Setter Property="Child" Value="{StaticResource FluentAppointmentControl}"/>
+        <Setter Property="Child">
+			<Template>
+				<Grid>
+					<Border
+						BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+						BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
+						CornerRadius="{DynamicResource ControlCornerRadius}">
+						<Border.Background>
+							<SolidColorBrush Color="{Binding Color}" />
+						</Border.Background>
+					</Border>
+					<StackPanel>
+						<TextBlock
+							Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+							Margin="4,4,4,0"
+							Text="{Binding Begin, StringFormat={}{0:t}}"
+							TextWrapping="Wrap" />
+						<TextBlock
+							Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
+							Margin="4,4,4,0"
+							Text="{Binding Text}"
+							TextWrapping="Wrap" />
+					</StackPanel>
+				</Grid>
+			</Template>
+		</Setter>
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="Margin" Value="0,0,2,0" />
 	</Style>
