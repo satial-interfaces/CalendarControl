@@ -7,10 +7,13 @@
         <Template x:Key="FluentAppointmentControl">
 			<Grid>
 				<Border
-					Background="{Binding Color}"
 					BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
 					BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
-					CornerRadius="{DynamicResource ControlCornerRadius}" />
+					CornerRadius="{DynamicResource ControlCornerRadius}">
+					<Border.Background>
+						<SolidColorBrush Color="{Binding Color}" />
+					</Border.Background>
+				</Border>
 				<StackPanel>
 					<TextBlock
 						Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
