@@ -5,9 +5,6 @@
     <Styles.Resources>
     </Styles.Resources>
 	<Style Selector="si|AppointmentControl">
-		<Setter Property="Background">
-			<SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
-		</Setter>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
         <Setter Property="Child">
@@ -16,6 +13,14 @@
 					<Design.DataContext>
 						<si:AppointmentItem />
 					</Design.DataContext>
+					<Border
+						BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+						BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
+						CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
+						<Border.Background>
+							<SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+						</Border.Background>
+					</Border>
 					<Border
 						BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
 						BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
