@@ -1,10 +1,7 @@
 using System;
 using System.Globalization;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Media;
 using SatialInterfaces.Controls;
-using SatialInterfaces.Converters;
 using SatialInterfaces.Helpers;
 
 namespace SatialInterfaces.Factories;
@@ -62,8 +59,11 @@ public static class ControlFactory
     /// <returns>Created appointment</returns>
     public static Border CreateAppointment(AppointmentItem item)
     {
-        var border = new AppointmentControl { Index = item.Index };
-        border.DataContext = item;
+        var border = new AppointmentControl
+        {
+            DataContext = item,
+            Index = item.Index
+        };
         return border;
     }
 

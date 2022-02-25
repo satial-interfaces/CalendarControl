@@ -18,7 +18,7 @@ internal class OneWayConverter<TSource, TTarget> : IValueConverter
 	public static OneWayConverter<TSource, TTarget> GetInstance(Func<TSource, object?, CultureInfo, TTarget> convert) => new(convert);
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="OneWayConverter" /> class.
+	/// Initializes a new instance of the <see cref="SatialInterfaces.Converters.OneWayConverter" /> class.
 	/// </summary>
 	/// <param name="convert">Convert function to pass</param>
 	public OneWayConverter(Func<TSource, object?, CultureInfo, TTarget> convert) => this.convert = convert;
@@ -30,7 +30,7 @@ internal class OneWayConverter<TSource, TTarget> : IValueConverter
 			return BindingOperations.DoNothing;
 		if (typeof(TTarget) != targetType)
 			return BindingOperations.DoNothing;
-		return (TTarget)convert((TSource)value!, parameter, culture);
+		return convert((TSource)value!, parameter, culture);
 	}
 
 	/// <inheritdoc />
