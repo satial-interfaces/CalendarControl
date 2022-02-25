@@ -27,8 +27,9 @@
 						CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}"
 						Name="SelectionBorder">
 					</Border>
-					<StackPanel>
+					<StackPanel MaxHeight="{Binding $parent[Grid].Bounds.Height}">
 						<TextBlock
+							FontWeight="Bold"
 							Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}"
 							Margin="4,4,4,0"
 							Text="{Binding Begin, StringFormat={}{0:t}}"
@@ -45,8 +46,8 @@
 		<Setter Property="Margin" Value="0,0,2,0" />
 	</Style>
 	<Style Selector="si|AppointmentControl:selected Border.selectedAppointment">
-		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 		<Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 	</Style>
 	<Style Selector="si|HourCell">
 		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefault}" />
