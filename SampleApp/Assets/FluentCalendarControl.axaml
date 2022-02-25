@@ -13,6 +13,9 @@
         <Setter Property="Child">
 			<Template>
 				<Grid>
+					<Design.DataContext>
+						<si:AppointmentItem />
+					</Design.DataContext>
 					<Border
 						BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
 						BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 

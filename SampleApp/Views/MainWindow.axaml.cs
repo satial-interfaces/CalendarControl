@@ -38,7 +38,7 @@ public enum Status
     Error
 }
 
-internal class CalendarControlItem
+public class AppointmentViewModel
 {
     public DateTime Begin { get; set; }
     public DateTime End { get; set; }
@@ -102,7 +102,7 @@ public partial class MainWindow : Window
         var begin = GetRandom(0, 24 * 4) / 4.0d;
         var length = GetRandom(1, 8);
 
-        var item = new CalendarControlItem
+        var item = new AppointmentViewModel
         {
             Begin = beginOfWeek.AddHours(begin),
             End = beginOfWeek.AddHours(begin + length),
@@ -110,7 +110,7 @@ public partial class MainWindow : Window
             Status = GetRandom()
         };
         list.Add(item);
-        list = new List<CalendarControlItem>(list);
+        list = new List<AppointmentViewModel>(list);
         calendarControl.Items = list;
         calendarControl.ScrollIntoView(item);
     }
@@ -120,7 +120,7 @@ public partial class MainWindow : Window
         calendarControl.CurrentWeek = DateTime.Now;
         var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek);
 
-        list = new List<CalendarControlItem>();
+        list = new List<AppointmentViewModel>();
         const int weeks = 1;
         const int heads = weeks / 2;
         const int tails = weeks - heads;
@@ -129,7 +129,7 @@ public partial class MainWindow : Window
             var begin = GetRandom(-168 * heads * 4, 168 * tails * 4) / 4.0d;
             var length = GetRandom(1, 8);
 
-            var item = new CalendarControlItem
+            var item = new AppointmentViewModel
             {
                 Begin = beginOfWeek.AddHours(begin),
                 End = beginOfWeek.AddHours(begin + length),
@@ -152,7 +152,7 @@ public partial class MainWindow : Window
         var begin = diff <= 0 ? dateTime.AddDays(diff) : dateTime.AddDays(diff - 7);
         return begin.Date;
     }
-    List<CalendarControlItem> list = new();
+    List<AppointmentViewModel> list = new();
     CalendarControl calendarControl;
     static readonly Random random = new();
 }

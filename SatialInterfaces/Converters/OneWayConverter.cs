@@ -26,9 +26,7 @@ internal class OneWayConverter<TSource, TTarget> : IValueConverter
 	/// <inheritdoc />
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
-		if (typeof(TSource).IsValueType && value == null)
-			return BindingOperations.DoNothing;
-		if (typeof(TTarget) != targetType)
+		if ((typeof(TSource).IsValueType && value == null) || typeof(TTarget) != targetType)
 			return BindingOperations.DoNothing;
 		return convert((TSource)value!, parameter, culture);
 	}

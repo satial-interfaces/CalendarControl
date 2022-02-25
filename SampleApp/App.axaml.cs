@@ -17,7 +17,7 @@ public class App : Application
         {
             desktop.MainWindow = new MainWindow();
         }
-        // var theme = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
+        // var theme = AvaloniaLocator.Current.GetService<FluentAvalonia.Styling.FluentAvaloniaTheme>();
         // if (theme != null)
         //     theme.RequestedTheme = "Dark";
 

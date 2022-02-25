@@ -23,6 +23,9 @@
             SelectionChanged="CalendarControlSelectionChanged"
             BeginOfTheDay="06:00"
             EndOfTheDay="18:00" >
+            <Design.DataContext>
+                <v:AppointmentViewModel />
+            </Design.DataContext>
             <si:CalendarControl.ItemTemplate>
                 <si:BeginItem Binding="{Binding Begin}" />
                 <si:EndItem Binding="{Binding End}" />
