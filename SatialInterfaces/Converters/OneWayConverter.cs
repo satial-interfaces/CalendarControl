@@ -3,7 +3,7 @@ using System.Globalization;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 
-namespace CalendarControl.Converters;
+namespace SatialInterfaces.Converters;
 
 /// <summary>
 /// This class represents a one-way converter.

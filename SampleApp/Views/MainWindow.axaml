@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:l="clr-namespace:CalendarControl.Controls;assembly=CalendarControl"
+    xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
     xmlns:v="clr-namespace:SampleApp"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="SampleApp.MainWindow"
@@ -18,18 +18,18 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="8,8,8,8" ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
-        <l:CalendarControl
+        <si:CalendarControl
             Name="CalendarControl"
             SelectionChanged="CalendarControlSelectionChanged"
             BeginOfTheDay="06:00"
             EndOfTheDay="18:00" >
-            <l:CalendarControl.ItemTemplate>
-                <l:BeginItem Binding="{Binding Begin}" />
-                <l:EndItem Binding="{Binding End}" />
-                <l:TextItem Binding="{Binding Text}" />
-                <l:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
-            </l:CalendarControl.ItemTemplate>
-        </l:CalendarControl>
+            <si:CalendarControl.ItemTemplate>
+                <si:BeginItem Binding="{Binding Begin}" />
+                <si:EndItem Binding="{Binding End}" />
+                <si:TextItem Binding="{Binding Text}" />
+                <si:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
+            </si:CalendarControl.ItemTemplate>
+        </si:CalendarControl>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">
             <Button Click="RandomButtonClick">Random</Button>
             <Button Click="PreviousButtonClick">&lt; Previous</Button>

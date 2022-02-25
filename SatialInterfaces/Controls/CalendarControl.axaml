@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentControl
-	x:Class="CalendarControl.Controls.CalendarControl"
+	x:Class="SatialInterfaces.Controls.CalendarControl"
 	xmlns="https://github.com/avaloniaui"
-	xmlns:l="clr-namespace:CalendarControl.Converters"
+	xmlns:si="clr-namespace:SatialInterfaces.Converters"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,7 +11,7 @@
 		<ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <l:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
+                    <si:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

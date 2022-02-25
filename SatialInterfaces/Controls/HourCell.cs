@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace CalendarControl.Controls;
+namespace SatialInterfaces.Controls;
 
 /// <summary>
 /// This class extends Border (by its name)

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using CalendarControl.Controls;
+using SatialInterfaces.Controls;
 
-namespace CalendarControl.Helpers;
+namespace SatialInterfaces.Helpers;
 
 /// <summary>
 /// This class contains appointment group methods

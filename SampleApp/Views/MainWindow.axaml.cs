@@ -7,7 +7,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using CalendarControl.Controls;
+using SatialInterfaces.Controls;
 
 namespace SampleApp;
 
@@ -61,7 +61,7 @@ public partial class MainWindow : Window
     void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
-        calendarControl = this.FindControl<CalendarControl.Controls.CalendarControl>("CalendarControl");
+        calendarControl = this.FindControl<CalendarControl>("CalendarControl");
         RandomCalendar();
     }
 
@@ -153,6 +153,6 @@ public partial class MainWindow : Window
         return begin.Date;
     }
     List<CalendarControlItem> list = new();
-    CalendarControl.Controls.CalendarControl calendarControl;
+    CalendarControl calendarControl;
     static readonly Random random = new();
 }

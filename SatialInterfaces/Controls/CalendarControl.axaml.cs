@@ -14,10 +14,10 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using CalendarControl.Factories;
-using CalendarControl.Helpers;
+using SatialInterfaces.Factories;
+using SatialInterfaces.Helpers;
 
-namespace CalendarControl.Controls;
+namespace SatialInterfaces.Controls;
 
 /// <summary>
 /// This class represents a calendar control (week view)

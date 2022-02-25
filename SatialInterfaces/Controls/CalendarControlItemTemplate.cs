@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Data;
 
-namespace CalendarControl.Controls;
+namespace SatialInterfaces.Controls;
 
 /// <summary>
 /// This class contains the base (abstract) for the item template.

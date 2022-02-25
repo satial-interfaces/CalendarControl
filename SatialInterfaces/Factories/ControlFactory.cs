@@ -3,11 +3,11 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
-using CalendarControl.Controls;
-using CalendarControl.Converters;
-using CalendarControl.Helpers;
+using SatialInterfaces.Controls;
+using SatialInterfaces.Converters;
+using SatialInterfaces.Helpers;
 
-namespace CalendarControl.Factories;
+namespace SatialInterfaces.Factories;
 
 /// <summary>
 /// This class contains control factory methods.

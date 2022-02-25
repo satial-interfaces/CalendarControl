@@ -1,13 +1,13 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
-	xmlns:l="clr-namespace:CalendarControl.Controls;assembly=CalendarControl"
+	xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
         <SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}" />
     </Styles.Resources>
-	<Style Selector="l|CalendarControl">
+	<Style Selector="si|CalendarControl">
 	</Style>
-	<Style Selector="l|AppointmentControl">
+	<Style Selector="si|AppointmentControl">
 		<Setter Property="Background" Value="{DynamicResource SystemAccentBrush}" />
         <Setter Property="Child">
 			<Template>
@@ -19,6 +19,8 @@
 						<Border.Background>
 							<SolidColorBrush Color="{Binding Color}" />
 						</Border.Background>
+					</Border>
+					<Border Classes="selected" Name="SelectionBorder">
 					</Border>
 					<StackPanel>
 						<TextBlock
@@ -38,15 +40,15 @@
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="Margin" Value="0,0,2,0" />
 	</Style>
-	<Style Selector="l|AppointmentControl:selected Border">
+	<Style Selector="si|AppointmentControl:selected Border.selected">
 		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 		<Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 	</Style>
-	<Style Selector="l|HourCell">
+	<Style Selector="si|HourCell">
 		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefault}" />
 		<Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
 	</Style>
-	<Style Selector="l|WeekendControl">
+	<Style Selector="si|WeekendControl">
 		<Setter Property="Background" Value="{DynamicResource ControlStrokeColorDefault}" />
 	</Style>
 </Styles>

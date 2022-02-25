@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CalendarControl.Helpers;
+namespace SatialInterfaces.Helpers;
 
 /// <summary>
 /// This class contains IEnumerable methods.

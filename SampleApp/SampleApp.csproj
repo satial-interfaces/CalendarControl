@@ -23,6 +23,6 @@
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\CalendarControl\CalendarControl.csproj" />
+		<ProjectReference Include="..\SatialInterfaces\CalendarControl.csproj" />
     </ItemGroup>
 </Project>

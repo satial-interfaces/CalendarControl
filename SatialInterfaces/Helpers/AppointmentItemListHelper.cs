@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using CalendarControl.Controls;
+using SatialInterfaces.Controls;
 
-namespace CalendarControl.Helpers;
+namespace SatialInterfaces.Helpers;
 
 internal static class AppointmentItemListHelper
 {
