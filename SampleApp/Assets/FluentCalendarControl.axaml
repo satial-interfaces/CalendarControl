@@ -3,24 +3,29 @@
 	xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
-        <SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}" />
     </Styles.Resources>
-	<Style Selector="si|CalendarControl">
-	</Style>
 	<Style Selector="si|AppointmentControl">
-		<Setter Property="Background" Value="{DynamicResource SystemAccentBrush}" />
+		<Setter Property="Background">
+			<SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+		</Setter>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
         <Setter Property="Child">
 			<Template>
 				<Grid>
 					<Border
 						BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
 						BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
-						CornerRadius="{DynamicResource ControlCornerRadius}">
+						CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
 						<Border.Background>
 							<SolidColorBrush Color="{Binding Color}" />
 						</Border.Background>
 					</Border>
-					<Border Classes="selected" Name="SelectionBorder">
+					<Border
+						BorderThickness="{DynamicResource TextControlBorderThemeThickness}" 
+						Classes="selectedAppointment" 
+						CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}"
+						Name="SelectionBorder">
 					</Border>
 					<StackPanel>
 						<TextBlock
@@ -37,10 +42,9 @@
 				</Grid>
 			</Template>
 		</Setter>
-        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="Margin" Value="0,0,2,0" />
 	</Style>
-	<Style Selector="si|AppointmentControl:selected Border.selected">
+	<Style Selector="si|AppointmentControl:selected Border.selectedAppointment">
 		<Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 		<Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
 	</Style>
