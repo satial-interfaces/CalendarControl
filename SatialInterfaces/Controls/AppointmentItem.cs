@@ -26,7 +26,7 @@ public class AppointmentItem
     /// </summary>
     public string Text { get; init; } = "";
     /// <summary>
-    /// The color. Colors.Transparent means used the default
+    /// The color
     /// </summary>
     public Color Color { get; init; }
     /// <summary>
