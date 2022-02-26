@@ -4,6 +4,8 @@
         <Company>Satial Interfaces</Company>
         <Nullable>enable</Nullable>
         <PackageId>CalendarControl.Avalonia</PackageId>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/satial-interfaces/CalendarControl</RepositoryUrl>
         <TargetFramework>net6.0</TargetFramework>
         <Version>0.10.12.0</Version>
     </PropertyGroup>
