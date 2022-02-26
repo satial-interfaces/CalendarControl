@@ -2,7 +2,7 @@
     <PropertyGroup>
         <Authors>Satial Interfaces</Authors>
         <Company>Satial Interfaces</Company>
-        <LangVersion>10</LangVersion>
+        <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <PackageId>CalendarControl.Avalonia</PackageId>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>

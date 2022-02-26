@@ -8,11 +8,11 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public abstract class CalendarControlItemTemplate : AvaloniaObject
 {
-    /// <summary>
-    /// Binding provided by the item definition
-    /// </summary>
-    [AssignBinding]
-    public IBinding? Binding { get; set; }
+	/// <summary>
+	/// Binding provided by the item definition
+	/// </summary>
+	[AssignBinding]
+	public IBinding? Binding { get; set; }
 }
 
 /// <summary>

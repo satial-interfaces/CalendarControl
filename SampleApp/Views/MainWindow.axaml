@@ -1,13 +1,9 @@
-<Window
-    xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
-    xmlns:v="clr-namespace:SampleApp"
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="SampleApp.MainWindow"
-    Title="SampleApp">
+    xmlns:v="clr-namespace:SampleApp" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="SampleApp.MainWindow" Title="SampleApp">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,11 +14,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="8,8,8,8" ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
-        <si:CalendarControl
-            Name="CalendarControl"
-            SelectionChanged="CalendarControlSelectionChanged"
-            BeginOfTheDay="06:00"
-            EndOfTheDay="18:00">
+        <si:CalendarControl Name="CalendarControl" SelectionChanged="CalendarControlSelectionChanged" BeginOfTheDay="06:00" EndOfTheDay="18:00">
             <Design.DataContext>
                 <v:AppointmentViewModel />
             </Design.DataContext>
