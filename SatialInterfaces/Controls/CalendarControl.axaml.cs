@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
@@ -44,9 +45,6 @@ public class CalendarControl : ContentControl, IStyleable
 
     /// <summary>The end of the day property</summary>
     public static readonly DirectProperty<CalendarControl, TimeSpan> EndOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(EndOfTheDay), o => o.EndOfTheDay, (o, v) => o.EndOfTheDay = v);
-
-    /// <summary>Item template</summary>
-    public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<CalendarControl, IDataTemplate?>(nameof(ItemTemplate));
 
     /// <summary>The selected index property</summary>
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
@@ -117,12 +115,11 @@ public class CalendarControl : ContentControl, IStyleable
     }
 
     /// <summary>Item template</summary>
-    public IDataTemplate? ItemTemplate
+    public ObservableCollection<CalendarControlItemTemplate> ItemTemplate
     {
-        get => GetValue(ItemTemplateProperty);
-        set => SetValue(ItemTemplateProperty, value);
-    }
-
+        get;
+    } = new();
+ 
     /// <summary>Selected index</summary>
     public int SelectedIndex
     {
@@ -483,16 +480,14 @@ public class CalendarControl : ContentControl, IStyleable
         var obj = enumerator.Current;
         if (obj == null) return result;
 
-        var logical = GetBindingLogical();
-        if (logical == null) return result;
-        var begin = GetBindingItem<BeginItem>(logical)?.Binding;
-        var end = GetBindingItem<EndItem>(logical)?.Binding;
-        var text = GetBindingItem<TextItem>(logical)?.Binding;
-        var color = GetBindingItem<ColorItem>(logical)?.Binding;
+        var begin = GetBindingItem<BeginItem>()?.Binding;
+        var end = GetBindingItem<EndItem>()?.Binding;
+        var text = GetBindingItem<TextItem>()?.Binding;
+        var color = GetBindingItem<ColorItem>()?.Binding;
 
         if (begin == null || end == null || text == null)
             return result;
-        var item = CreateItem(logical, obj, begin, end, text, color, i);
+        var item = CreateItem(obj, begin, end, text, color, i);
         if (item == null)
             return result;
         if (item.IsValid())
@@ -504,7 +499,7 @@ public class CalendarControl : ContentControl, IStyleable
             obj = enumerator.Current;
             if (obj == null)
                 return new List<AppointmentItem>();
-            item = CreateItem(logical, obj, begin, end, text, color, i);
+            item = CreateItem(obj, begin, end, text, color, i);
             if (item == null)
                 return new List<AppointmentItem>();
             if (item.IsValid())
@@ -515,18 +510,18 @@ public class CalendarControl : ContentControl, IStyleable
     }
 
     /// <summary>
-    /// Gets the binding logical
+    /// Gets the instance for the given calendar control item template
     /// </summary>
-    /// <returns>The binding panel or null otherwise</returns>
-    ILogical? GetBindingLogical()
+    /// <typeparam name="T">Type of the calendar control item template</typeparam>
+    /// <returns>The instance or null otherwise</returns>
+    T? GetBindingItem<T>() where T : CalendarControlItemTemplate
     {
-        return ItemTemplate != null ? ItemTemplate.Build(new object()) : null;
+        return ItemTemplate != null ? ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(T)) as T : null;
     }
 
     /// <summary>
     /// Creates a calendar control item using the given bindings
     /// </summary>
-    /// <param name="logical">Logical containing the item template</param>
     /// <param name="obj">Source object</param>
     /// <param name="beginBinding">Binding containing the begin</param>
     /// <param name="endBinding">Binding containing the end</param>
@@ -534,23 +529,23 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="colorBinding">Binding containing the color</param>
     /// <param name="index">Index to use for the calendar control item</param>
     /// <returns>The calendar control item or null otherwise</returns>
-    AppointmentItem? CreateItem(ILogical logical, object obj, IBinding beginBinding, IBinding endBinding,
+    AppointmentItem? CreateItem(object obj, IBinding beginBinding, IBinding endBinding,
         IBinding textBinding, IBinding? colorBinding, int index)
     {
         IAvaloniaObject? itemTemplate;
-        itemTemplate = GetBindingItem<BeginItem>(logical);
+        itemTemplate = GetBindingItem<BeginItem>();
         if (itemTemplate == null) return null;
         var begin = itemTemplate.GetObservableValue(beginBinding, obj, DateTime.MinValue);
 
-        itemTemplate = GetBindingItem<EndItem>(logical);
+        itemTemplate = GetBindingItem<EndItem>();
         if (itemTemplate == null) return null;
         var end = itemTemplate.GetObservableValue(endBinding, obj, DateTime.MinValue);
 
-        itemTemplate = GetBindingItem<TextItem>(logical);
+        itemTemplate = GetBindingItem<TextItem>();
         if (itemTemplate == null) return null;
         var text = itemTemplate.GetObservableValue(textBinding, obj, "");
 
-        itemTemplate = GetBindingItem<ColorItem>(logical);
+        itemTemplate = GetBindingItem<ColorItem>();
         Color? color = null;
         if (itemTemplate != null && colorBinding != null)
             color = itemTemplate.GetObservableValue(colorBinding, obj, Colors.Transparent);

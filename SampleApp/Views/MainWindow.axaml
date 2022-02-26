@@ -27,14 +27,10 @@
                 <v:AppointmentViewModel />
             </Design.DataContext>
             <si:CalendarControl.ItemTemplate>
-                <DataTemplate>
-                    <Panel>
-                        <si:BeginItem Binding="{Binding Begin}" />
-                        <si:EndItem Binding="{Binding End}" />
-                        <si:TextItem Binding="{Binding Text}" />
-                        <si:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
-                    </Panel>
-                </DataTemplate>
+                <si:BeginItem Binding="{Binding Begin}" />
+                <si:EndItem Binding="{Binding End}" />
+                <si:TextItem Binding="{Binding Text}" />
+                <si:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
             </si:CalendarControl.ItemTemplate>
         </si:CalendarControl>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">

@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 
@@ -6,7 +7,7 @@ namespace SatialInterfaces.Controls;
 /// <summary>
 /// This class contains the base (abstract) for the item template.
 /// </summary>
-public abstract class CalendarControlItemTemplate : Control
+public abstract class CalendarControlItemTemplate : AvaloniaObject
 {
     /// <summary>
     /// Binding provided by the item definition
