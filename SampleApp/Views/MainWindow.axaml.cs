@@ -25,10 +25,7 @@ public class ColorConverter : IValueConverter
 		};
 	}
 
-	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-	{
-		throw new NotImplementedException();
-	}
+	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }
 
 public enum Status
@@ -49,9 +46,6 @@ public class AppointmentViewModel
 
 public partial class MainWindow : Window
 {
-	static readonly Random random = new();
-	CalendarControl calendarControl;
-	List<AppointmentViewModel> list = new();
 #pragma warning disable CS8618
 	public MainWindow()
 #pragma warning restore CS8618
@@ -69,9 +63,8 @@ public partial class MainWindow : Window
 		RandomCalendar();
 	}
 
-	protected void CalendarControlSelectionChanged(object? sender, CalendarSelectionChangedEventArgs e)
+	void CalendarControlSelectionChanged(object? sender, CalendarSelectionChangedEventArgs e)
 	{
-		Title = e.SelectedIndex.ToString();
 		var info = this.FindControl<TextBlock>("Info");
 		if (e.SelectedIndex >= 0)
 		{
@@ -84,27 +77,15 @@ public partial class MainWindow : Window
 		}
 	}
 
-	protected void RandomButtonClick(object? sender, RoutedEventArgs e)
-	{
-		RandomCalendar();
-	}
+	void RandomButtonClick(object? sender, RoutedEventArgs e) => RandomCalendar();
 
-	protected void PreviousButtonClick(object? sender, RoutedEventArgs e)
-	{
-		calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
-	}
+	void PreviousButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
 
-	protected void ThisWeekButtonClick(object? sender, RoutedEventArgs e)
-	{
-		calendarControl.CurrentWeek = DateTime.Now;
-	}
+	void ThisWeekButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = DateTime.Now;
 
-	protected void NextButtonClick(object? sender, RoutedEventArgs e)
-	{
-		calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
-	}
+	void NextButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
 
-	protected void NewButtonClick(object? sender, RoutedEventArgs e)
+	void NewButtonClick(object? sender, RoutedEventArgs e)
 	{
 		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek).AddDays(7);
 		var begin = GetRandom(0, 24 * 4) / 4.0d;
@@ -150,15 +131,9 @@ public partial class MainWindow : Window
 		calendarControl.Items = list;
 	}
 
-	static int GetRandom(int minVal, int maxVal)
-	{
-		return random.Next(minVal, maxVal + 1);
-	}
+	static int GetRandom(int minVal, int maxVal) => random.Next(minVal, maxVal + 1);
 
-	static Status GetRandom()
-	{
-		return (Status)GetRandom((int)Status.None, (int)Status.Error);
-	}
+	static Status GetRandom() => (Status)GetRandom((int)Status.None, (int)Status.Error);
 
 	static DateTime GetBeginWeek(DateTime dateTime, DayOfWeek firstDayOfWeek)
 	{
@@ -167,4 +142,7 @@ public partial class MainWindow : Window
 		var begin = diff <= 0 ? dateTime.AddDays(diff) : dateTime.AddDays(diff - 7);
 		return begin.Date;
 	}
+	static readonly Random random = new();
+	CalendarControl calendarControl;
+	List<AppointmentViewModel> list = new();
 }
