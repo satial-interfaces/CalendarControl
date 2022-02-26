@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <TrimMode>copyused</TrimMode>
-        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     </PropertyGroup>
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="Assets/**" />
         <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>
@@ -23,6 +23,6 @@
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\SatialInterfaces\CalendarControl.csproj" />
+		<ProjectReference Include="../SatialInterfaces/CalendarControl.csproj" />
     </ItemGroup>
 </Project>
