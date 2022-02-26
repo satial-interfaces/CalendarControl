@@ -9,20 +9,20 @@ namespace SatialInterfaces.Controls;
 public class AppointmentItem
 {
     /// <summary>The begin</summary>
-    public DateTime Begin { get; init; }
+    public DateTime Begin { get; set; }
 
     /// <summary>The end</summary>
-    public DateTime End { get; init; }
+    public DateTime End { get; set; }
 
     /// <summary>The length</summary>
     public TimeSpan Length => End - Begin;
 
     /// <summary>The text</summary>
-    public string Text { get; init; } = "";
+    public string Text { get; set; } = "";
     /// <summary>The color</summary>
-    public Color Color { get; init; }
+    public Color Color { get; set; }
     /// <summary>The index in the list</summary>
-    public int Index { get; init; }
+    public int Index { get; set; }
     /// <summary>The indentation</summary>
     public int Indent { get => indent; set { if (value >= 0) indent = value; } }
 

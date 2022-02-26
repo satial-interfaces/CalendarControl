@@ -2,17 +2,18 @@
     <PropertyGroup>
         <Authors>Satial Interfaces</Authors>
         <Company>Satial Interfaces</Company>
+        <LangVersion>10</LangVersion>
         <Nullable>enable</Nullable>
         <PackageId>CalendarControl.Avalonia</PackageId>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/satial-interfaces/CalendarControl</RepositoryUrl>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <Version>0.10.12.0</Version>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove=".gitignore"/>
+        <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.12"/>
+        <PackageReference Include="Avalonia" Version="0.10.12" />
     </ItemGroup>
 </Project>
