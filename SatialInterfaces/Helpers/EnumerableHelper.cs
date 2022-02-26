@@ -14,11 +14,18 @@ internal static class EnumerableHelper
     /// </summary>
     /// <param name="source">The IEnumerable to check for emptiness.</param>
     /// <returns>true if the source sequence contains any elements; otherwise, false.</returns>
-    public static bool Any(this IEnumerable source) => source.GetEnumerator().MoveNext();
+    public static bool Any(this IEnumerable source)
+    {
+        return source.GetEnumerator().MoveNext();
+    }
+
     /// <summary>
     /// Creates a list with objects from an enumerable
     /// </summary>
     /// <param name="source">The IEnumerable to convert.</param>
     /// <returns>The list</returns>
-    public static List<object> ToList(this IEnumerable source) => Enumerable.ToList(source.Cast<object>());
+    public static List<object> ToList(this IEnumerable source)
+    {
+        return Enumerable.ToList(source.Cast<object>());
+    }
 }

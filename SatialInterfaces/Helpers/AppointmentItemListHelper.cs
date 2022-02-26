@@ -27,16 +27,13 @@ internal static class AppointmentItemListHelper
                 indentList = new List<AppointmentItem>();
                 listOfLists.Add(indentList);
             }
+
             indentList.Add(item);
         }
 
         for (var i = 0; i < listOfLists.Count; i++)
-        {
             foreach (var item in listOfLists[i])
-            {
                 item.Indent = i;
-            }
-        }
     }
 
     /// <summary>
@@ -47,12 +44,11 @@ internal static class AppointmentItemListHelper
     /// <returns>The index or -1 otherwise</returns>
     static int GetIndent(IReadOnlyList<List<AppointmentItem>> listOfLists, AppointmentItem item)
     {
-       for (var i = 0; i < listOfLists.Count; i++)
-       {
-           if (FitsIn(listOfLists[i], item)) return i;
-       }
+        for (var i = 0; i < listOfLists.Count; i++)
+            if (FitsIn(listOfLists[i], item))
+                return i;
 
-       return -1;
+        return -1;
     }
 
     /// <summary>

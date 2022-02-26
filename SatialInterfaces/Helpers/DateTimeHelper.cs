@@ -8,24 +8,26 @@ namespace SatialInterfaces.Helpers;
 /// </summary>
 internal static class DateTimeHelper
 {
-	/// <summary>
-	/// The weekday/weekend state for a given day.
-	/// </summary>
-	public enum DayState
-	{
-		/// <summary>
-		/// A work day.
-		/// </summary>
-		WorkDay,
-		/// <summary>
-		/// A weekend.
-		/// </summary>
-		Weekend,
-		/// <summary>
-		/// Morning is a workday, afternoon is the start of the weekend.
-		/// </summary>
-		WorkdayMorning
-	}
+    /// <summary>
+    /// The weekday/weekend state for a given day.
+    /// </summary>
+    public enum DayState
+    {
+        /// <summary>
+        /// A work day.
+        /// </summary>
+        WorkDay,
+
+        /// <summary>
+        /// A weekend.
+        /// </summary>
+        Weekend,
+
+        /// <summary>
+        /// Morning is a workday, afternoon is the start of the weekend.
+        /// </summary>
+        WorkdayMorning
+    }
 
     /// <summary>
     /// Gets the begin of the week
@@ -35,8 +37,8 @@ internal static class DateTimeHelper
     /// <returns>Begin of the week</returns>
     public static DateTime GetBeginWeek(this DateTime obj, DayOfWeek firstDayOfWeek)
     {
-        var dayOfWeek = (int)obj.DayOfWeek;
-        var diff = (int)firstDayOfWeek - dayOfWeek;
+        var dayOfWeek = (int) obj.DayOfWeek;
+        var diff = (int) firstDayOfWeek - dayOfWeek;
         try
         {
             var begin = diff <= 0 ? obj.AddDays(diff) : obj.AddDays(diff - 7);
@@ -97,17 +99,21 @@ internal static class DateTimeHelper
     /// </summary>
     /// <param name="dayOfWeek">Day of the week to convert</param>
     /// <returns>The string</returns>
-    public static string DayOfWeekToString(DayOfWeek dayOfWeek) => GetCurrentDateFormat().AbbreviatedDayNames[(int)dayOfWeek];
-
-	/// <summary>
-	/// Return if the passed in day of the week is a weekend. note: state pulled from http://en.wikipedia.org/wiki/Workweek_and_weekend
-	/// </summary>
-	/// <param name="obj">The CultureInfo this object.</param>
-	/// <param name="dayOfWeek">The Day of the week to return the state of.</param>
-	/// <returns>The weekday/weekend state of the passed in day of the week.</returns>
-	public static DayState GetDayState(CultureInfo obj, DayOfWeek dayOfWeek)
+    public static string DayOfWeekToString(DayOfWeek dayOfWeek)
     {
-        var items = obj.Name.Split(new[] { '-' }, StringSplitOptions.RemoveEmptyEntries);
+        return GetCurrentDateFormat().AbbreviatedDayNames[(int) dayOfWeek];
+    }
+
+    /// <summary>
+    /// Return if the passed in day of the week is a weekend. note: state pulled from
+    /// http://en.wikipedia.org/wiki/Workweek_and_weekend
+    /// </summary>
+    /// <param name="obj">The CultureInfo this object.</param>
+    /// <param name="dayOfWeek">The Day of the week to return the state of.</param>
+    /// <returns>The weekday/weekend state of the passed in day of the week.</returns>
+    public static DayState GetDayState(CultureInfo obj, DayOfWeek dayOfWeek)
+    {
+        var items = obj.Name.Split(new[] {'-'}, StringSplitOptions.RemoveEmptyEntries);
         if (items.Length < 1) return DefaultDayState(dayOfWeek);
         switch (items[^1])
         {
@@ -120,7 +126,7 @@ internal static class DateTimeHelper
             case "JO": // Jordan
             case "KW": // Kuwait
             case "LY": // Libya
-                       // Northern Malaysia (only in the states of Kelantan, Terengganu, and Kedah)
+            // Northern Malaysia (only in the states of Kelantan, Terengganu, and Kedah)
             case "MV": // Maldives
             case "MR": // Mauritania
             case "NP": // Nepal
@@ -159,11 +165,11 @@ internal static class DateTimeHelper
         return DefaultDayState(dayOfWeek);
     }
 
-	/// <summary>
-	/// Gets the default day state
-	/// </summary>
-	/// <param name="dayOfWeek">Day of the week to check</param>
-	/// <returns>The day state</returns>
+    /// <summary>
+    /// Gets the default day state
+    /// </summary>
+    /// <param name="dayOfWeek">Day of the week to check</param>
+    /// <returns>The day state</returns>
     static DayState DefaultDayState(DayOfWeek dayOfWeek)
     {
         return dayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? DayState.Weekend : DayState.WorkDay;

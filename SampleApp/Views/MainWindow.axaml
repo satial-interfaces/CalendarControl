@@ -22,15 +22,19 @@
             Name="CalendarControl"
             SelectionChanged="CalendarControlSelectionChanged"
             BeginOfTheDay="06:00"
-            EndOfTheDay="18:00" >
+            EndOfTheDay="18:00">
             <Design.DataContext>
                 <v:AppointmentViewModel />
             </Design.DataContext>
             <si:CalendarControl.ItemTemplate>
-                <si:BeginItem Binding="{Binding Begin}" />
-                <si:EndItem Binding="{Binding End}" />
-                <si:TextItem Binding="{Binding Text}" />
-                <si:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
+                <DataTemplate>
+                    <Panel>
+                        <si:BeginItem Binding="{Binding Begin}" />
+                        <si:EndItem Binding="{Binding End}" />
+                        <si:TextItem Binding="{Binding Text}" />
+                        <si:ColorItem Binding="{Binding Status, Converter={StaticResource ColorConverter}}" />
+                    </Panel>
+                </DataTemplate>
             </si:CalendarControl.ItemTemplate>
         </si:CalendarControl>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,8,0,0" Spacing="8" Orientation="Horizontal">
@@ -39,7 +43,7 @@
             <Button Click="ThisWeekButtonClick">This week</Button>
             <Button Click="NextButtonClick">Next &gt;</Button>
             <Button Click="NewButtonClick">New</Button>
-            <TextBlock Name="Info" VerticalAlignment="Center"></TextBlock>
+            <TextBlock Name="Info" VerticalAlignment="Center" />
         </StackPanel>
     </Grid>
 </Window>

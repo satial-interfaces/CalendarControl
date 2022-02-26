@@ -27,7 +27,7 @@ public static class AvaloniaObjectHelper
         var result = defaultValue;
         var disposable = instancedBinding.Observable.Subscribe(x =>
         {
-            if (x != null) result = (T)x;
+            if (x != null) result = (T) x;
         });
         disposable.Dispose();
         return result;

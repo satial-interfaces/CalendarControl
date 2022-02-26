@@ -15,7 +15,10 @@ public static class ControlFactory
     /// Creates a column
     /// </summary>
     /// <returns>Created column</returns>
-   public static Grid CreateColumn() => new();
+    public static Grid CreateColumn()
+    {
+        return new Grid();
+    }
 
     /// <summary>
     /// Creates a workday/weekend control
@@ -81,6 +84,7 @@ public static class ControlFactory
             columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             grid.Children.Add(new Grid());
         }
+
         grid.ColumnDefinitions = columnDefinitions;
         for (var i = 0; i < columnCount; i++)
             Grid.SetColumn(grid.Children[i] as Control, i);

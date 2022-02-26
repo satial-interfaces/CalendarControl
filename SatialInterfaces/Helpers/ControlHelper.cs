@@ -22,9 +22,7 @@ public static class ControlHelper
         foreach (var control in controls.Where(x => x != null))
             grid.Children.Add(control);
         for (var i = 0; i < controls.Count; i++)
-        {
             if (controls[i] != null)
                 Grid.SetRow(controls[i] as Control, i);
-        }
     }
 }

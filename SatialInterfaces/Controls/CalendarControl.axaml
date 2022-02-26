@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentControl
-	x:Class="SatialInterfaces.Controls.CalendarControl"
-	xmlns="https://github.com/avaloniaui"
-	xmlns:si="clr-namespace:SatialInterfaces.Converters"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d">
-	<ContentControl.Resources>
-		<ResourceDictionary>
+    x:Class="SatialInterfaces.Controls.CalendarControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:si="clr-namespace:SatialInterfaces.Converters"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <ContentControl.Resources>
+        <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <si:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-	</ContentControl.Resources>
+        </ResourceDictionary>
+    </ContentControl.Resources>
     <Grid RowDefinitions="Auto,*" Name="MainGrid">
-        <Grid Grid.Row="0" Name="DayGrid" Margin="{Binding #HourGrid.Bounds.Width, Converter={StaticResource DoubleToLeftMarginConverter}}" />
+        <Grid Grid.Row="0" Name="DayGrid"
+              Margin="{Binding #HourGrid.Bounds.Width, Converter={StaticResource DoubleToLeftMarginConverter}}" />
         <Grid Grid.Row="1">
-			<ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto" >
-				<Grid
-					Name="ScrollableGrid"
-					ColumnDefinitions="Auto,*">
-			        <Grid Grid.Column="0" Name="HourGrid" />
-					<Grid Grid.Column="1" Name="WeekGrid" />
-					<Grid Grid.Column="1" Name="ItemsGrid" />
-				</Grid>
-			</ScrollViewer>
+            <ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto">
+                <Grid
+                    Name="ScrollableGrid"
+                    ColumnDefinitions="Auto,*">
+                    <Grid Grid.Column="0" Name="HourGrid" />
+                    <Grid Grid.Column="1" Name="WeekGrid" />
+                    <Grid Grid.Column="1" Name="ItemsGrid" />
+                </Grid>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </ContentControl>

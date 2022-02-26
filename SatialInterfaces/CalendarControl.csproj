@@ -10,9 +10,9 @@
         <Version>0.10.12.0</Version>
     </PropertyGroup>
     <ItemGroup>
-        <None Remove=".gitignore" />
+        <None Remove=".gitignore"/>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.12" />
+        <PackageReference Include="Avalonia" Version="0.10.12"/>
     </ItemGroup>
 </Project>

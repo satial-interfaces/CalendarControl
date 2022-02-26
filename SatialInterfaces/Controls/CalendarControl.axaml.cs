@@ -1,11 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -24,45 +24,41 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public class CalendarControl : ContentControl, IStyleable
 {
-    /// <inheritdoc />
-    Type IStyleable.StyleKey => typeof(ContentControl);
+    /// <summary>Days per week</summary>
+    const int daysPerWeek = 7;
+
+    /// <summary>Hours per day</summary>
+    const int hoursPerDay = 24;
 
     /// <summary>First day of the week property</summary>
     public static readonly StyledProperty<DayOfWeek> FirstDayOfWeekProperty = AvaloniaProperty.Register<CalendarControl, DayOfWeek>(nameof(FirstDayOfWeek), DateTimeHelper.GetCurrentDateFormat().FirstDayOfWeek);
+
     /// <summary>Items property</summary>
     public static readonly DirectProperty<CalendarControl, IEnumerable> ItemsProperty = AvaloniaProperty.RegisterDirect<CalendarControl, IEnumerable>(nameof(Items), o => o.Items, (o, v) => o.Items = v);
+
     /// <summary>Current week property</summary>
     public static readonly DirectProperty<CalendarControl, DateTime> CurrentWeekProperty = AvaloniaProperty.RegisterDirect<CalendarControl, DateTime>(nameof(CurrentWeek), o => o.CurrentWeek, (o, v) => o.CurrentWeek = v);
+
     /// <summary>The begin of the day property</summary>
     public static readonly DirectProperty<CalendarControl, TimeSpan> BeginOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(BeginOfTheDay), o => o.BeginOfTheDay, (o, v) => o.BeginOfTheDay = v);
+
     /// <summary>The end of the day property</summary>
     public static readonly DirectProperty<CalendarControl, TimeSpan> EndOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(EndOfTheDay), o => o.EndOfTheDay, (o, v) => o.EndOfTheDay = v);
+
+    /// <summary>Item template</summary>
+    public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<CalendarControl, IDataTemplate?>(nameof(ItemTemplate));
+
     /// <summary>The selected index property</summary>
     public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
+
     /// <summary>The selected item property</summary>
     public static readonly StyledProperty<object> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object>(nameof(SelectedItem));
+
     /// <summary>The selection changed event</summary>
     public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
-    /// <summary>First day of the week property</summary>
-	public DayOfWeek FirstDayOfWeek { get => GetValue(FirstDayOfWeekProperty); set => SetValue(FirstDayOfWeekProperty, value); }
-    /// <summary>Items property</summary>
-    public IEnumerable Items { get => items; set => SetAndRaise(ItemsProperty, ref items, value); }
-    /// <summary>Current week property</summary>
-	public DateTime CurrentWeek { get => currentWeek; set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value); }
-    /// <summary>Begin of the day property</summary>
-	public TimeSpan BeginOfTheDay { get => beginOfTheDay; set => SetAndRaise(BeginOfTheDayProperty, ref beginOfTheDay, value); }
-    /// <summary>End of the day property</summary>
-	public TimeSpan EndOfTheDay { get => endOfTheDay; set => SetAndRaise(EndOfTheDayProperty, ref endOfTheDay, value); }
-    /// <summary>Item definition</summary>
-    public ObservableCollection<CalendarControlItemTemplate> ItemTemplate { get; } = new();
-    /// <summary>Selected index</summary>
-	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
-    /// <summary>Selected item</summary>
-	public object SelectedItem { get => GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
-    /// <summary>Occurs when selection changed</summary>
-    public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
+
     /// <summary>
-    /// Initializes static members of the <see cref="CalendarControl"/> class.
+    /// Initializes static members of the <see cref="CalendarControl" /> class.
     /// </summary>
     static CalendarControl()
     {
@@ -83,6 +79,72 @@ public class CalendarControl : ContentControl, IStyleable
         scrollViewer.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
         CreateWeek(CurrentWeek);
         UpdateItems(Items);
+    }
+
+    /// <summary>First day of the week property</summary>
+    public DayOfWeek FirstDayOfWeek
+    {
+        get => GetValue(FirstDayOfWeekProperty);
+        set => SetValue(FirstDayOfWeekProperty, value);
+    }
+
+    /// <summary>Items property</summary>
+    public IEnumerable Items
+    {
+        get => items;
+        set => SetAndRaise(ItemsProperty, ref items, value);
+    }
+
+    /// <summary>Current week property</summary>
+    public DateTime CurrentWeek
+    {
+        get => currentWeek;
+        set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value);
+    }
+
+    /// <summary>Begin of the day property</summary>
+    public TimeSpan BeginOfTheDay
+    {
+        get => beginOfTheDay;
+        set => SetAndRaise(BeginOfTheDayProperty, ref beginOfTheDay, value);
+    }
+
+    /// <summary>End of the day property</summary>
+    public TimeSpan EndOfTheDay
+    {
+        get => endOfTheDay;
+        set => SetAndRaise(EndOfTheDayProperty, ref endOfTheDay, value);
+    }
+
+    /// <summary>Item template</summary>
+    public IDataTemplate? ItemTemplate
+    {
+        get => GetValue(ItemTemplateProperty);
+        set => SetValue(ItemTemplateProperty, value);
+    }
+
+    /// <summary>Selected index</summary>
+    public int SelectedIndex
+    {
+        get => GetValue(SelectedIndexProperty);
+        set => SetValue(SelectedIndexProperty, value);
+    }
+
+    /// <summary>Selected item</summary>
+    public object SelectedItem
+    {
+        get => GetValue(SelectedItemProperty);
+        set => SetValue(SelectedItemProperty, value);
+    }
+
+    /// <inheritdoc />
+    Type IStyleable.StyleKey => typeof(ContentControl);
+
+    /// <summary>Occurs when selection changed</summary>
+    public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged
+    {
+        add => AddHandler(SelectionChangedEvent, value);
+        remove => RemoveHandler(SelectionChangedEvent, value);
     }
 
     /// <summary>
@@ -149,7 +211,8 @@ public class CalendarControl : ContentControl, IStyleable
             scrollableGrid.Height = height;
 
             if (scrollViewer.Offset.Y == 0.0d)
-                Dispatcher.UIThread.Post(() => scrollViewer.Offset = new Vector(0.0d, BeginOfTheDay.TotalDays * height));
+                Dispatcher.UIThread.Post(() =>
+                    scrollViewer.Offset = new Vector(0.0d, BeginOfTheDay.TotalDays * height));
         }
         else
         {
@@ -214,7 +277,8 @@ public class CalendarControl : ContentControl, IStyleable
         if (e.NewValue is not int index) return;
 
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-        var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().FirstOrDefault(x => x.Index == index);
+        var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
+            .FirstOrDefault(x => x.Index == index);
         if (appointment != null)
             appointment.IsSelected = true;
 
@@ -222,7 +286,8 @@ public class CalendarControl : ContentControl, IStyleable
         var list = items.ToList();
         if (index >= 0 && index < list.Count)
             item = list[index];
-        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index, SelectedItem = item };
+        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
+            {SelectedIndex = index, SelectedItem = item};
         RaiseEvent(eventArgs);
     }
 
@@ -236,11 +301,13 @@ public class CalendarControl : ContentControl, IStyleable
         var index = Items.ToList().FindIndex(x => x == obj);
 
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-        var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().FirstOrDefault(x => x.Index == index);
+        var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
+            .FirstOrDefault(x => x.Index == index);
         if (appointment != null)
             appointment.IsSelected = true;
 
-        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent) { SelectedIndex = index, SelectedItem = obj };
+        var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
+            {SelectedIndex = index, SelectedItem = obj};
         RaiseEvent(eventArgs);
     }
 
@@ -265,7 +332,8 @@ public class CalendarControl : ContentControl, IStyleable
 
             var previousEnd = double.NaN;
             var dayControls = new List<IControl?>();
-            var j = 0; while (j < todayList.Count)
+            var j = 0;
+            while (j < todayList.Count)
             {
                 var (begin, _) = todayList[j].GetFractionOfDay();
                 AddEmptyRow(rowDefinitions, dayControls, previousEnd, begin);
@@ -289,13 +357,15 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="rowDefinitions">List of row definitions to add to</param>
     /// <param name="controls">List of controls to add to</param>
     /// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
-    static void AddEmptyRowTail(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd)
+    static void AddEmptyRowTail(RowDefinitions rowDefinitions, ICollection<IControl?> controls,
+        double previousEnd)
     {
         if (!double.IsNaN(previousEnd) && previousEnd >= 1.0d)
             return;
 
         controls.Add(null);
-        rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d), GridUnitType.Star));
+        rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d),
+            GridUnitType.Star));
     }
 
     /// <summary>
@@ -305,7 +375,8 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="controls">List of controls to add to</param>
     /// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
     /// <param name="begin">Begin of the current appointment (as a fraction of the day)</param>
-    static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd, double begin)
+    static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd,
+        double begin)
     {
         var emptyLength = begin - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d);
         if (emptyLength <= 0.0d)
@@ -329,10 +400,8 @@ public class CalendarControl : ContentControl, IStyleable
             grid.Children.Add(control);
 
         for (var i = 0; i < controls.Count; i++)
-        {
             if (controls[i] != null)
                 Grid.SetRow(controls[i] as Control, i);
-        }
     }
 
     /// <summary>
@@ -340,8 +409,12 @@ public class CalendarControl : ContentControl, IStyleable
     /// </summary>
     /// <param name="list">List to get appointment from</param>
     /// <param name="beginIndex">Index to begin in</param>
-    /// <returns>Index to continue in next iteration, the begin (fraction of day), the length (fraction of day) and the containing control</returns>
-    static (int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(IList<AppointmentItem> list, int beginIndex)
+    /// <returns>
+    /// Index to continue in next iteration, the begin (fraction of day), the length (fraction of day) and the
+    /// containing control
+    /// </returns>
+    static (int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(
+        IList<AppointmentItem> list, int beginIndex)
     {
         var (begin, _) = list[beginIndex].GetFractionOfDay();
         var count = AppointmentGroupHelper.GetGroupCount(list, beginIndex);
@@ -378,11 +451,13 @@ public class CalendarControl : ContentControl, IStyleable
                 rowDefinitions.Add(new RowDefinition(l, GridUnitType.Star));
                 previous = b + l;
             }
+
             // Tail
             if (double.IsNaN(previous) || previous < 1.0d)
             {
                 groupControls.Add(null);
-                rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d), GridUnitType.Star));
+                rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d),
+                    GridUnitType.Star));
             }
 
             ControlHelper.AddControlsToRows(g, groupControls, rowDefinitions);
@@ -408,14 +483,16 @@ public class CalendarControl : ContentControl, IStyleable
         var obj = enumerator.Current;
         if (obj == null) return result;
 
-        var begin = GetBinding<BeginItem>();
-        var end = GetBinding<EndItem>();
-        var text = GetBinding<TextItem>();
-        var color = GetBinding<ColorItem>();
+        var logical = GetBindingLogical();
+        if (logical == null) return result;
+        var begin = GetBindingItem<BeginItem>(logical)?.Binding;
+        var end = GetBindingItem<EndItem>(logical)?.Binding;
+        var text = GetBindingItem<TextItem>(logical)?.Binding;
+        var color = GetBindingItem<ColorItem>(logical)?.Binding;
 
         if (begin == null || end == null || text == null)
             return result;
-        var item = CreateItem(obj, begin, end, text, color, i);
+        var item = CreateItem(logical, obj, begin, end, text, color, i);
         if (item == null)
             return result;
         if (item.IsValid())
@@ -427,7 +504,7 @@ public class CalendarControl : ContentControl, IStyleable
             obj = enumerator.Current;
             if (obj == null)
                 return new List<AppointmentItem>();
-            item = CreateItem(obj, begin, end, text, color, i);
+            item = CreateItem(logical, obj, begin, end, text, color, i);
             if (item == null)
                 return new List<AppointmentItem>();
             if (item.IsValid())
@@ -438,15 +515,18 @@ public class CalendarControl : ContentControl, IStyleable
     }
 
     /// <summary>
-    /// Gets the binding for the given calendar control item template
+    /// Gets the binding logical
     /// </summary>
-    /// <typeparam name="T">Type of the calendar control item template</typeparam>
-    /// <returns>The binding or null otherwise</returns>
-    IBinding? GetBinding<T>() where T : CalendarControlItemTemplate => ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(T))?.Binding;
+    /// <returns>The binding panel or null otherwise</returns>
+    ILogical? GetBindingLogical()
+    {
+        return ItemTemplate != null ? ItemTemplate.Build(new object()) : null;
+    }
 
     /// <summary>
     /// Creates a calendar control item using the given bindings
     /// </summary>
+    /// <param name="logical">Logical containing the item template</param>
     /// <param name="obj">Source object</param>
     /// <param name="beginBinding">Binding containing the begin</param>
     /// <param name="endBinding">Binding containing the end</param>
@@ -454,26 +534,29 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="colorBinding">Binding containing the color</param>
     /// <param name="index">Index to use for the calendar control item</param>
     /// <returns>The calendar control item or null otherwise</returns>
-    AppointmentItem? CreateItem(object obj, IBinding beginBinding, IBinding endBinding, IBinding textBinding, IBinding? colorBinding, int index)
+    AppointmentItem? CreateItem(ILogical logical, object obj, IBinding beginBinding, IBinding endBinding,
+        IBinding textBinding, IBinding? colorBinding, int index)
     {
-        var itemTemplate = ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(BeginItem));
+        IAvaloniaObject? itemTemplate;
+        itemTemplate = GetBindingItem<BeginItem>(logical);
         if (itemTemplate == null) return null;
         var begin = itemTemplate.GetObservableValue(beginBinding, obj, DateTime.MinValue);
 
-        itemTemplate = ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(EndItem));
+        itemTemplate = GetBindingItem<EndItem>(logical);
         if (itemTemplate == null) return null;
         var end = itemTemplate.GetObservableValue(endBinding, obj, DateTime.MinValue);
 
-        itemTemplate = ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(TextItem));
+        itemTemplate = GetBindingItem<TextItem>(logical);
         if (itemTemplate == null) return null;
         var text = itemTemplate.GetObservableValue(textBinding, obj, "");
 
-        itemTemplate = ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(ColorItem));
+        itemTemplate = GetBindingItem<ColorItem>(logical);
         Color? color = null;
         if (itemTemplate != null && colorBinding != null)
             color = itemTemplate.GetObservableValue(colorBinding, obj, Colors.Transparent);
 
-        return new AppointmentItem { Begin = begin, End = end, Text = text, Color = color ?? Colors.Transparent, Index = index };
+        return new AppointmentItem
+            {Begin = begin, End = end, Text = text, Color = color ?? Colors.Transparent, Index = index};
     }
 
     /// <summary>
@@ -492,6 +575,7 @@ public class CalendarControl : ContentControl, IStyleable
             itemsGrid.Children.Add(dayColumn);
             Grid.SetColumn(dayColumn, i);
         }
+
         itemsGrid.ColumnDefinitions = columnDefinitions;
     }
 
@@ -521,6 +605,7 @@ public class CalendarControl : ContentControl, IStyleable
                 Grid.SetRow(hourCell, j);
                 rowDefinitions.Add(new RowDefinition(1.0d, GridUnitType.Star));
             }
+
             dayColumn.RowDefinitions = rowDefinitions;
             columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             weekGrid.Children.Add(dayState);
@@ -528,6 +613,7 @@ public class CalendarControl : ContentControl, IStyleable
             Grid.SetColumn(dayColumn, i);
             Grid.SetColumn(dayState, i);
         }
+
         weekGrid.ColumnDefinitions = columnDefinitions;
         ClearItemsGrid();
     }
@@ -547,11 +633,12 @@ public class CalendarControl : ContentControl, IStyleable
         {
             var day = AddDay(firstDayOfWeek, i);
             var text = DateTimeHelper.DayOfWeekToString(day) + " " + beginWeek.AddDays(i).Day;
-            var dayText = new TextBlock { Text = text };
+            var dayText = new TextBlock {Text = text};
             columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
             dayGrid.Children.Add(dayText);
             Grid.SetColumn(dayText, i);
         }
+
         dayGrid.ColumnDefinitions = columnDefinitions;
     }
 
@@ -566,11 +653,12 @@ public class CalendarControl : ContentControl, IStyleable
         for (var j = 0; j < hoursPerDay; j++)
         {
             var text = new DateTime(1970, 1, 1, j, 0, 0).ToShortTimeString();
-            var hourText = new TextBlock { Text = text };
+            var hourText = new TextBlock {Text = text};
             hourGrid.Children.Add(hourText);
             Grid.SetRow(hourText, j);
             rowDefinitions.Add(new RowDefinition(1.0d, GridUnitType.Star));
         }
+
         hourGrid.RowDefinitions = rowDefinitions;
     }
 
@@ -580,21 +668,36 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="dayOfWeek">Day of the week</param>
     /// <param name="i">Number of days to add</param>
     /// <returns>New day of week</returns>
-    static DayOfWeek AddDay(DayOfWeek dayOfWeek, int i) => (DayOfWeek)(((int)dayOfWeek + i) % 7);
-    /// <summary>Days per week</summary>
-    const int daysPerWeek = 7;
-    /// <summary>Hours per day</summary>
-    const int hoursPerDay = 24;
-    /// <summary>Current week</summary>
-    DateTime currentWeek = DateTime.Now;
+    static DayOfWeek AddDay(DayOfWeek dayOfWeek, int i)
+    {
+        return (DayOfWeek) (((int) dayOfWeek + i) % 7);
+    }
+
+    /// <summary>
+    /// Gets the instance of the given calendar control item template type
+    /// </summary>
+    /// <param name="logical">logical element containing the control item template</param>
+    /// <typeparam name="T">Type of the calendar control item template</typeparam>
+    /// <returns>The isntance or null otherwise</returns>
+    static T? GetBindingItem<T>(ILogical logical) where T : CalendarControlItemTemplate
+    {
+        return logical.GetLogicalChildren().FirstOrDefault(x => x.GetType() == typeof(T)) as T;
+    }
     /// <summary>Begin of the day</summary>
     TimeSpan beginOfTheDay = new(0, 0, 0);
+
+    /// <summary>Current week</summary>
+    DateTime currentWeek = DateTime.Now;
+
     /// <summary>End of the day</summary>
     TimeSpan endOfTheDay = new(0, 0, 0);
-    /// <summary>Items</summary>
-    IEnumerable items = new AvaloniaList<object>();
+
     /// <summary>Items</summary>
     IList<AppointmentItem> internalItems = new List<AppointmentItem>();
+
+    /// <summary>Items</summary>
+    IEnumerable items = new AvaloniaList<object>();
+
     /// <summary>State of the left mouse button</summary>
     bool leftButtonDown;
 }

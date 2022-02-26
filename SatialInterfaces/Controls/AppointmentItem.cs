@@ -12,10 +12,12 @@ public class AppointmentItem
     /// The begin
     /// </summary>
     public DateTime Begin { get; init; }
+
     /// <summary>
     /// The end
     /// </summary>
     public DateTime End { get; init; }
+
     /// <summary>
     /// The length
     /// </summary>
@@ -25,22 +27,29 @@ public class AppointmentItem
     /// The text
     /// </summary>
     public string Text { get; init; } = "";
+
     /// <summary>
     /// The color
     /// </summary>
     public Color Color { get; init; }
+
     /// <summary>
     /// The index in the list
     /// </summary>
     public int Index { get; init; }
+
     /// <summary>
     /// The indentation
     /// </summary>
     public int Indent
     {
         get => indent;
-        set { if (value >= 0) indent = value; }
+        set
+        {
+            if (value >= 0) indent = value;
+        }
     }
+
     /// <summary>
     /// Gets the begin and length as a fraction of the day
     /// </summary>
@@ -56,6 +65,7 @@ public class AppointmentItem
         var length = end - begin;
         return (begin, length);
     }
+
     /// <summary>
     /// Checks if this instance is in the given day
     /// </summary>
@@ -67,6 +77,7 @@ public class AppointmentItem
         var endDay = beginDay.AddDays(1).AddTicks(-1);
         return Begin >= beginDay && Begin < endDay;
     }
+
     /// <summary>
     /// Checks if this instance is valid
     /// </summary>
@@ -75,6 +86,7 @@ public class AppointmentItem
     {
         return End > Begin;
     }
+
     /// <summary>
     /// Checks if this instance has overlap with another instance
     /// </summary>
@@ -82,14 +94,19 @@ public class AppointmentItem
     /// <returns>True if it has and false otherwise</returns>
     public bool HasOverlap(AppointmentItem other)
     {
-        return (other.Begin >= Begin && other.Begin < End) || (Begin >= other.Begin && Begin < other.End);
+        return other.Begin >= Begin && other.Begin < End || Begin >= other.Begin && Begin < other.End;
     }
+
     /// <summary>
     /// Check if a given item is in the given week.
     /// </summary>
     /// <param name="beginWeek">Begin of the week</param>
     /// <returns>True if it is and false otherwise</returns>
-    public bool IsInCurrentWeek(DateTime beginWeek) => Begin >= beginWeek;
+    public bool IsInCurrentWeek(DateTime beginWeek)
+    {
+        return Begin >= beginWeek;
+    }
+
     /// <summary>
     /// The indentation
     /// </summary>

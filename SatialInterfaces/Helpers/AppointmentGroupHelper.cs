@@ -30,6 +30,7 @@ internal static class AppointmentGroupHelper
                 end = e;
             count++;
         }
+
         return count;
     }
 
@@ -41,14 +42,13 @@ internal static class AppointmentGroupHelper
     /// <param name="count">Count of group</param>
     /// <param name="indent">Indentation to get count for</param>
     /// <returns>List with items matching the indentation</returns>
-    public static IList<AppointmentItem> GetIndentationItems(IList<AppointmentItem> list, int beginIndex, int count, int indent)
+    public static IList<AppointmentItem> GetIndentationItems(IList<AppointmentItem> list, int beginIndex, int count,
+        int indent)
     {
         var result = new List<AppointmentItem>();
         for (var i = beginIndex; i < beginIndex + count; i++)
-        {
             if (list[i].Indent == indent)
                 result.Add(list[i]);
-        }
         return result;
     }
 
@@ -74,6 +74,7 @@ internal static class AppointmentGroupHelper
 
         return end;
     }
+
     /// <summary>
     /// Gets the indentation count for a group
     /// </summary>
@@ -85,10 +86,8 @@ internal static class AppointmentGroupHelper
     {
         var result = 0;
         for (var i = beginIndex; i < beginIndex + count; i++)
-        {
             if (list[i].Indent > result)
                 result = list[i].Indent;
-        }
 
         return result + 1;
     }
