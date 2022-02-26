@@ -8,47 +8,23 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public class AppointmentItem
 {
-    /// <summary>
-    /// The begin
-    /// </summary>
+    /// <summary>The begin</summary>
     public DateTime Begin { get; init; }
 
-    /// <summary>
-    /// The end
-    /// </summary>
+    /// <summary>The end</summary>
     public DateTime End { get; init; }
 
-    /// <summary>
-    /// The length
-    /// </summary>
+    /// <summary>The length</summary>
     public TimeSpan Length => End - Begin;
 
-    /// <summary>
-    /// The text
-    /// </summary>
+    /// <summary>The text</summary>
     public string Text { get; init; } = "";
-
-    /// <summary>
-    /// The color
-    /// </summary>
+    /// <summary>The color</summary>
     public Color Color { get; init; }
-
-    /// <summary>
-    /// The index in the list
-    /// </summary>
+    /// <summary>The index in the list</summary>
     public int Index { get; init; }
-
-    /// <summary>
-    /// The indentation
-    /// </summary>
-    public int Indent
-    {
-        get => indent;
-        set
-        {
-            if (value >= 0) indent = value;
-        }
-    }
+    /// <summary>The indentation</summary>
+    public int Indent { get => indent; set { if (value >= 0) indent = value; } }
 
     /// <summary>
     /// Gets the begin and length as a fraction of the day
@@ -82,30 +58,21 @@ public class AppointmentItem
     /// Checks if this instance is valid
     /// </summary>
     /// <returns>True if it is and false otherwise</returns>
-    public bool IsValid()
-    {
-        return End > Begin;
-    }
+    public bool IsValid() => End > Begin;
 
     /// <summary>
     /// Checks if this instance has overlap with another instance
     /// </summary>
     /// <param name="other">Other instance to check with</param>
     /// <returns>True if it has and false otherwise</returns>
-    public bool HasOverlap(AppointmentItem other)
-    {
-        return other.Begin >= Begin && other.Begin < End || Begin >= other.Begin && Begin < other.End;
-    }
+    public bool HasOverlap(AppointmentItem other) => other.Begin >= Begin && other.Begin < End || Begin >= other.Begin && Begin < other.End;
 
     /// <summary>
     /// Check if a given item is in the given week.
     /// </summary>
     /// <param name="beginWeek">Begin of the week</param>
     /// <returns>True if it is and false otherwise</returns>
-    public bool IsInCurrentWeek(DateTime beginWeek)
-    {
-        return Begin >= beginWeek;
-    }
+    public bool IsInCurrentWeek(DateTime beginWeek) => Begin >= beginWeek;
 
     /// <summary>
     /// The indentation
