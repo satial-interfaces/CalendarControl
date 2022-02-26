@@ -6,8 +6,6 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
@@ -244,7 +242,7 @@ public class CalendarControl : ContentControl, IStyleable
     /// <param name="e">Argument for the event</param>
     void SelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
     {
-        if (e.NewValue is not object obj) return;
+        if (e.NewValue is not { } obj) return;
         var index = Items.ToList().FindIndex(x => x == obj);
 
         var itemsGrid = this.FindControl<Grid>("ItemsGrid");
@@ -464,30 +462,7 @@ public class CalendarControl : ContentControl, IStyleable
     /// <returns>The instance or null otherwise</returns>
     T? GetBindingItem<T>() where T : CalendarControlItemTemplate
     {
-        return ItemTemplate != null ? ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(T)) as T : null;
-    }
-
-    /// <summary>
-    /// Creates a calendar control item using the given controls
-    /// </summary>
-    /// <param name="obj">Source object</param>
-    /// <param name="beginItem">Item containing the begin</param>
-    /// <param name="endItem">Item containing the end</param>
-    /// <param name="textItem">Item containing the text</param>
-    /// <param name="colorItem">Item containing the color</param>
-    /// <param name="index">Index to use for the calendar control item</param>
-    /// <returns>The calendar control item or null otherwise</returns>
-    AppointmentItem? CreateItem(object obj, BeginItem beginItem, EndItem endItem, TextItem textItem, ColorItem? colorItem, int index)
-    {
-        if (beginItem.Binding == null || endItem.Binding == null || textItem.Binding == null) return null;
-        var begin = beginItem.GetObservableValue(beginItem.Binding, obj, DateTime.MinValue);
-        var end = endItem.GetObservableValue(endItem.Binding, obj, DateTime.MinValue);
-        var text = textItem.GetObservableValue(textItem.Binding, obj, "");
-        var color = Colors.Transparent;
-        if (colorItem != null && colorItem.Binding != null)
-            color = colorItem.GetObservableValue(colorItem.Binding, obj, Colors.Transparent);
-
-        return new AppointmentItem { Begin = begin, End = end, Text = text, Color = color, Index = index };
+        return ItemTemplate.FirstOrDefault(x => x.GetType() == typeof(T)) as T;
     }
 
     /// <summary>
@@ -591,6 +566,29 @@ public class CalendarControl : ContentControl, IStyleable
         }
 
         hourGrid.RowDefinitions = rowDefinitions;
+    }
+
+    /// <summary>
+    /// Creates a calendar control item using the given controls
+    /// </summary>
+    /// <param name="obj">Source object</param>
+    /// <param name="beginItem">Item containing the begin</param>
+    /// <param name="endItem">Item containing the end</param>
+    /// <param name="textItem">Item containing the text</param>
+    /// <param name="colorItem">Item containing the color</param>
+    /// <param name="index">Index to use for the calendar control item</param>
+    /// <returns>The calendar control item or null otherwise</returns>
+    static AppointmentItem? CreateItem(object obj, CalendarControlItemTemplate beginItem, CalendarControlItemTemplate endItem, CalendarControlItemTemplate textItem, CalendarControlItemTemplate? colorItem, int index)
+    {
+        if (beginItem.Binding == null || endItem.Binding == null || textItem.Binding == null) return null;
+        var begin = beginItem.GetObservableValue(beginItem.Binding, obj, DateTime.MinValue);
+        var end = endItem.GetObservableValue(endItem.Binding, obj, DateTime.MinValue);
+        var text = textItem.GetObservableValue(textItem.Binding, obj, "");
+        var color = Colors.Transparent;
+        if (colorItem != null && colorItem.Binding != null)
+            color = colorItem.GetObservableValue(colorItem.Binding, obj, Colors.Transparent);
+
+        return new AppointmentItem { Begin = begin, End = end, Text = text, Color = color, Index = index };
     }
 
     /// <summary>
