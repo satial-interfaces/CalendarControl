@@ -32,7 +32,7 @@ internal class OneWayConverter<TSource, TTarget> : IValueConverter
 	/// </summary>
 	/// <param name="convert">Convert function to pass</param>
 	/// <returns>An instance of this class</returns>
-	public static OneWayConverter<TSource, TTarget> GetInstance(Func<TSource, object?, CultureInfo, TTarget> convert) => new OneWayConverter<TSource, TTarget>(convert);
+	public static OneWayConverter<TSource, TTarget> GetInstance(Func<TSource, object?, CultureInfo, TTarget> convert) => new(convert);
 
 	/// <summary>
 	/// Convert method reference.
