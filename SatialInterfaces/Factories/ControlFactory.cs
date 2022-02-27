@@ -15,7 +15,7 @@ public static class ControlFactory
 	/// Creates a column
 	/// </summary>
 	/// <returns>Created column</returns>
-	public static Grid CreateColumn() => new Grid();
+	public static Grid CreateColumn() => new();
 
 	/// <summary>
 	/// Creates a workday/weekend control

@@ -1,6 +1,6 @@
 <ContentControl x:Class="SatialInterfaces.Controls.CalendarControl"
     xmlns="https://github.com/avaloniaui"
-    xmlns:si="clr-namespace:SatialInterfaces.Converters"
+    xmlns:sic="clr-namespace:SatialInterfaces.Converters"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,7 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <si:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
+                    <sic:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
