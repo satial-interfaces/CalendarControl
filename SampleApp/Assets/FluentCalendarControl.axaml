@@ -48,7 +48,17 @@
     </Style>
     <Style Selector="si|HourCell">
         <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefault}" />
-        <Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
+        <Setter Property="BorderThickness" Value="0.5" />
+        <Setter Property="Child">
+            <Template>
+                <Grid RowDefinitions="1*,1*,1*,1*">
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource SubtleFillColorTertiaryBrush}" BorderThickness="0.5" />
+                    <Border Grid.Row="1" BorderBrush="{DynamicResource SubtleFillColorTertiaryBrush}" BorderThickness="0.5" />
+                    <Border Grid.Row="2" BorderBrush="{DynamicResource SubtleFillColorTertiaryBrush}" BorderThickness="0.5" />
+                    <Border Grid.Row="3" BorderBrush="{DynamicResource SubtleFillColorTertiaryBrush}" BorderThickness="0.5" />
+                </Grid>
+            </Template>
+        </Setter>
     </Style>
     <Style Selector="si|WeekendControl">
         <Setter Property="Background" Value="{DynamicResource ControlStrokeColorDefault}" />
