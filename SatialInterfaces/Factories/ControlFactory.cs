@@ -15,10 +15,7 @@ public static class ControlFactory
 	/// Creates a column
 	/// </summary>
 	/// <returns>Created column</returns>
-	public static Grid CreateColumn()
-	{
-		return new Grid();
-	}
+	public static Grid CreateColumn() => new Grid();
 
 	/// <summary>
 	/// Creates a workday/weekend control
@@ -50,25 +47,14 @@ public static class ControlFactory
 	/// Creates a background cell
 	/// </summary>
 	/// <returns>Created control</returns>
-	public static Border CreateHourCell()
-	{
-		return new HourCell();
-	}
+	public static Border CreateHourCell() => new HourCell();
 
 	/// <summary>
 	/// Creates an appointment control for the given item
 	/// </summary>
 	/// <param name="item">Appointment item to create control for</param>
 	/// <returns>Created appointment</returns>
-	public static Border CreateAppointment(AppointmentItem item)
-	{
-		var border = new AppointmentControl
-		{
-			DataContext = item,
-			Index = item.Index
-		};
-		return border;
-	}
+	public static Border CreateAppointment(AppointmentItem item) => new AppointmentControl { DataContext = item, Index = item.Index };
 
 	/// <summary>
 	/// Creates a grid with a given column count

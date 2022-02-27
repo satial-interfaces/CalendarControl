@@ -61,8 +61,5 @@ internal static class AppointmentItemListHelper
 	/// <param name="list">List to check in</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>True if it fits and false otherwise</returns>
-	static bool FitsIn(IEnumerable<AppointmentItem> list, AppointmentItem item)
-	{
-		return list.All(i => !i.HasOverlap(item));
-	}
+	static bool FitsIn(IEnumerable<AppointmentItem> list, AppointmentItem item) => list.All(i => !i.HasOverlap(item));
 }

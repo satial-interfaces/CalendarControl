@@ -21,8 +21,5 @@ internal class DoubleToLeftMarginConverter : IValueConverter
 	}
 
 	/// <inheritdoc />
-	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-	{
-		return BindingOperations.DoNothing;
-	}
+	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => BindingOperations.DoNothing;
 }

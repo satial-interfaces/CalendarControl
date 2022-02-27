@@ -99,10 +99,7 @@ internal static class DateTimeHelper
 	/// </summary>
 	/// <param name="dayOfWeek">Day of the week to convert</param>
 	/// <returns>The string</returns>
-	public static string DayOfWeekToString(DayOfWeek dayOfWeek)
-	{
-		return GetCurrentDateFormat().AbbreviatedDayNames[(int)dayOfWeek];
-	}
+	public static string DayOfWeekToString(DayOfWeek dayOfWeek) => GetCurrentDateFormat().AbbreviatedDayNames[(int)dayOfWeek];
 
 	/// <summary>
 	/// Return if the passed in day of the week is a weekend. note: state pulled from
@@ -170,8 +167,5 @@ internal static class DateTimeHelper
 	/// </summary>
 	/// <param name="dayOfWeek">Day of the week to check</param>
 	/// <returns>The day state</returns>
-	static DayState DefaultDayState(DayOfWeek dayOfWeek)
-	{
-		return dayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? DayState.Weekend : DayState.WorkDay;
-	}
+	static DayState DefaultDayState(DayOfWeek dayOfWeek) => dayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? DayState.Weekend : DayState.WorkDay;
 }
