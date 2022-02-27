@@ -1,15 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
     xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
-    xmlns:sic="clr-namespace:SatialInterfaces.Converters;assembly=CalendarControl"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <sic:BrushToBoolConverter x:Key="BrushToBoolConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
     </Styles.Resources>
     <Style Selector="si|AppointmentControl">
         <Setter Property="BorderThickness" Value="0" />
@@ -20,15 +12,17 @@
                     <Design.DataContext>
                         <si:AppointmentItem />
                     </Design.DataContext>
-                    <Border BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}" BorderThickness="{DynamicResource TextControlBorderThemeThickness}" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" IsVisible="{Binding !#CustomColorBorder.Background, Converter={StaticResource BrushToBoolConverter}}">
+                    <Border CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                         <Border.Background>
                             <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
                         </Border.Background>
                     </Border>
-                    <Border BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}" BorderThickness="{DynamicResource TextControlBorderThemeThickness}" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" IsVisible="{Binding $self.Background, Converter={StaticResource BrushToBoolConverter}}" Name="CustomColorBorder">
+                    <Border CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                         <Border.Background>
                             <SolidColorBrush Color="{Binding Color}" />
                         </Border.Background>
+                    </Border>
+                    <Border BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}" BorderThickness="{DynamicResource TextControlBorderThemeThickness}" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                     </Border>
                     <Border BorderThickness="{DynamicResource TextControlBorderThemeThickness}" Classes="selectedAppointment" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" Name="SelectionBorder" />
                     <StackPanel ClipToBounds="True" MaxHeight="{Binding $parent[Grid].Bounds.Height}">
