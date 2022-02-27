@@ -11,13 +11,10 @@ namespace SatialInterfaces.Converters;
 internal class OneWayConverter<TSource, TTarget> : IValueConverter
 {
 	/// <summary>
-	/// Initializes a new instance of the <see cref="SatialInterfaces.Converters.OneWayConverter" /> class.
+	/// Initializes a new instance of the <see cref="OneWayConverter{TSource, TTarget}" /> class.
 	/// </summary>
 	/// <param name="convert">Convert function to pass</param>
-	public OneWayConverter(Func<TSource, object?, CultureInfo, TTarget> convert)
-	{
-		this.convert = convert;
-	}
+	public OneWayConverter(Func<TSource, object?, CultureInfo, TTarget> convert) => this.convert = convert;
 
 	/// <inheritdoc />
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -28,20 +25,14 @@ internal class OneWayConverter<TSource, TTarget> : IValueConverter
 	}
 
 	/// <inheritdoc />
-	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-	{
-		return BindingOperations.DoNothing;
-	}
+	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => BindingOperations.DoNothing;
 
 	/// <summary>
 	/// Gets the instance of this class
 	/// </summary>
 	/// <param name="convert">Convert function to pass</param>
 	/// <returns>An instance of this class</returns>
-	public static OneWayConverter<TSource, TTarget> GetInstance(Func<TSource, object?, CultureInfo, TTarget> convert)
-	{
-		return new OneWayConverter<TSource, TTarget>(convert);
-	}
+	public static OneWayConverter<TSource, TTarget> GetInstance(Func<TSource, object?, CultureInfo, TTarget> convert) => new OneWayConverter<TSource, TTarget>(convert);
 
 	/// <summary>
 	/// Convert method reference.

@@ -23,7 +23,7 @@
                         </Border.Background>
                     </Border>
                     <Border BorderThickness="{DynamicResource TextControlBorderThemeThickness}" Classes="selectedAppointment" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" Name="SelectionBorder" />
-                    <StackPanel MaxHeight="{Binding $parent[Grid].Bounds.Height}">
+                    <StackPanel ClipToBounds="True" MaxHeight="{Binding $parent[Grid].Bounds.Height}">
                         <TextBlock FontWeight="Bold" Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding Begin, StringFormat={}{0:t}}" TextWrapping="Wrap" />
                         <TextBlock Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding Text}" TextWrapping="Wrap" />
                     </StackPanel>
@@ -35,6 +35,16 @@
     <Style Selector="si|AppointmentControl:selected Border.selectedAppointment">
         <Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
+    </Style>
+    <Style Selector="si|CalendarControl">
+        <Setter Property="AppointmentGroupMargin" Value="0,0,6,0" />
+        <Setter Property="BeginOfTheDay" Value="06:00" />
+        <Setter Property="EndOfTheDay" Value="18:00" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" Padding="{TemplateBinding Padding}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+            </ControlTemplate>
+        </Setter>
     </Style>
     <Style Selector="si|HourCell">
         <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefault}" />

@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
@@ -23,6 +24,8 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public class CalendarControl : ContentControl, IStyleable
 {
+	/// <summary>Margin around the appointment group property</summary>
+	public static readonly StyledProperty<Thickness> AppointmentGroupMarginProperty = AvaloniaProperty.Register<CalendarControl, Thickness>(nameof(AppointmentGroupMargin));
 	/// <summary>First day of the week property</summary>
 	public static readonly StyledProperty<DayOfWeek> FirstDayOfWeekProperty = AvaloniaProperty.Register<CalendarControl, DayOfWeek>(nameof(FirstDayOfWeek), DateTimeHelper.GetCurrentDateFormat().FirstDayOfWeek);
 
@@ -72,7 +75,9 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <inheritdoc />
-	Type IStyleable.StyleKey => typeof(ContentControl);
+	Type IStyleable.StyleKey => typeof(CalendarControl);
+	/// <summary>Margin around the appointment group</summary>
+	public Thickness AppointmentGroupMargin { get => GetValue(AppointmentGroupMarginProperty); set => SetValue(AppointmentGroupMarginProperty, value); }
 	/// <summary>First day of the week property</summary>
 	public DayOfWeek FirstDayOfWeek { get => GetValue(FirstDayOfWeekProperty); set => SetValue(FirstDayOfWeekProperty, value); }
 	/// <summary>Items property</summary>
@@ -296,6 +301,67 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>
+	/// Get an appointment group from the given list
+	/// </summary>
+	/// <param name="list">List to get appointment from</param>
+	/// <param name="beginIndex">Index to begin in</param>
+	/// <returns>
+	/// Index to continue in next iteration, the begin (fraction of day), the length (fraction of day) and the
+	/// containing control
+	/// </returns>
+	(int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(IList<AppointmentItem> list, int beginIndex)
+	{
+		var (begin, _) = list[beginIndex].GetFractionOfDay();
+		var count = AppointmentGroupHelper.GetGroupCount(list, beginIndex);
+		var end = AppointmentGroupHelper.GetEnd(list, beginIndex, count);
+		var length = end - begin;
+		var indentationCount = AppointmentGroupHelper.GetIndentationCount(list, beginIndex, count);
+		var grid = ControlFactory.CreateGrid(indentationCount);
+		grid[!MarginProperty] = new Binding("AppointmentGroupMargin") { Source = this };
+
+		for (var i = 0; i < indentationCount; i++)
+		{
+			if (grid.Children[i] is not Grid g)
+				continue;
+			var indentItems = AppointmentGroupHelper.GetIndentationItems(list, beginIndex, count, i);
+			if (indentItems.Count == 0)
+				continue;
+			var groupControls = new List<IControl?>();
+			var rowDefinitions = new RowDefinitions();
+			var previous = double.NaN;
+			foreach (var indentItem in indentItems)
+			{
+				var (b, l) = indentItem.GetFractionOfDay();
+				// Within the group
+				b = (b - begin) / length;
+				l /= length;
+
+				var emptyLength = b - (!double.IsNaN(previous) ? previous : 0.0d);
+				if (emptyLength > 0.0d)
+				{
+					groupControls.Add(null);
+					rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
+				}
+
+				groupControls.Add(ControlFactory.CreateAppointment(indentItem));
+				rowDefinitions.Add(new RowDefinition(l, GridUnitType.Star));
+				previous = b + l;
+			}
+
+			// Tail
+			if (double.IsNaN(previous) || previous < 1.0d)
+			{
+				groupControls.Add(null);
+				rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d), GridUnitType.Star));
+			}
+
+			ControlHelper.AddControlsToRows(g, groupControls, rowDefinitions);
+		}
+
+		return (beginIndex + count, begin, length, grid);
+	}
+
+	/// <summary>
 	/// Adds an empty row for the tail (if applicable)
 	/// </summary>
 	/// <param name="rowDefinitions">List of row definitions to add to</param>
@@ -347,67 +413,6 @@ public class CalendarControl : ContentControl, IStyleable
 			if (controls[i] != null)
 				Grid.SetRow(controls[i] as Control, i);
 		}
-	}
-
-	/// <summary>
-	/// Get an appointment group from the given list
-	/// </summary>
-	/// <param name="list">List to get appointment from</param>
-	/// <param name="beginIndex">Index to begin in</param>
-	/// <returns>
-	/// Index to continue in next iteration, the begin (fraction of day), the length (fraction of day) and the
-	/// containing control
-	/// </returns>
-	static (int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(IList<AppointmentItem> list, int beginIndex)
-	{
-		var (begin, _) = list[beginIndex].GetFractionOfDay();
-		var count = AppointmentGroupHelper.GetGroupCount(list, beginIndex);
-		var end = AppointmentGroupHelper.GetEnd(list, beginIndex, count);
-		var length = end - begin;
-		var indentationCount = AppointmentGroupHelper.GetIndentationCount(list, beginIndex, count);
-		var grid = ControlFactory.CreateGrid(indentationCount);
-
-		for (var i = 0; i < indentationCount; i++)
-		{
-			if (grid.Children[i] is not Grid g)
-				continue;
-			var indentItems = AppointmentGroupHelper.GetIndentationItems(list, beginIndex, count, i);
-			if (indentItems.Count == 0)
-				continue;
-			var groupControls = new List<IControl?>();
-			var rowDefinitions = new RowDefinitions();
-			var previous = double.NaN;
-			foreach (var indentItem in indentItems)
-			{
-				var (b, l) = indentItem.GetFractionOfDay();
-				// Within the group
-				b = (b - begin) / length;
-				l /= length;
-
-				var emptyLength = b - (!double.IsNaN(previous) ? previous : 0.0d);
-				if (emptyLength > 0.0d)
-				{
-					groupControls.Add(null);
-					rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
-				}
-
-				groupControls.Add(ControlFactory.CreateAppointment(indentItem));
-				rowDefinitions.Add(new RowDefinition(l, GridUnitType.Star));
-				previous = b + l;
-			}
-
-			// Tail
-			if (double.IsNaN(previous) || previous < 1.0d)
-			{
-				groupControls.Add(null);
-				rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previous) ? previous : 0.0d),
-					GridUnitType.Star));
-			}
-
-			ControlHelper.AddControlsToRows(g, groupControls, rowDefinitions);
-		}
-
-		return (beginIndex + count, begin, length, grid);
 	}
 
 	/// <summary>
