@@ -9,9 +9,6 @@
         <Setter Property="Child">
             <Template>
                 <Grid>
-                    <Design.DataContext>
-                        <si:AppointmentItem />
-                    </Design.DataContext>
                     <Border CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                         <Border.Background>
                             <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />

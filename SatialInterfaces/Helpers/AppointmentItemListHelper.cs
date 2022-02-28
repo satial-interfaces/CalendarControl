@@ -4,27 +4,27 @@ using SatialInterfaces.Controls;
 
 namespace SatialInterfaces.Helpers;
 
-internal static class AppointmentItemListHelper
+internal static class AppointmentControlListHelper
 {
 	/// <summary>
 	/// Applies the indentation of the appointment list (based on avoiding overlap)
 	/// </summary>
 	/// <param name="list">Appointment list to process</param>
-	public static void ApplyIndentation(IEnumerable<AppointmentItem> list)
+	public static void ApplyIndentation(IEnumerable<AppointmentControl> list)
 	{
-		var listOfLists = new List<List<AppointmentItem>>();
+		var listOfLists = new List<List<AppointmentControl>>();
 
 		foreach (var item in list)
 		{
 			var index = GetIndent(listOfLists, item);
-			List<AppointmentItem> indentList;
+			List<AppointmentControl> indentList;
 			if (index >= 0)
 			{
 				indentList = listOfLists[index];
 			}
 			else
 			{
-				indentList = new List<AppointmentItem>();
+				indentList = new List<AppointmentControl>();
 				listOfLists.Add(indentList);
 			}
 
@@ -44,7 +44,7 @@ internal static class AppointmentItemListHelper
 	/// <param name="listOfLists">List with indentations</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>The index or -1 otherwise</returns>
-	static int GetIndent(IReadOnlyList<List<AppointmentItem>> listOfLists, AppointmentItem item)
+	static int GetIndent(IReadOnlyList<List<AppointmentControl>> listOfLists, AppointmentControl item)
 	{
 		for (var i = 0; i < listOfLists.Count; i++)
 		{
@@ -61,5 +61,5 @@ internal static class AppointmentItemListHelper
 	/// <param name="list">List to check in</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>True if it fits and false otherwise</returns>
-	static bool FitsIn(IEnumerable<AppointmentItem> list, AppointmentItem item) => list.All(i => !i.HasOverlap(item));
+	static bool FitsIn(IEnumerable<AppointmentControl> list, AppointmentControl item) => list.All(i => !i.HasOverlap(item));
 }

@@ -14,7 +14,7 @@ internal static class AppointmentGroupHelper
 	/// <param name="list">List to get group from</param>
 	/// <param name="beginIndex">Index to start from</param>
 	/// <returns>The group count</returns>
-	public static int GetGroupCount(IList<AppointmentItem> list, int beginIndex)
+	public static int GetGroupCount(IList<AppointmentControl> list, int beginIndex)
 	{
 		var (begin, length) = list[beginIndex].GetFractionOfDay();
 		var end = begin + length;
@@ -42,10 +42,10 @@ internal static class AppointmentGroupHelper
 	/// <param name="count">Count of group</param>
 	/// <param name="indent">Indentation to get count for</param>
 	/// <returns>List with items matching the indentation</returns>
-	public static IList<AppointmentItem> GetIndentationItems(IList<AppointmentItem> list, int beginIndex, int count,
+	public static IList<AppointmentControl> GetIndentationItems(IList<AppointmentControl> list, int beginIndex, int count,
 		int indent)
 	{
-		var result = new List<AppointmentItem>();
+		var result = new List<AppointmentControl>();
 		for (var i = beginIndex; i < beginIndex + count; i++)
 		{
 			if (list[i].Indent == indent)
@@ -62,7 +62,7 @@ internal static class AppointmentGroupHelper
 	/// <param name="beginIndex">Begin index of group</param>
 	/// <param name="count">Count of group</param>
 	/// <returns>The end as a fraction of the day</returns>
-	public static double GetEnd(IList<AppointmentItem> list, int beginIndex, int count)
+	public static double GetEnd(IList<AppointmentControl> list, int beginIndex, int count)
 	{
 		var (begin, length) = list[beginIndex].GetFractionOfDay();
 		var end = begin + length;
@@ -85,7 +85,7 @@ internal static class AppointmentGroupHelper
 	/// <param name="beginIndex">Begin index of group</param>
 	/// <param name="count">Count of group</param>
 	/// <returns>Indentation count</returns>
-	public static int GetIndentationCount(IList<AppointmentItem> list, int beginIndex, int count)
+	public static int GetIndentationCount(IList<AppointmentControl> list, int beginIndex, int count)
 	{
 		var result = 0;
 		for (var i = beginIndex; i < beginIndex + count; i++)
