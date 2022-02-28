@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Avalonia.Controls;
+using Avalonia.Data;
 using SatialInterfaces.Controls;
 using SatialInterfaces.Helpers;
 
@@ -54,7 +55,17 @@ public static class ControlFactory
 	/// </summary>
 	/// <param name="item">Appointment item to create control for</param>
 	/// <returns>Created appointment</returns>
-	public static Border CreateAppointment(AppointmentItem item) => new AppointmentControl { DataContext = item, Index = item.Index };
+	public static Border CreateAppointment(AppointmentItem item)
+	{
+		var p = new AppointmentControl();
+		p[!AppointmentControl.BeginProperty] = new Binding("Begin");
+		p[!AppointmentControl.EndProperty] = new Binding("End");
+		p[!AppointmentControl.TextProperty] = new Binding("Text");
+		p[!AppointmentControl.ColorProperty] = new Binding("Color");
+		p[!AppointmentControl.IndexProperty] = new Binding("Index");
+		p.DataContext = item;
+		return p;
+	}
 
 	/// <summary>
 	/// Creates a grid with a given column count

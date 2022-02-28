@@ -19,15 +19,15 @@
                     </Border>
                     <Border CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                         <Border.Background>
-                            <SolidColorBrush Color="{Binding Color}" />
+                            <SolidColorBrush Color="{Binding $parent[si:AppointmentControl].Color}" />
                         </Border.Background>
                     </Border>
                     <Border BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}" BorderThickness="{DynamicResource TextControlBorderThemeThickness}" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                     </Border>
                     <Border BorderThickness="{DynamicResource TextControlBorderThemeThickness}" Classes="selectedAppointment" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" Name="SelectionBorder" />
                     <StackPanel ClipToBounds="True" MaxHeight="{Binding $parent[Grid].Bounds.Height}">
-                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding Begin, StringFormat={}{0:t}}" TextWrapping="Wrap" />
-                        <TextBlock Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding Text}" TextWrapping="Wrap" />
+                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding $parent[si:AppointmentControl].Begin, StringFormat={}{0:t}}" TextWrapping="Wrap" />
+                        <TextBlock Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding $parent[si:AppointmentControl].Text}" TextWrapping="Wrap" />
                     </StackPanel>
                 </Grid>
             </Template>
