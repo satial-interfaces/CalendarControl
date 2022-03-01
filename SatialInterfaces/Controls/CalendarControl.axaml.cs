@@ -143,7 +143,12 @@ public class CalendarControl : ContentControl, IStyleable
 		var index = appointment?.Index ?? -1;
 		leftButtonDown = false;
 		base.OnPointerReleased(e);
+		var previousIndex = SelectedIndex;
 		SelectedIndex = index;
+
+		// Force retrigger
+		if (index == previousIndex)
+			RaiseSelectionChanged(index);
 	}
 
 	/// <summary>
@@ -227,20 +232,7 @@ public class CalendarControl : ContentControl, IStyleable
 	void SelectedIndexChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not int index) return;
-
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
-			.FirstOrDefault(x => x.Index == index);
-		if (appointment != null)
-			appointment.IsSelected = true;
-
-		object? item = null;
-		var list = items.ToList();
-		if (index >= 0 && index < list.Count)
-			item = list[index];
-		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
-		{ SelectedIndex = index, SelectedItem = item };
-		RaiseEvent(eventArgs);
+		RaiseSelectionChanged(index);
 	}
 
 	/// <summary>
@@ -260,6 +252,27 @@ public class CalendarControl : ContentControl, IStyleable
 
 		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
 		{ SelectedIndex = index, SelectedItem = obj };
+		RaiseEvent(eventArgs);
+	}
+
+	/// <summary>
+	/// Raises the selection changed event
+	/// </summary>
+	/// <param name="index">Index selected</param>
+	void RaiseSelectionChanged(int index)
+	{
+		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
+		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
+			.FirstOrDefault(x => x.Index == index);
+		if (appointment != null)
+			appointment.IsSelected = true;
+
+		object? item = null;
+		var list = items.ToList();
+		if (index >= 0 && index < list.Count)
+			item = list[index];
+		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
+		{ SelectedIndex = index, SelectedItem = item };
 		RaiseEvent(eventArgs);
 	}
 
