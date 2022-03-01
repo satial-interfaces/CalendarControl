@@ -1,0 +1,1 @@
+CalendarControl is a calendar control (week view) for Avalonia. Go to the source repository, see and run the sample app to get to know it.
