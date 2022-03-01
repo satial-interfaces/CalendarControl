@@ -176,14 +176,15 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="list">List of the item</param>
 	/// <param name="index">Index of the item</param>
-	void ScrollIntoView(IList<AppointmentControl> list, int index)
+	void ScrollIntoView(IList<IControl> list, int index)
 	{
-		CurrentWeek = list[index].Begin;
+		var item = list[index].GetFirstLogicalDescendant<IAppointmentControl>();
+		CurrentWeek = item.Begin;
 
 		var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
 		var scrollViewerRect = scrollViewer.Bounds;
 
-		var begin = (list[index].Begin - list[index].Begin.Date).TotalDays;
+		var begin = (item.Begin - item.Begin.Date).TotalDays;
 		scrollViewer.Offset = new Vector(0.0d, begin * scrollViewerRect.Height);
 	}
 
@@ -272,12 +273,14 @@ public class CalendarControl : ContentControl, IStyleable
 		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 
 		internalItems = Convert(enumerable);
-		var weekList = internalItems.Where(x => x.IsInCurrentWeek(beginWeek)).OrderBy(x => x.Begin);
+		var weekList = internalItems.
+		Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).
+		OrderBy(x => x.GetFirstLogicalDescendant<IAppointmentControl>().Begin);
 		for (var i = 0; i < daysPerWeek; i++)
 		{
 			if (itemsGrid.Children[i] is not Grid dayColumn) continue;
 
-			var todayList = weekList.Where(x => x.IsInDay(beginWeek.AddDays(i))).ToList();
+			var todayList = weekList.Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInDay(beginWeek.AddDays(i))).ToList();
 			AppointmentControlListHelper.ApplyIndentation(todayList);
 			var rowDefinitions = new RowDefinitions();
 
@@ -286,7 +289,8 @@ public class CalendarControl : ContentControl, IStyleable
 			var j = 0;
 			while (j < todayList.Count)
 			{
-				var (begin, _) = todayList[j].GetFractionOfDay();
+				var item = todayList[j].GetFirstLogicalDescendant<IAppointmentControl>();
+				var (begin, _) = item.GetFractionOfDay();
 				AddEmptyRow(rowDefinitions, dayControls, previousEnd, begin);
 
 				var appointmentGroup = GetAppointmentGroup(todayList, j);
@@ -311,9 +315,10 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Index to continue in next iteration, the begin (fraction of day), the length (fraction of day) and the
 	/// containing control
 	/// </returns>
-	(int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(IList<AppointmentControl> list, int beginIndex)
+	(int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(IList<IControl> list, int beginIndex)
 	{
-		var (begin, _) = list[beginIndex].GetFractionOfDay();
+		var item = list[beginIndex].GetFirstLogicalDescendant<IAppointmentControl>();
+		var (begin, _) = item.GetFractionOfDay();
 		var count = AppointmentGroupHelper.GetGroupCount(list, beginIndex);
 		var end = AppointmentGroupHelper.GetEnd(list, beginIndex, count);
 		var length = end - begin;
@@ -333,7 +338,8 @@ public class CalendarControl : ContentControl, IStyleable
 			var previous = double.NaN;
 			foreach (var indentItem in indentItems)
 			{
-				var (b, l) = indentItem.GetFractionOfDay();
+				item = indentItem.GetFirstLogicalDescendant<IAppointmentControl>();
+				var (b, l) = item.GetFractionOfDay();
 				// Within the group
 				b = (b - begin) / length;
 				l /= length;
@@ -422,16 +428,16 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
 	/// <returns>Internal handleable format</returns>
-	IList<AppointmentControl> Convert(IEnumerable enumerable)
+	IList<IControl> Convert(IEnumerable enumerable)
 	{
-		var result = new List<AppointmentControl>();
-		var obj = new object();
+		var result = new List<IControl>();
 
 		var i = 0;
 		foreach (var e in enumerable)
 		{
-			if (ItemTemplate?.Build(obj) is not AppointmentControl p) continue;
-			p.Index = i;
+			if (ItemTemplate?.Build(e) is not { } p || !p.HasFirstLogicalDescendant<IAppointmentControl>()) continue;
+			var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
+			item.Index = i;
 			p.DataContext = e;
 			result.Add(p);
 			i++;
@@ -561,7 +567,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>End of the day</summary>
 	TimeSpan endOfTheDay = new(0, 0, 0);
 	/// <summary>Items</summary>
-	IList<AppointmentControl> internalItems = new List<AppointmentControl>();
+	IList<IControl> internalItems = new List<IControl>();
 	/// <summary>Items</summary>
 	IEnumerable items = new AvaloniaList<object>();
 	/// <summary>State of the left mouse button</summary>

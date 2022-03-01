@@ -20,7 +20,9 @@
             </Design.DataContext>
             <si:CalendarControl.ItemTemplate>
                 <DataTemplate>
-                    <si:AppointmentControl Begin="{Binding Begin}" End="{Binding End}" Text="{Binding Text}" Color="{Binding Status, Converter={StaticResource ColorConverter}}" />
+                    <Grid>
+                        <si:AppointmentControl Begin="{Binding Begin}" End="{Binding End}" Text="{Binding Text}" Color="{Binding Status, Converter={StaticResource ColorConverter}}" />
+                    </Grid>
                 </DataTemplate>
             </si:CalendarControl.ItemTemplate>
         </si:CalendarControl>

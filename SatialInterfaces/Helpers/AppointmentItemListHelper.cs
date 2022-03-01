@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Controls;
 using SatialInterfaces.Controls;
 
 namespace SatialInterfaces.Helpers;
@@ -10,21 +11,21 @@ internal static class AppointmentControlListHelper
 	/// Applies the indentation of the appointment list (based on avoiding overlap)
 	/// </summary>
 	/// <param name="list">Appointment list to process</param>
-	public static void ApplyIndentation(IEnumerable<AppointmentControl> list)
+	public static void ApplyIndentation(IEnumerable<IControl> list)
 	{
-		var listOfLists = new List<List<AppointmentControl>>();
+		var listOfLists = new List<List<IControl>>();
 
 		foreach (var item in list)
 		{
 			var index = GetIndent(listOfLists, item);
-			List<AppointmentControl> indentList;
+			List<IControl> indentList;
 			if (index >= 0)
 			{
 				indentList = listOfLists[index];
 			}
 			else
 			{
-				indentList = new List<AppointmentControl>();
+				indentList = new List<IControl>();
 				listOfLists.Add(indentList);
 			}
 
@@ -34,7 +35,9 @@ internal static class AppointmentControlListHelper
 		for (var i = 0; i < listOfLists.Count; i++)
 		{
 			foreach (var item in listOfLists[i])
-				item.Indent = i;
+			{
+				item.GetFirstLogicalDescendant<IAppointmentControl>().Indent = i;
+			}
 		}
 	}
 
@@ -44,7 +47,7 @@ internal static class AppointmentControlListHelper
 	/// <param name="listOfLists">List with indentations</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>The index or -1 otherwise</returns>
-	static int GetIndent(IReadOnlyList<List<AppointmentControl>> listOfLists, AppointmentControl item)
+	static int GetIndent(IReadOnlyList<List<IControl>> listOfLists, IControl item)
 	{
 		for (var i = 0; i < listOfLists.Count; i++)
 		{
@@ -61,5 +64,9 @@ internal static class AppointmentControlListHelper
 	/// <param name="list">List to check in</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>True if it fits and false otherwise</returns>
-	static bool FitsIn(IEnumerable<AppointmentControl> list, AppointmentControl item) => list.All(i => !i.HasOverlap(item));
+	static bool FitsIn(IEnumerable<IControl> list, IControl item)
+	{
+		var item2 = item.GetFirstLogicalDescendant<IAppointmentControl>();
+		return list.All(x => !x.GetFirstLogicalDescendant<IAppointmentControl>().HasOverlap(item2));
+	}
 }

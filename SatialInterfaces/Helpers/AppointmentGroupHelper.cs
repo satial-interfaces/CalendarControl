@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Avalonia.Controls;
 using SatialInterfaces.Controls;
 
 namespace SatialInterfaces.Helpers;
@@ -14,15 +15,17 @@ internal static class AppointmentGroupHelper
 	/// <param name="list">List to get group from</param>
 	/// <param name="beginIndex">Index to start from</param>
 	/// <returns>The group count</returns>
-	public static int GetGroupCount(IList<AppointmentControl> list, int beginIndex)
+	public static int GetGroupCount(IList<IControl> list, int beginIndex)
 	{
-		var (begin, length) = list[beginIndex].GetFractionOfDay();
+		var item = list[beginIndex].GetFirstLogicalDescendant<IAppointmentControl>();
+		var (begin, length) = item.GetFractionOfDay();
 		var end = begin + length;
 		var count = 1;
 		for (var i = beginIndex + 1; i < list.Count; i++)
 		{
-			var (b, l) = list[i].GetFractionOfDay();
-			if (list[i].Indent == 0 && b > end)
+			item = list[i].GetFirstLogicalDescendant<IAppointmentControl>();
+			var (b, l) = item.GetFractionOfDay();
+			if (item.Indent == 0 && b > end)
 				break;
 
 			var e = b + l;
@@ -42,13 +45,13 @@ internal static class AppointmentGroupHelper
 	/// <param name="count">Count of group</param>
 	/// <param name="indent">Indentation to get count for</param>
 	/// <returns>List with items matching the indentation</returns>
-	public static IList<AppointmentControl> GetIndentationItems(IList<AppointmentControl> list, int beginIndex, int count,
-		int indent)
+	public static IList<IControl> GetIndentationItems(IList<IControl> list, int beginIndex, int count, int indent)
 	{
-		var result = new List<AppointmentControl>();
+		var result = new List<IControl>();
 		for (var i = beginIndex; i < beginIndex + count; i++)
 		{
-			if (list[i].Indent == indent)
+			var item = list[i].GetFirstLogicalDescendant<IAppointmentControl>();
+			if (item.Indent == indent)
 				result.Add(list[i]);
 		}
 
@@ -62,14 +65,16 @@ internal static class AppointmentGroupHelper
 	/// <param name="beginIndex">Begin index of group</param>
 	/// <param name="count">Count of group</param>
 	/// <returns>The end as a fraction of the day</returns>
-	public static double GetEnd(IList<AppointmentControl> list, int beginIndex, int count)
+	public static double GetEnd(IList<IControl> list, int beginIndex, int count)
 	{
-		var (begin, length) = list[beginIndex].GetFractionOfDay();
+		var item = list[beginIndex].GetFirstLogicalDescendant<IAppointmentControl>();
+		var (begin, length) = item.GetFractionOfDay();
 		var end = begin + length;
 
 		for (var i = beginIndex + 1; i < beginIndex + count; i++)
 		{
-			var (b, l) = list[i].GetFractionOfDay();
+			item = list[i].GetFirstLogicalDescendant<IAppointmentControl>();
+			var (b, l) = item.GetFractionOfDay();
 			var e = b + l;
 			if (e > end)
 				end = e;
@@ -85,13 +90,14 @@ internal static class AppointmentGroupHelper
 	/// <param name="beginIndex">Begin index of group</param>
 	/// <param name="count">Count of group</param>
 	/// <returns>Indentation count</returns>
-	public static int GetIndentationCount(IList<AppointmentControl> list, int beginIndex, int count)
+	public static int GetIndentationCount(IList<IControl> list, int beginIndex, int count)
 	{
 		var result = 0;
 		for (var i = beginIndex; i < beginIndex + count; i++)
 		{
-			if (list[i].Indent > result)
-				result = list[i].Indent;
+			var item = list[i].GetFirstLogicalDescendant<IAppointmentControl>();
+			if (item.Indent > result)
+				result = item.Indent;
 		}
 
 		return result + 1;

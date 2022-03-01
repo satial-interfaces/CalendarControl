@@ -60,6 +60,13 @@ public partial class MainWindow : Window
 	{
 		AvaloniaXamlLoader.Load(this);
 		calendarControl = this.FindControl<CalendarControl>("CalendarControl");
+		// calendarControl.ItemTemplate = new FuncDataTemplate<AppointmentViewModel>((_, __) => new AppointmentControl
+		// {
+		// 	[!AppointmentControl.BeginProperty] = new Binding("Begin"),
+		// 	[!AppointmentControl.EndProperty] = new Binding("End"),
+		// 	[!AppointmentControl.TextProperty] = new Binding("Text"),
+		// 	[!AppointmentControl.ColorProperty] = new Binding("Status") { Converter = new ColorConverter() }
+		// });
 		RandomCalendar();
 	}
 
