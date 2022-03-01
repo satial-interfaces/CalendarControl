@@ -40,7 +40,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>The end of the day property</summary>
 	public static readonly DirectProperty<CalendarControl, TimeSpan> EndOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(EndOfTheDay), o => o.EndOfTheDay, (o, v) => o.EndOfTheDay = v);
 
-	/// <summary>Item template 2</summary>
+	/// <summary>Item template</summary>
 	public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<CalendarControl, IDataTemplate?>(nameof(ItemTemplate));
 
 	/// <summary>The selected index property</summary>
@@ -90,7 +90,7 @@ public class CalendarControl : ContentControl, IStyleable
 	public TimeSpan BeginOfTheDay { get => beginOfTheDay; set => SetAndRaise(BeginOfTheDayProperty, ref beginOfTheDay, value); }
 	/// <summary>End of the day property</summary>
 	public TimeSpan EndOfTheDay { get => endOfTheDay; set => SetAndRaise(EndOfTheDayProperty, ref endOfTheDay, value); }
-	/// <summary>Item template2</summary>
+	/// <summary>Item template</summary>
 	public IDataTemplate? ItemTemplate { get => GetValue(ItemTemplateProperty); set => SetValue(ItemTemplateProperty, value); }
 	/// <summary>Selected index</summary>
 	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
