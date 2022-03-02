@@ -14,7 +14,7 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="8,8,8,8" ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
-        <si:CalendarControl Name="CalendarControl" SelectionChanged="CalendarControlSelectionChanged">
+        <si:CalendarControl Name="CalendarControl" AllowDelete="True" SelectionChanged="CalendarControlSelectionChanged">
             <Design.DataContext>
                 <v:AppointmentViewModel />
             </Design.DataContext>

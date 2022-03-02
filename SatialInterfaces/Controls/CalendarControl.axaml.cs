@@ -23,32 +23,26 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public class CalendarControl : ContentControl, IStyleable
 {
+	/// <summary>Allow delete property</summary>
+	public static readonly DirectProperty<CalendarControl, bool> AllowDeleteProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AllowDelete), o => o.AllowDelete, (o, v) => o.AllowDelete = v);
 	/// <summary>Margin around the appointment group property</summary>
 	public static readonly StyledProperty<Thickness> AppointmentGroupMarginProperty = AvaloniaProperty.Register<CalendarControl, Thickness>(nameof(AppointmentGroupMargin));
 	/// <summary>First day of the week property</summary>
 	public static readonly StyledProperty<DayOfWeek> FirstDayOfWeekProperty = AvaloniaProperty.Register<CalendarControl, DayOfWeek>(nameof(FirstDayOfWeek), DateTimeHelper.GetCurrentDateFormat().FirstDayOfWeek);
-
 	/// <summary>Items property</summary>
 	public static readonly DirectProperty<CalendarControl, IEnumerable> ItemsProperty = AvaloniaProperty.RegisterDirect<CalendarControl, IEnumerable>(nameof(Items), o => o.Items, (o, v) => o.Items = v);
-
 	/// <summary>Current week property</summary>
 	public static readonly DirectProperty<CalendarControl, DateTime> CurrentWeekProperty = AvaloniaProperty.RegisterDirect<CalendarControl, DateTime>(nameof(CurrentWeek), o => o.CurrentWeek, (o, v) => o.CurrentWeek = v);
-
 	/// <summary>The begin of the day property</summary>
 	public static readonly DirectProperty<CalendarControl, TimeSpan> BeginOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(BeginOfTheDay), o => o.BeginOfTheDay, (o, v) => o.BeginOfTheDay = v);
-
 	/// <summary>The end of the day property</summary>
 	public static readonly DirectProperty<CalendarControl, TimeSpan> EndOfTheDayProperty = AvaloniaProperty.RegisterDirect<CalendarControl, TimeSpan>(nameof(EndOfTheDay), o => o.EndOfTheDay, (o, v) => o.EndOfTheDay = v);
-
 	/// <summary>Item template</summary>
 	public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty = AvaloniaProperty.Register<CalendarControl, IDataTemplate?>(nameof(ItemTemplate));
-
 	/// <summary>The selected index property</summary>
 	public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
-
 	/// <summary>The selected item property</summary>
-	public static readonly StyledProperty<object> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object>(nameof(SelectedItem));
-
+	public static readonly StyledProperty<object?> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object?>(nameof(SelectedItem));
 	/// <summary>The selection changed event</summary>
 	public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
 
@@ -57,6 +51,8 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	static CalendarControl()
 	{
+		FocusableProperty.OverrideDefaultValue<CalendarControl>(true);
+
 		ItemsProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.ItemsChanged(e));
 		CurrentWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.CurrentWeekChanged(e));
 		SelectedIndexProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedIndexChanged(e));
@@ -78,6 +74,8 @@ public class CalendarControl : ContentControl, IStyleable
 
 	/// <inheritdoc />
 	Type IStyleable.StyleKey => typeof(CalendarControl);
+	/// <summary>Allow delete property</summary>
+	public bool AllowDelete { get => allowDelete; set => SetAndRaise(AllowDeleteProperty, ref allowDelete, value); }
 	/// <summary>Margin around the appointment group</summary>
 	public Thickness AppointmentGroupMargin { get => GetValue(AppointmentGroupMarginProperty); set => SetValue(AppointmentGroupMarginProperty, value); }
 	/// <summary>First day of the week property</summary>
@@ -95,7 +93,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>Selected index</summary>
 	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
 	/// <summary>Selected item</summary>
-	public object SelectedItem { get => GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
+	public object? SelectedItem { get => GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
 	/// <summary>Occurs when selection changed</summary>
 	public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
 
@@ -115,7 +113,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="item">The item</param>
 	public void ScrollIntoView(object item)
 	{
-		var index = items.ToList().IndexOf(item);
+		var index = GetItemsAsList().IndexOf(item);
 		if (index < 0 || index >= internalItems.Count) return;
 		ScrollIntoView(internalItems, index);
 	}
@@ -137,7 +135,6 @@ public class CalendarControl : ContentControl, IStyleable
 			return;
 		}
 
-		ClearSelection();
 		var control = e.Pointer.Captured as ILogical;
 		var appointment = control?.FindLogicalAncestorOfType<AppointmentControl>();
 		var index = appointment?.Index ?? -1;
@@ -151,9 +148,79 @@ public class CalendarControl : ContentControl, IStyleable
 			RaiseSelectionChanged(index);
 	}
 
+	/// <inheritdoc />
+	protected override void OnKeyDown(KeyEventArgs e)
+	{
+		if (e.Key is Key.Up or Key.Left)
+		{
+			SelectNext(-1);
+			e.Handled = true;
+		}
+		else if (e.Key is Key.Down or Key.Right)
+		{
+			SelectNext(1);
+			e.Handled = true;
+		}
+		else if (e.Key is Key.Delete)
+		{
+			DeleteAppointment();
+			e.Handled = true;
+		}
+		base.OnKeyDown(e);
+	}
+
+	/// <summary>
+	/// Select next appointment
+	/// </summary>
+	/// <param name="step">Step to take</param>
+	void SelectNext(int step)
+	{
+		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
+		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
+		if (appointments.Count == 0) return;
+		var appointmentIndex = appointments.FindIndex(x => x.Index == SelectedIndex);
+		appointmentIndex += step;
+		if (appointmentIndex < 0)
+			appointmentIndex = appointments.Count - 1;
+		else if (appointmentIndex >= appointments.Count)
+			appointmentIndex = 0;
+		SelectedItem = appointments[appointmentIndex].DataContext;
+	}
+
+	/// <summary>
+	/// Deletes the selected appointment
+	/// </summary>
+	void DeleteAppointment()
+	{
+		if (SelectedIndex < 0 || !AllowDelete) return;
+		var list = GetItemsAsList();
+		try
+		{
+			list.RemoveAt(SelectedIndex);
+			skipItemsChanged = true;
+			Items = new ArrayList();
+			skipItemsChanged = false;
+			Items = list;
+		}
+		catch (NotSupportedException)
+		{
+			// Too bad
+		}
+	}
+
+	/// <summary>
+	/// Gets the items as a list
+	/// </summary>
+	/// <returns></returns>
+	IList GetItemsAsList()
+	{
+		if (Items is IList list) return list;
+		return Items.ToList();
+	}
+
 	/// <summary>
 	/// Scroll viewer bounds changed: adjust scrollable grid as well
-	/// </summary>
+	/// /// </summary>
 	/// <param name="rect">Rectangle of the scroll viewer</param>
 	void OnScrollViewerBoundsChanged(Rect rect)
 	{
@@ -209,9 +276,12 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
 	{
+		if (skipItemsChanged) return;
 		ClearItemsGrid();
+		ClearSelectionProperties();
 		if (e.NewValue is not IEnumerable enumerable) return;
 		UpdateItems(enumerable);
+		RaiseSelectionChanged(SelectedIndex);
 	}
 
 	/// <summary>
@@ -221,8 +291,10 @@ public class CalendarControl : ContentControl, IStyleable
 	protected void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not DateTime dateTime) return;
+		ClearSelectionProperties();
 		CreateWeek(dateTime);
 		UpdateItems(Items);
+		RaiseSelectionChanged(SelectedIndex);
 	}
 
 	/// <summary>
@@ -231,7 +303,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void SelectedIndexChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (e.NewValue is not int index) return;
+		if (skipSelectedIndexChanged || e.NewValue is not int index) return;
 		RaiseSelectionChanged(index);
 	}
 
@@ -241,18 +313,21 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void SelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (e.NewValue is not { } obj) return;
-		var index = Items.ToList().FindIndex(x => x == obj);
+		if (skipSelectedItemChanged || e.NewValue is not { } obj) return;
+		RaiseSelectionChanged(obj);
+	}
 
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
-			.FirstOrDefault(x => x.Index == index);
-		if (appointment != null)
-			appointment.IsSelected = true;
-
-		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
-		{ SelectedIndex = index, SelectedItem = obj };
-		RaiseEvent(eventArgs);
+	/// <summary>
+	/// Clears the selection properties
+	/// </summary>
+	void ClearSelectionProperties()
+	{
+		skipSelectedIndexChanged = true;
+		SelectedIndex = -1;
+		skipSelectedIndexChanged = false;
+		skipSelectedItemChanged = true;
+		SelectedItem = null;
+		skipSelectedItemChanged = false;
 	}
 
 	/// <summary>
@@ -261,6 +336,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="index">Index selected</param>
 	void RaiseSelectionChanged(int index)
 	{
+		ClearSelection();
 		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
 			.FirstOrDefault(x => x.Index == index);
@@ -268,12 +344,38 @@ public class CalendarControl : ContentControl, IStyleable
 			appointment.IsSelected = true;
 
 		object? item = null;
-		var list = items.ToList();
+		var list = GetItemsAsList();
 		if (index >= 0 && index < list.Count)
 			item = list[index];
 		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
 		{ SelectedIndex = index, SelectedItem = item };
 		RaiseEvent(eventArgs);
+		skipSelectedItemChanged = true;
+		SelectedItem = item;
+		skipSelectedItemChanged = false;
+	}
+
+	/// <summary>
+	/// Raises the selection changed event
+	/// </summary>
+	/// <param name="item">Item selected</param>
+	void RaiseSelectionChanged(object item)
+	{
+		ClearSelection();
+		var index = GetItemsAsList().IndexOf(item);
+
+		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
+		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
+			.FirstOrDefault(x => x.Index == index);
+		if (appointment != null)
+			appointment.IsSelected = true;
+
+		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
+		{ SelectedIndex = index, SelectedItem = item };
+		RaiseEvent(eventArgs);
+		skipSelectedIndexChanged = true;
+		SelectedIndex = index;
+		skipSelectedIndexChanged = false;
 	}
 
 	/// <summary>
@@ -394,8 +496,7 @@ public class CalendarControl : ContentControl, IStyleable
 			return;
 
 		controls.Add(null);
-		rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d),
-			GridUnitType.Star));
+		rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d), GridUnitType.Star));
 	}
 
 	/// <summary>
@@ -573,6 +674,8 @@ public class CalendarControl : ContentControl, IStyleable
 	const int daysPerWeek = 7;
 	/// <summary>Hours per day</summary>
 	const int hoursPerDay = 24;
+	/// <summary>Allow delete</summary>
+	bool allowDelete;
 	/// <summary>Begin of the day</summary>
 	TimeSpan beginOfTheDay = new(0, 0, 0);
 	/// <summary>Current week</summary>
@@ -585,4 +688,10 @@ public class CalendarControl : ContentControl, IStyleable
 	IEnumerable items = new AvaloniaList<object>();
 	/// <summary>State of the left mouse button</summary>
 	bool leftButtonDown;
+	/// <summary>Skip handling the items changed event flag</summary>
+	bool skipItemsChanged;
+	/// <summary>Skip handling the selected index changed event flag</summary>
+	bool skipSelectedIndexChanged;
+	/// <summary>Skip handling the selected item changed event flag</summary>
+	bool skipSelectedItemChanged;
 }

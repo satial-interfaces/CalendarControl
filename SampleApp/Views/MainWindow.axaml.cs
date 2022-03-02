@@ -7,6 +7,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using SatialInterfaces.Controls;
 
 namespace SampleApp;
@@ -60,13 +61,7 @@ public partial class MainWindow : Window
 	{
 		AvaloniaXamlLoader.Load(this);
 		calendarControl = this.FindControl<CalendarControl>("CalendarControl");
-		// calendarControl.ItemTemplate = new FuncDataTemplate<AppointmentViewModel>((_, __) => new AppointmentControl
-		// {
-		// 	[!AppointmentControl.BeginProperty] = new Binding("Begin"),
-		// 	[!AppointmentControl.EndProperty] = new Binding("End"),
-		// 	[!AppointmentControl.TextProperty] = new Binding("Text"),
-		// 	[!AppointmentControl.ColorProperty] = new Binding("Status") { Converter = new ColorConverter() }
-		// });
+		Dispatcher.UIThread.Post(() => calendarControl.Focus());
 		RandomCalendar();
 	}
 
@@ -136,6 +131,7 @@ public partial class MainWindow : Window
 		}
 
 		calendarControl.Items = list;
+		calendarControl.SelectedIndex = 0;
 	}
 
 	static int GetRandom(int minVal, int maxVal) => random.Next(minVal, maxVal + 1);
