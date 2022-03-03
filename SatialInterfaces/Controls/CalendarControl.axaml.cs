@@ -83,7 +83,15 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>Items property</summary>
 	public IEnumerable Items { get => items; set => SetAndRaise(ItemsProperty, ref items, value); }
 	/// <summary>Current week property</summary>
-	public DateTime CurrentWeek { get => currentWeek; set => SetAndRaise(CurrentWeekProperty, ref currentWeek, value); }
+	public DateTime CurrentWeek
+	{
+		get => currentWeek;
+		set
+		{
+			if (currentWeek.GetBeginWeek(FirstDayOfWeek) == value.GetBeginWeek(FirstDayOfWeek)) return;
+			SetAndRaise(CurrentWeekProperty, ref currentWeek, value);
+		}
+	}
 	/// <summary>Begin of the day property</summary>
 	public TimeSpan BeginOfTheDay { get => beginOfTheDay; set => SetAndRaise(BeginOfTheDayProperty, ref beginOfTheDay, value); }
 	/// <summary>End of the day property</summary>
@@ -185,6 +193,8 @@ public class CalendarControl : ContentControl, IStyleable
 		else if (appointmentIndex >= appointments.Count)
 			appointmentIndex = 0;
 		SelectedItem = appointments[appointmentIndex].DataContext;
+		if (SelectedItem != null)
+			ScrollIntoView(SelectedItem);
 	}
 
 	/// <summary>

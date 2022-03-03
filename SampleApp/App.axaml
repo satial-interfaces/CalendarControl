@@ -5,6 +5,7 @@
     x:Class="SampleApp.App">
     <Application.Styles>
         <f:FluentAvaloniaTheme />
+        <StyleInclude Source="avares://CalendarControl/Themes/Default.axaml" />
         <StyleInclude Source="avares://SampleApp/Assets/FluentCalendarControl.axaml" />
     </Application.Styles>
 </Application>

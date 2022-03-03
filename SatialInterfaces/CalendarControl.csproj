@@ -9,13 +9,13 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/satial-interfaces/CalendarControl</RepositoryUrl>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Version>0.10.12.2</Version>
+        <Version>0.10.13</Version>
     </PropertyGroup>
     <ItemGroup>
         <None Remove=".gitignore" />
         <None Include="README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.12" />
+        <PackageReference Include="Avalonia" Version="0.10.13" />
     </ItemGroup>
 </Project>
