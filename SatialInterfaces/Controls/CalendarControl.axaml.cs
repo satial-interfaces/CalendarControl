@@ -165,21 +165,22 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <inheritdoc />
 	protected override void OnKeyDown(KeyEventArgs e)
 	{
-		if (e.Key is Key.Up or Key.Left)
+		switch (e.Key)
 		{
-			SelectNext(-1);
-			e.Handled = true;
+			case Key.Up or Key.Left:
+				SelectNext(-1);
+				e.Handled = true;
+				break;
+			case Key.Down or Key.Right:
+				SelectNext(1);
+				e.Handled = true;
+				break;
+			case Key.Delete:
+				DeleteAppointment();
+				e.Handled = true;
+				break;
 		}
-		else if (e.Key is Key.Down or Key.Right)
-		{
-			SelectNext(1);
-			e.Handled = true;
-		}
-		else if (e.Key is Key.Delete)
-		{
-			DeleteAppointment();
-			e.Handled = true;
-		}
+
 		base.OnKeyDown(e);
 	}
 

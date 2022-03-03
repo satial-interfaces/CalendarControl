@@ -5,26 +5,30 @@
     </Styles.Resources>
     <Style Selector="si|AppointmentControl">
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="CornerRadius" Value="3" />
         <Setter Property="Child">
             <Template>
                 <Grid>
-                    <Border CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
+                    <Border BorderThickness="3" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                         <Border.Background>
                             <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
                         </Border.Background>
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+                        </Border.BorderBrush>
                     </Border>
-                    <Border CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
+                    <Border BorderThickness="3" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
                         <Border.Background>
                             <SolidColorBrush Color="{Binding $parent[si:AppointmentControl].Color}" />
                         </Border.Background>
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{Binding $parent[si:AppointmentControl].Color}" />
+                        </Border.BorderBrush>
                     </Border>
-                    <Border BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}" BorderThickness="{DynamicResource TextControlBorderThemeThickness}" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}">
-                    </Border>
-                    <Border BorderThickness="{DynamicResource TextControlBorderThemeThickness}" Classes="selectedAppointment" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" Name="SelectionBorder" />
+                    <Border BorderThickness="3" Classes="selectedAppointment" CornerRadius="{Binding $parent[si:AppointmentControl].CornerRadius}" Name="SelectionBorder" />
                     <StackPanel ClipToBounds="True" MaxHeight="{Binding $parent[Grid].Bounds.Height}">
-                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding $parent[si:AppointmentControl].Begin, StringFormat={}{0:t}}" TextWrapping="Wrap" />
-                        <TextBlock Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="4,4,4,0" Text="{Binding $parent[si:AppointmentControl].Text}" TextWrapping="Wrap" />
+                        <TextBlock FontWeight="Bold" Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="8,8,8,0" Text="{Binding $parent[si:AppointmentControl].Begin, StringFormat={}{0:t}}" TextWrapping="Wrap" />
+                        <TextBlock Foreground="{DynamicResource TextOnAccentFillColorPrimaryBrush}" Margin="8,0,8,0" Text="{Binding $parent[si:AppointmentControl].Text}" TextWrapping="Wrap" />
                     </StackPanel>
                 </Grid>
             </Template>
@@ -32,7 +36,6 @@
         <Setter Property="Margin" Value="0,0,2,0" />
     </Style>
     <Style Selector="si|AppointmentControl:selected Border.selectedAppointment">
-        <Setter Property="Background" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ControlStrongStrokeColorDefaultBrush}" />
     </Style>
     <Style Selector="si|CalendarControl">
