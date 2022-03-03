@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
@@ -43,6 +44,8 @@ public class CalendarControl : ContentControl, IStyleable
 	public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<CalendarControl, int>(nameof(SelectedIndex), -1);
 	/// <summary>The selected item property</summary>
 	public static readonly StyledProperty<object?> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object?>(nameof(SelectedItem));
+	/// <summary>Weekend is visible property</summary>
+	public static readonly DirectProperty<CalendarControl, bool> WeekendIsVisibleProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(WeekendIsVisible), o => o.WeekendIsVisible, (o, v) => o.WeekendIsVisible = v);
 	/// <summary>The selection changed event</summary>
 	public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
 
@@ -57,6 +60,7 @@ public class CalendarControl : ContentControl, IStyleable
 		CurrentWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.CurrentWeekChanged(e));
 		SelectedIndexProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedIndexChanged(e));
 		SelectedItemProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedItemChanged(e));
+		WeekendIsVisibleProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.WeekendIsVisibleChanged(e));
 	}
 
 	/// <summary>
@@ -68,8 +72,8 @@ public class CalendarControl : ContentControl, IStyleable
 
 		var scrollViewer = this.FindControl<ScrollViewer>("ScrollViewer");
 		scrollViewer.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
-		CreateWeek(CurrentWeek);
-		UpdateItems(Items);
+		CreateWeek(CurrentWeek, WeekendIsVisible);
+		UpdateItems(Items, WeekendIsVisible, SelectedIndex);
 	}
 
 	/// <inheritdoc />
@@ -102,6 +106,8 @@ public class CalendarControl : ContentControl, IStyleable
 	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
 	/// <summary>Selected item</summary>
 	public object? SelectedItem { get => GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
+	/// <summary>Weekend is visible property</summary>
+	public bool WeekendIsVisible { get => weekendIsVisible; set => SetAndRaise(WeekendIsVisibleProperty, ref weekendIsVisible, value); }
 	/// <summary>Occurs when selection changed</summary>
 	public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
 
@@ -271,13 +277,19 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>
-	/// Clear the selection bit for the other appointments.
+	/// Sets the selection bit for the selected appointment.
 	/// </summary>
-	void ClearSelection()
+	/// <param name="selectedIndex">Index of the selected item</param>
+	void SetSelection(int selectedIndex)
 	{
 		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-		foreach (var appointment in itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>())
-			appointment.IsSelected = false;
+		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
+		var appointmentIndex = appointments.FindIndex(x => x.Index == selectedIndex);
+
+		for (var i = 0; i < appointments.Count; i++)
+		{
+			appointments[i].IsSelected = i == appointmentIndex;
+		}
 	}
 
 	/// <summary>
@@ -287,11 +299,11 @@ public class CalendarControl : ContentControl, IStyleable
 	protected void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (skipItemsChanged) return;
-		ClearItemsGrid();
-		ClearSelectionProperties();
+		ClearItemsGrid(WeekendIsVisible);
+		// ClearSelectionProperties();
 		if (e.NewValue is not IEnumerable enumerable) return;
-		UpdateItems(enumerable);
-		RaiseSelectionChanged(SelectedIndex);
+		UpdateItems(enumerable, WeekendIsVisible, SelectedIndex);
+		// RaiseSelectionChanged(SelectedIndex);
 	}
 
 	/// <summary>
@@ -301,10 +313,10 @@ public class CalendarControl : ContentControl, IStyleable
 	protected void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not DateTime dateTime) return;
-		ClearSelectionProperties();
-		CreateWeek(dateTime);
-		UpdateItems(Items);
-		RaiseSelectionChanged(SelectedIndex);
+		// ClearSelectionProperties();
+		CreateWeek(dateTime, WeekendIsVisible);
+		UpdateItems(Items, WeekendIsVisible, SelectedIndex);
+		// RaiseSelectionChanged(SelectedIndex);
 	}
 
 	/// <summary>
@@ -314,6 +326,7 @@ public class CalendarControl : ContentControl, IStyleable
 	void SelectedIndexChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (skipSelectedIndexChanged || e.NewValue is not int index) return;
+		SetSelection(index);
 		RaiseSelectionChanged(index);
 	}
 
@@ -324,20 +337,22 @@ public class CalendarControl : ContentControl, IStyleable
 	void SelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (skipSelectedItemChanged || e.NewValue is not { } obj) return;
+		var index = GetItemsAsList().IndexOf(obj);
+		SetSelection(index);
 		RaiseSelectionChanged(obj);
 	}
 
 	/// <summary>
-	/// Clears the selection properties
+	/// Current week changed event
 	/// </summary>
-	void ClearSelectionProperties()
+	/// <param name="e">Argument for the event</param>
+	protected void WeekendIsVisibleChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		skipSelectedIndexChanged = true;
-		SelectedIndex = -1;
-		skipSelectedIndexChanged = false;
-		skipSelectedItemChanged = true;
-		SelectedItem = null;
-		skipSelectedItemChanged = false;
+		if (e.NewValue is not bool weekendVisible) return;
+		// ClearSelectionProperties();
+		CreateWeek(CurrentWeek, weekendVisible);
+		UpdateItems(Items, weekendVisible, SelectedIndex);
+		// RaiseSelectionChanged(SelectedIndex);
 	}
 
 	/// <summary>
@@ -346,13 +361,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="index">Index selected</param>
 	void RaiseSelectionChanged(int index)
 	{
-		ClearSelection();
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
-			.FirstOrDefault(x => x.Index == index);
-		if (appointment != null)
-			appointment.IsSelected = true;
-
 		object? item = null;
 		var list = GetItemsAsList();
 		if (index >= 0 && index < list.Count)
@@ -371,14 +379,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="item">Item selected</param>
 	void RaiseSelectionChanged(object item)
 	{
-		ClearSelection();
 		var index = GetItemsAsList().IndexOf(item);
-
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
-		var appointment = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>()
-			.FirstOrDefault(x => x.Index == index);
-		if (appointment != null)
-			appointment.IsSelected = true;
 
 		var eventArgs = new CalendarSelectionChangedEventArgs(SelectionChangedEvent)
 		{ SelectedIndex = index, SelectedItem = item };
@@ -392,7 +393,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Updated the view with the given items
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
-	void UpdateItems(IEnumerable enumerable)
+	/// <param name="weekendVisible">The weekend is visible flag</param>
+	/// <param name="selectedIndex">Index of appointment to select</param>
+	void UpdateItems(IEnumerable enumerable, bool weekendVisible, int selectedIndex)
 	{
 		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
@@ -401,9 +404,10 @@ public class CalendarControl : ContentControl, IStyleable
 		var weekList = internalItems.
 		Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).
 		OrderBy(x => x.GetFirstLogicalDescendant<IAppointmentControl>().Begin);
-		for (var i = 0; i < daysPerWeek; i++)
+		var visibleDaysPerWeek = GetDaysPerWeek(weekendVisible);
+		foreach (var i in visibleDaysPerWeek)
 		{
-			if (itemsGrid.Children[i] is not Grid dayColumn) continue;
+			if (itemsGrid.Children[i - visibleDaysPerWeek[0]] is not Grid dayColumn) continue;
 
 			var todayList = weekList.Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInDay(beginWeek.AddDays(i))).ToList();
 			AppointmentControlListHelper.ApplyIndentation(todayList);
@@ -429,6 +433,7 @@ public class CalendarControl : ContentControl, IStyleable
 			AddEmptyRowTail(rowDefinitions, dayControls, previousEnd);
 			AddRows(dayColumn, rowDefinitions, dayControls);
 		}
+		SetSelection(selectedIndex);
 	}
 
 	/// <summary>
@@ -572,40 +577,72 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>
 	/// Clears the items grid
 	/// </summary>
-	void ClearItemsGrid()
+	/// <param name="weekendVisible">The weekend is visible flag</param>
+	void ClearItemsGrid(bool weekendVisible)
 	{
 		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		itemsGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
-		for (var i = 0; i < daysPerWeek; i++)
+		var visibleDaysPerWeek = GetDaysPerWeek(weekendVisible);
+		foreach (var i in visibleDaysPerWeek)
 		{
 			var dayColumn = ControlFactory.CreateColumn();
 			dayColumn.RowDefinitions = new RowDefinitions();
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
 			itemsGrid.Children.Add(dayColumn);
-			Grid.SetColumn(dayColumn, i);
+			Grid.SetColumn(dayColumn, i - visibleDaysPerWeek[0]);
 		}
 
 		itemsGrid.ColumnDefinitions = columnDefinitions;
 	}
 
 	/// <summary>
+	/// Gets the days per week list. It excludes the 'weekend' if applicable.
+	/// </summary>
+	/// <param name="weekendVisible">The weekend is visible flag</param>
+	/// <returns>Days per week</returns>
+	IList<int> GetDaysPerWeek(bool weekendVisible)
+	{
+		var result = new List<int>();
+		var firstDayOfWeek = FirstDayOfWeek;
+		for (var i = 0; i < daysPerWeek; i++)
+		{
+			var day = AddDay(firstDayOfWeek, i);
+			if (weekendVisible)
+			{
+				result.Add(i);
+			}
+			else
+			{
+				var dayState = DateTimeHelper.GetDayState(CultureInfo.CurrentCulture, day);
+				if (dayState == DateTimeHelper.DayState.Weekend)
+					continue;
+				result.Add(i);
+			}
+		}
+		return result;
+	}
+
+	/// <summary>
 	/// Creates the week UI for the given current week
 	/// </summary>
 	/// <param name="week">The current week</param>
-	void CreateWeek(DateTime week)
+	/// <param name="weekendVisible">The weekend is visible flag</param>
+	void CreateWeek(DateTime week, bool weekendVisible)
 	{
 		CreateHourTexts();
-		CreateDayTexts(week);
+		CreateDayTexts(week, weekendVisible);
 
 		var weekGrid = this.FindControl<Grid>("WeekGrid");
 		weekGrid.Children.Clear();
 
 		var columnDefinitions = new ColumnDefinitions();
 		var firstDayOfWeek = FirstDayOfWeek;
-		for (var i = 0; i < daysPerWeek; i++)
+		var visibleDaysPerWeek = GetDaysPerWeek(weekendVisible);
+		foreach (var i in visibleDaysPerWeek)
 		{
-			var dayState = ControlFactory.CreateDayState(AddDay(firstDayOfWeek, i));
+			var day = AddDay(firstDayOfWeek, i);
+			var dayState = ControlFactory.CreateDayState(day);
 			var dayColumn = ControlFactory.CreateColumn();
 			var rowDefinitions = new RowDefinitions();
 			for (var j = 0; j < hoursPerDay; j++)
@@ -620,33 +657,35 @@ public class CalendarControl : ContentControl, IStyleable
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
 			weekGrid.Children.Add(dayState);
 			weekGrid.Children.Add(dayColumn);
-			Grid.SetColumn(dayColumn, i);
-			Grid.SetColumn(dayState, i);
+			Grid.SetColumn(dayColumn, i - visibleDaysPerWeek[0]);
+			Grid.SetColumn(dayState, i - visibleDaysPerWeek[0]);
 		}
 
 		weekGrid.ColumnDefinitions = columnDefinitions;
-		ClearItemsGrid();
+		ClearItemsGrid(weekendVisible);
 	}
 
 	/// <summary>
 	/// Creates the day texts
 	/// </summary>
 	/// <param name="week">The current week</param>
-	void CreateDayTexts(DateTime week)
+	/// <param name="weekendVisible">The weekend is visible flag</param>
+	void CreateDayTexts(DateTime week, bool weekendVisible)
 	{
 		var dayGrid = this.FindControl<Grid>("DayGrid");
 		dayGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
 		var firstDayOfWeek = FirstDayOfWeek;
 		var beginWeek = week.GetBeginWeek(firstDayOfWeek);
-		for (var i = 0; i < daysPerWeek; i++)
+		var visibleDaysPerWeek = GetDaysPerWeek(weekendVisible);
+		foreach (var i in visibleDaysPerWeek)
 		{
 			var day = AddDay(firstDayOfWeek, i);
 			var text = DateTimeHelper.DayOfWeekToString(day) + " " + beginWeek.AddDays(i).Day;
 			var dayText = new TextBlock { Text = text };
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
 			dayGrid.Children.Add(dayText);
-			Grid.SetColumn(dayText, i);
+			Grid.SetColumn(dayText, i - visibleDaysPerWeek[0]);
 		}
 
 		dayGrid.ColumnDefinitions = columnDefinitions;
@@ -696,6 +735,8 @@ public class CalendarControl : ContentControl, IStyleable
 	IList<IControl> internalItems = new List<IControl>();
 	/// <summary>Items</summary>
 	IEnumerable items = new AvaloniaList<object>();
+	/// <summary>Weekend is visible</summary>
+	bool weekendIsVisible = true;
 	/// <summary>State of the left mouse button</summary>
 	bool leftButtonDown;
 	/// <summary>Skip handling the items changed event flag</summary>

@@ -34,5 +34,8 @@
             <Button Click="NewButtonClick">New</Button>
             <TextBlock Name="Info" VerticalAlignment="Center" />
         </StackPanel>
+        <StackPanel Grid.Column="1" IsVisible="False">
+            <CheckBox Content="Weekend is visible" IsChecked="{Binding #CalendarControl.WeekendIsVisible}" />
+        </StackPanel>
     </Grid>
 </Window>

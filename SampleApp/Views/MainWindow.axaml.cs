@@ -89,7 +89,7 @@ public partial class MainWindow : Window
 
 	void NewButtonClick(object? sender, RoutedEventArgs e)
 	{
-		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek).AddDays(7);
+		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek).AddDays(7 + 3);
 		var begin = GetRandom(0, 24 * 4) / 4.0d;
 		var length = GetRandom(1, 8);
 
