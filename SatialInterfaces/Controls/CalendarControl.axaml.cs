@@ -264,7 +264,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var y = double.NaN;
 		if (beginOfTheDay.TotalDays >= 0.0d && endOfTheDay.TotalDays < 24.0d && endOfTheDay > beginOfTheDay)
 		{
-			var height = 1.0d / (double)(endOfTheDay - beginOfTheDay).TotalDays * rect.Height;
+			var height = 1.0d / (endOfTheDay - beginOfTheDay).TotalDays * rect.Height;
 			scrollableGrid.Height = height;
 
 			y = forceScroll || scrollViewerMain.Offset.Y == 0.0d ? beginOfTheDay.TotalDays * height : scrollViewerMain.Offset.Y;
@@ -345,8 +345,8 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		if (skipItemsChanged) return;
 		ClearItemsGrid();
-		if (e.NewValue is not IEnumerable enumerable) return;
-		UpdateItems(enumerable, SelectedIndex);
+		if (e.NewValue is not IEnumerable value) return;
+		UpdateItems(value, SelectedIndex);
 	}
 
 	/// <summary>
@@ -355,10 +355,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void BeginOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (e.NewValue is not TimeSpan beginOfTheDay) return;
-
+		if (e.NewValue is not TimeSpan value) return;
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		UpdateScrollViewer(scrollViewerMain.Bounds, beginOfTheDay, EndOfTheDay, WeekendIsVisible, true);
+		UpdateScrollViewer(scrollViewerMain.Bounds, value, EndOfTheDay, WeekendIsVisible, true);
 	}
 
 	/// <summary>
@@ -367,8 +366,8 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (e.NewValue is not DateTime dateTime) return;
-		CreateWeek(dateTime);
+		if (e.NewValue is not DateTime value) return;
+		CreateWeek(value);
 		UpdateItems(Items, SelectedIndex);
 	}
 
@@ -378,10 +377,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void EndOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (e.NewValue is not TimeSpan endOfTheDay) return;
-
+		if (e.NewValue is not TimeSpan value) return;
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, endOfTheDay, WeekendIsVisible, true);
+		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, value, WeekendIsVisible, true);
 	}
 
 	/// <summary>
@@ -390,9 +388,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void SelectedIndexChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (skipSelectedIndexChanged || e.NewValue is not int index) return;
-		SetSelection(index);
-		RaiseSelectionChanged(index);
+		if (skipSelectedIndexChanged || e.NewValue is not int value) return;
+		SetSelection(value);
+		RaiseSelectionChanged(value);
 	}
 
 	/// <summary>
@@ -401,10 +399,10 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void SelectedItemChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (skipSelectedItemChanged || e.NewValue is not { } obj) return;
-		var index = GetItemsAsList().IndexOf(obj);
+		if (skipSelectedItemChanged || e.NewValue is not { } value) return;
+		var index = GetItemsAsList().IndexOf(value);
 		SetSelection(index);
-		RaiseSelectionChanged(obj);
+		RaiseSelectionChanged(value);
 	}
 
 	/// <summary>
@@ -413,10 +411,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void WeekendIsVisibleChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		if (e.NewValue is not bool weekendVisible) return;
-
+		if (e.NewValue is not bool value) return;
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, EndOfTheDay, weekendVisible, true);
+		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, EndOfTheDay, value, true);
 	}
 
 	/// <summary>
