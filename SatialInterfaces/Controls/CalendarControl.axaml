@@ -1,19 +1,9 @@
 <ContentControl x:Class="SatialInterfaces.Controls.CalendarControl"
     xmlns="https://github.com/avaloniaui"
-    xmlns:si="clr-namespace:SatialInterfaces.Converters"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <ContentControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <si:DoubleToLeftMarginConverter x:Key="DoubleToLeftMarginConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </ContentControl.Resources>
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
         <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Name="DayScrollViewer" Offset="{Binding #MainScrollViewer.Offset}">
             <Grid Name="DayGrid" Width="{Binding #ScrollableGrid.Bounds.Width}" />

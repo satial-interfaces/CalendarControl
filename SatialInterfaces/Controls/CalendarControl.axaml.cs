@@ -302,6 +302,7 @@ public class CalendarControl : ContentControl, IStyleable
 		CurrentWeek = item.Begin;
 
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
+		var scrollViewerMainRect = scrollViewerMain.Bounds;
 		var scrollableGrid = this.FindControl<Grid>("ScrollableGrid");
 		var scrollableGridRect = scrollableGrid.Bounds;
 
@@ -312,7 +313,8 @@ public class CalendarControl : ContentControl, IStyleable
 		var begin = (item.Begin - beginDate).TotalDays;
 		var x = daysOffset.TotalDays / daysPerWeek * scrollableGridRect.Width;
 		var y  = begin * scrollableGridRect.Height;
-		scrollViewerMain.Offset = new Vector(x, y);
+		if (ScrollIsNeeded(x, y, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
+			scrollViewerMain.Offset = new Vector(x, y);
 	}
 
 	/// <summary>
@@ -583,6 +585,20 @@ public class CalendarControl : ContentControl, IStyleable
 			if (controls[i] != null)
 				Grid.SetRow(controls[i] as Control, i);
 		}
+	}
+
+	/// <summary>
+	/// Check if a scroll is needed with the given new X and Y values
+	/// </summary>
+	/// <param name="newX">New X value</param>
+	/// <param name="newY">New Y value</param>
+	/// <param name="rect">Rectangle of the current scroll view</param>
+	/// <returns>True if needed and false otherwise</returns>
+	static bool ScrollIsNeeded(double newX, double newY, Rect rect)
+	{
+		var xInRect = newX >= rect.Left && newX < rect.Right;
+		var yInRect = newY >= rect.Top && newY < rect.Bottom;
+		return !xInRect || !yInRect;
 	}
 
 	/// <summary>
