@@ -57,7 +57,9 @@ public class CalendarControl : ContentControl, IStyleable
 		FocusableProperty.OverrideDefaultValue<CalendarControl>(true);
 
 		ItemsProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.ItemsChanged(e));
+		BeginOfTheDayProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.BeginOfTheDayChanged(e));
 		CurrentWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.CurrentWeekChanged(e));
+		EndOfTheDayProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.EndOfTheDayChanged(e));
 		SelectedIndexProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedIndexChanged(e));
 		SelectedItemProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.SelectedItemChanged(e));
 		WeekendIsVisibleProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.WeekendIsVisibleChanged(e));
@@ -241,16 +243,18 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="rect">Rectangle of the scroll viewer</param>
 	void OnScrollViewerBoundsChanged(Rect rect)
 	{
-		OnScrollViewerBoundsChanged(rect, WeekendIsVisible, false);
+		UpdateScrollViewer(rect, BeginOfTheDay, EndOfTheDay, WeekendIsVisible, false);
 	}
 
 	/// <summary>
-	/// Scroll viewer bounds changed: adjust scrollable grid as well
+	/// Update the scroll viewers
 	/// /// </summary>
 	/// <param name="rect">Rectangle of the scroll viewer</param>
+	/// <param name="beginOfTheDay">The begin of the day</param>
+	/// <param name="endOfTheDay">The end of the day</param>
 	/// <param name="weekendVisible">The weekend is visible flag</param>
 	/// <param name="forceScroll">Force to scroll or not</param>
-	void OnScrollViewerBoundsChanged(Rect rect, bool weekendVisible, bool forceScroll)
+	void UpdateScrollViewer(Rect rect, TimeSpan beginOfTheDay, TimeSpan endOfTheDay, bool weekendVisible, bool forceScroll)
 	{
 		if (rect.Width < 0 || rect.Height < 0) return;
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
@@ -258,12 +262,12 @@ public class CalendarControl : ContentControl, IStyleable
 
 		var x = double.NaN;
 		var y = double.NaN;
-		if (BeginOfTheDay.TotalDays >= 0.0d && EndOfTheDay.TotalDays < 24.0d && EndOfTheDay > BeginOfTheDay)
+		if (beginOfTheDay.TotalDays >= 0.0d && endOfTheDay.TotalDays < 24.0d && endOfTheDay > beginOfTheDay)
 		{
-			var height = 1.0d / (double)(EndOfTheDay - BeginOfTheDay).TotalDays * rect.Height;
+			var height = 1.0d / (double)(endOfTheDay - beginOfTheDay).TotalDays * rect.Height;
 			scrollableGrid.Height = height;
 
-			y = forceScroll || scrollViewerMain.Offset.Y == 0.0d ? BeginOfTheDay.TotalDays * height : scrollViewerMain.Offset.Y;
+			y = forceScroll || scrollViewerMain.Offset.Y == 0.0d ? beginOfTheDay.TotalDays * height : scrollViewerMain.Offset.Y;
 		}
 		else
 		{
@@ -346,6 +350,18 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>
+	/// Begin of the day changed event
+	/// </summary>
+	/// <param name="e">Argument for the event</param>
+	protected void BeginOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
+	{
+		if (e.NewValue is not TimeSpan beginOfTheDay) return;
+
+		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
+		UpdateScrollViewer(scrollViewerMain.Bounds, beginOfTheDay, EndOfTheDay, WeekendIsVisible, true);
+	}
+
+	/// <summary>
 	/// Current week changed event
 	/// </summary>
 	/// <param name="e">Argument for the event</param>
@@ -354,6 +370,18 @@ public class CalendarControl : ContentControl, IStyleable
 		if (e.NewValue is not DateTime dateTime) return;
 		CreateWeek(dateTime);
 		UpdateItems(Items, SelectedIndex);
+	}
+
+	/// <summary>
+	/// End of the day changed event
+	/// </summary>
+	/// <param name="e">Argument for the event</param>
+	protected void EndOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
+	{
+		if (e.NewValue is not TimeSpan endOfTheDay) return;
+
+		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
+		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, endOfTheDay, WeekendIsVisible, true);
 	}
 
 	/// <summary>
@@ -388,7 +416,7 @@ public class CalendarControl : ContentControl, IStyleable
 		if (e.NewValue is not bool weekendVisible) return;
 
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		OnScrollViewerBoundsChanged(scrollViewerMain.Bounds, weekendVisible, true);
+		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, EndOfTheDay, weekendVisible, true);
 	}
 
 	/// <summary>
