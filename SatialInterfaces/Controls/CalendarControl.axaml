@@ -14,16 +14,18 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentControl.Resources>
-    <Grid RowDefinitions="Auto,*" Name="MainGrid">
-        <Grid Grid.Row="0" Name="DayGrid" Margin="{Binding #HourGrid.Bounds.Width, Converter={StaticResource DoubleToLeftMarginConverter}}" />
-        <Grid Grid.Row="1">
-            <ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto">
-                <Grid Name="ScrollableGrid" ColumnDefinitions="Auto,*">
-                    <Grid Grid.Column="0" Name="HourGrid" />
-                    <Grid Grid.Column="1" Name="WeekGrid" />
-                    <Grid Grid.Column="1" Name="ItemsGrid" />
-                </Grid>
-            </ScrollViewer>
-        </Grid>
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Name="DayScrollViewer" Offset="{Binding #MainScrollViewer.Offset}">
+            <Grid Name="DayGrid" Width="{Binding #ScrollableGrid.Bounds.Width}" />
+        </ScrollViewer>
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Name="HourScrollViewer" Offset="{Binding #MainScrollViewer.Offset}" VerticalScrollBarVisibility="Hidden" >
+            <Grid Name="HourGrid" Height="{Binding #ScrollableGrid.Bounds.Height}" />
+        </ScrollViewer>
+        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="MainScrollViewer">
+            <Grid Name="ScrollableGrid">
+                <Grid Name="WeekGrid" />
+                <Grid Name="ItemsGrid" />
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </ContentControl>
