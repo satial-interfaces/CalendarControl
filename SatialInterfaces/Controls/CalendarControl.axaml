@@ -1,10 +1,26 @@
 <ContentControl x:Class="SatialInterfaces.Controls.CalendarControl"
     xmlns="https://github.com/avaloniaui"
+    xmlns:sic="clr-namespace:SatialInterfaces.Converters"
+    xmlns:si="clr-namespace:SatialInterfaces.Controls"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <ContentControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <sic:XOffsetThresholdConverter x:Key="XOffsetThresholdConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentControl.Resources>
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
+        <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="1*,1*" IsVisible="{Binding !$parent[si:CalendarControl].WeekendIsVisible}">
+            <Button Grid.Row="0" Grid.Column="0" Content="&lt;" Click="PreviousDayButtonClick" MinWidth="0" Classes="AppBarButton" />
+            <Button Grid.Row="0" Grid.Column="1" Content="&gt;" Click="NextDayButtonClick" MinWidth="0" Classes="AppBarButton" />
+        </Grid>
         <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Name="DayScrollViewer" Offset="{Binding #MainScrollViewer.Offset}">
             <Grid Name="DayGrid" Width="{Binding #ScrollableGrid.Bounds.Width}" />
         </ScrollViewer>
@@ -12,6 +28,11 @@
             <Grid Name="HourGrid" Height="{Binding #ScrollableGrid.Bounds.Height}" />
         </ScrollViewer>
         <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="MainScrollViewer">
+            <ScrollViewer.Offset>  
+					<Binding Path="$self.Offset" Converter="{StaticResource XOffsetThresholdConverter}">
+						<Binding.ConverterParameter><s:Double>8</s:Double></Binding.ConverterParameter>
+					</Binding>
+            </ScrollViewer.Offset>         
             <Grid Name="ScrollableGrid">
                 <Grid Name="WeekGrid" />
                 <Grid Name="ItemsGrid" />

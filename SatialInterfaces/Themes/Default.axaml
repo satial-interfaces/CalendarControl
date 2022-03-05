@@ -45,6 +45,13 @@
             </ControlTemplate>
         </Setter>
     </Style>
+	<Style Selector="si|CalendarControl Button.AppBarButton">
+		<Setter Property="Padding" Value="0,0,0,0" />
+		<Setter Property="VerticalAlignment" Value="Top" />
+	</Style>
+    <Style Selector="si|CalendarControl ScrollViewer#DayScrollViewer">
+		<Setter Property="Height" Value="20" />
+    </Style>
 	<Style Selector="si|CalendarControl TextBlock">
 		<Setter Property="Margin" Value="4,0,4,0" />
 	</Style>

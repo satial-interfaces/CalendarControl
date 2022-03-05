@@ -187,6 +187,34 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>
+	/// Select previous day click
+	/// </summary>
+	/// <param name="sender">Sender of the event.</param>
+	/// <param name="e">Event arguments.</param>
+#pragma warning disable RCS1213
+	void PreviousDayButtonClick(object? sender, RoutedEventArgs e)
+#pragma warning restore RCS1213
+	{
+		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
+		var currentOffset = scrollViewerMain.Offset;
+		scrollViewerMain.Offset = new Vector(currentOffset.X - dayInOffset, currentOffset.Y);
+	}
+
+	/// <summary>
+	/// Select next day click
+	/// </summary>
+	/// <param name="sender">Sender of the event.</param>
+	/// <param name="e">Event arguments.</param>
+#pragma warning disable RCS1213
+	void NextDayButtonClick(object? sender, RoutedEventArgs e)
+#pragma warning restore RCS1213
+	{
+		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
+		var currentOffset = scrollViewerMain.Offset;
+		scrollViewerMain.Offset = new Vector(currentOffset.X + dayInOffset, currentOffset.Y);
+	}
+
+	/// <summary>
 	/// Select next appointment
 	/// </summary>
 	/// <param name="step">Step to take</param>
@@ -283,6 +311,7 @@ public class CalendarControl : ContentControl, IStyleable
 			var offsetFrac = (visibleDaysPerWeek[0] - allDaysPerWeek[0]) / (double)daysPerWeek;
 
 			x = forceScroll || scrollViewerMain.Offset.X == 0.0d ? offsetFrac * width : scrollViewerMain.Offset.X;
+			dayInOffset = 1 / (double)daysPerWeek * width;
 		}
 		else
 		{
@@ -816,4 +845,5 @@ public class CalendarControl : ContentControl, IStyleable
 	bool skipSelectedIndexChanged;
 	/// <summary>Skip handling the selected item changed event flag</summary>
 	bool skipSelectedItemChanged;
+	private double dayInOffset;
 }
