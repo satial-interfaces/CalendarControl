@@ -52,7 +52,29 @@
 		<Setter Property="Padding" Value="0,0,0,0" />
 		<Setter Property="VerticalAlignment" Value="Top" />
 	</Style>
-    <Style Selector="si|CalendarControl ScrollViewer#DayScrollViewer">
+	<Style Selector="si|CalendarControl Button#PreviousDayButton">
+		<Setter Property="Content">
+            <Template>
+                <Viewbox Stretch="Uniform" Height="12" Width="12">
+                    <Canvas Width="16" Height="16">
+                        <Path Fill="{Binding $parent[Button].Foreground}" Data="M 16,0 V 16 L 0,8 16,0" />
+                    </Canvas>
+                </Viewbox>
+            </Template>
+        </Setter>
+ 	</Style>
+	<Style Selector="si|CalendarControl Button#NextDayButton">
+		<Setter Property="Content">
+            <Template>
+				<Viewbox Stretch="Uniform" Height="12" Width="12">
+					<Canvas Width="16" Height="16">
+                        <Path Fill="{Binding $parent[Button].Foreground}" Data="M 0,0 V 16 L 16,8 0,0" />
+                    </Canvas>
+                </Viewbox>
+            </Template>
+        </Setter>
+ 	</Style>
+   <Style Selector="si|CalendarControl ScrollViewer#DayScrollViewer">
 		<Setter Property="Height" Value="20" />
     </Style>
 	<Style Selector="si|CalendarControl TextBlock">
