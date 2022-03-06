@@ -45,7 +45,7 @@
             </ControlTemplate>
         </Setter>
     </Style>
-	<Style Selector="si|CalendarControl Button.AppBarButton">
+	<Style Selector="si|CalendarControl Button">
 		<Setter Property="Padding" Value="0,0,0,0" />
 		<Setter Property="VerticalAlignment" Value="Top" />
 	</Style>

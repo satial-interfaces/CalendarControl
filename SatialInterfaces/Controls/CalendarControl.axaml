@@ -18,8 +18,8 @@
     </ContentControl.Resources>
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
         <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="1*,1*" IsVisible="{Binding !$parent[si:CalendarControl].WeekendIsVisible}" Name="NavigationGrid">
-            <Button Grid.Row="0" Grid.Column="0" Click="PreviousDayButtonClick" Classes="AppBarButton" Name="PreviousDayButton"></Button>
-            <Button Grid.Row="0" Grid.Column="1" Click="NextDayButtonClick" Classes="AppBarButton" Name="NextDayButton"></Button>
+            <Button Grid.Row="0" Grid.Column="0" Click="PreviousDayButtonClick" Name="PreviousDayButton" />
+            <Button Grid.Row="0" Grid.Column="1" Click="NextDayButtonClick" Name="NextDayButton" />
         </Grid>
         <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Hidden" Name="DayScrollViewer" Offset="{Binding #MainScrollViewer.Offset}">
             <Grid Name="DayGrid" Width="{Binding #ScrollableGrid.Bounds.Width}" />
