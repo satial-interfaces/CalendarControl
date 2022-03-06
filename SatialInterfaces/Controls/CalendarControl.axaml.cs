@@ -278,11 +278,11 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Update the scroll viewers
 	/// /// </summary>
 	/// <param name="rect">Rectangle of the scroll viewer</param>
-	/// <param name="beginOfTheDay">The begin of the day</param>
-	/// <param name="endOfTheDay">The end of the day</param>
+	/// <param name="beginOfDay">The begin of the day</param>
+	/// <param name="endOfDay">The end of the day</param>
 	/// <param name="weekendVisible">The weekend is visible flag</param>
 	/// <param name="forceScroll">Force to scroll or not</param>
-	void UpdateScrollViewer(Rect rect, TimeSpan beginOfTheDay, TimeSpan endOfTheDay, bool weekendVisible, bool forceScroll)
+	void UpdateScrollViewer(Rect rect, TimeSpan beginOfDay, TimeSpan endOfDay, bool weekendVisible, bool forceScroll)
 	{
 		if (rect.Width < 0 || rect.Height < 0) return;
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
@@ -290,12 +290,12 @@ public class CalendarControl : ContentControl, IStyleable
 
 		var x = double.NaN;
 		var y = double.NaN;
-		if (beginOfTheDay.TotalDays >= 0.0d && endOfTheDay.TotalDays < 24.0d && endOfTheDay > beginOfTheDay)
+		if (beginOfDay.TotalDays >= 0.0d && endOfDay.TotalDays < 24.0d && endOfDay > beginOfDay)
 		{
-			var height = 1.0d / (endOfTheDay - beginOfTheDay).TotalDays * rect.Height;
+			var height = 1.0d / (endOfDay - beginOfDay).TotalDays * rect.Height;
 			scrollableGrid.Height = height;
 
-			y = forceScroll || scrollViewerMain.Offset.Y == 0.0d ? beginOfTheDay.TotalDays * height : scrollViewerMain.Offset.Y;
+			y = forceScroll || scrollViewerMain.Offset.Y == 0.0d ? beginOfDay.TotalDays * height : scrollViewerMain.Offset.Y;
 		}
 		else
 		{
