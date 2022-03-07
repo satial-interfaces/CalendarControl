@@ -27,12 +27,7 @@
         <ScrollViewer Grid.Row="1" Grid.Column="0" Name="HourScrollViewer" Offset="{Binding #MainScrollViewer.Offset}" VerticalScrollBarVisibility="Hidden" >
             <Grid Name="HourGrid" Height="{Binding #ScrollableGrid.Bounds.Height}" />
         </ScrollViewer>
-        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="MainScrollViewer">
-            <ScrollViewer.Offset>  
-					<Binding Path="$self.Offset" Converter="{StaticResource XOffsetThresholdConverter}">
-						<Binding.ConverterParameter><s:Double>8</s:Double></Binding.ConverterParameter>
-					</Binding>
-            </ScrollViewer.Offset>         
+        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="MainScrollViewer" Offset="{Binding Path=$self.Offset, Converter={StaticResource XOffsetThresholdConverter}, ConverterParameter={StaticResource XOffsetThreshold}}">
             <Grid Name="ScrollableGrid">
                 <Grid Name="WeekGrid" />
                 <Grid Name="ItemsGrid" />

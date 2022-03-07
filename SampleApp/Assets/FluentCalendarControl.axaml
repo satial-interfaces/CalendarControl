@@ -1,7 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui"
     xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
+		<s:Double x:Key="XOffsetThreshold">8.0</s:Double>
     </Styles.Resources>
     <Style Selector="si|AppointmentControl">
         <Setter Property="BorderThickness" Value="0" />
