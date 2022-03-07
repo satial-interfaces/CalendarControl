@@ -159,7 +159,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var previousIndex = SelectedIndex;
 		SelectedIndex = index;
 
-		// Force retrigger
+		// Force re-trigger
 		if (index == previousIndex)
 			RaiseSelectionChanged(index);
 	}
@@ -196,8 +196,8 @@ public class CalendarControl : ContentControl, IStyleable
 #pragma warning restore RCS1213
 	{
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		var currentOffset = scrollViewerMain.Offset;
-		scrollViewerMain.Offset = new Vector(currentOffset.X - dayInOffset, currentOffset.Y);
+		var (x, y) = scrollViewerMain.Offset;
+		scrollViewerMain.Offset = new Vector(x - dayInOffset, y);
 	}
 
 	/// <summary>
@@ -210,8 +210,8 @@ public class CalendarControl : ContentControl, IStyleable
 #pragma warning restore RCS1213
 	{
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		var currentOffset = scrollViewerMain.Offset;
-		scrollViewerMain.Offset = new Vector(currentOffset.X + dayInOffset, currentOffset.Y);
+		var (x, y) = scrollViewerMain.Offset;
+		scrollViewerMain.Offset = new Vector(x + dayInOffset, y);
 	}
 
 	/// <summary>
