@@ -347,8 +347,9 @@ public class CalendarControl : ContentControl, IStyleable
 		var begin = (item.Begin - beginDate).TotalDays;
 		var x = daysOffset.TotalDays / daysPerWeek * scrollableGridRect.Width;
 		var y  = begin * scrollableGridRect.Height;
-		if (!GeometryHelper.IsInRect(x, y, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
-			scrollViewerMain.ScrollWithoutBinding(new Vector(x, y));
+		var v = new Vector(x, y);
+		if (!GeometryHelper.IsInRect(v, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
+			scrollViewerMain.ScrollWithoutBinding(v);
 	}
 
 	/// <summary>
