@@ -197,7 +197,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var (x, y) = scrollViewerMain.Offset;
-		ScrollWithoutBinding(scrollViewerMain, new Vector(x - dayInOffset, y));
+		scrollViewerMain.ScrollWithoutBinding(new Vector(x - dayInOffset, y));
 	}
 
 	/// <summary>
@@ -211,7 +211,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var (x, y) = scrollViewerMain.Offset;
-		ScrollWithoutBinding(scrollViewerMain, new Vector(x + dayInOffset, y));
+		scrollViewerMain.ScrollWithoutBinding(new Vector(x + dayInOffset, y));
 	}
 
 	/// <summary>
@@ -322,7 +322,7 @@ public class CalendarControl : ContentControl, IStyleable
 		x = !double.IsNaN(x) ? x : 0.0d;
 		y = !double.IsNaN(y) ? y : 0.0d;
 
-		Dispatcher.UIThread.Post(() => ScrollWithoutBinding(scrollViewerMain, new Vector(x, y)));
+		Dispatcher.UIThread.Post(() => scrollViewerMain.ScrollWithoutBinding(new Vector(x, y)));
 	}
 
 	/// <summary>
@@ -347,8 +347,8 @@ public class CalendarControl : ContentControl, IStyleable
 		var begin = (item.Begin - beginDate).TotalDays;
 		var x = daysOffset.TotalDays / daysPerWeek * scrollableGridRect.Width;
 		var y  = begin * scrollableGridRect.Height;
-		if (ScrollIsNeeded(x, y, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
-			ScrollWithoutBinding(scrollViewerMain, new Vector(x, y));
+		if (!GeometryHelper.IsInRect(x, y, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
+			scrollViewerMain.ScrollWithoutBinding(new Vector(x, y));
 	}
 
 	/// <summary>
@@ -611,8 +611,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="controls">List of controls to add to</param>
 	/// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
 	/// <param name="begin">Begin of the current appointment (as a fraction of the day)</param>
-	static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd,
-		double begin)
+	static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd, double begin)
 	{
 		var emptyLength = begin - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d);
 		if (emptyLength <= 0.0d)
@@ -640,33 +639,6 @@ public class CalendarControl : ContentControl, IStyleable
 			if (controls[i] != null)
 				Grid.SetRow(controls[i] as Control, i);
 		}
-	}
-
-	/// <summary>
-	/// Check if a scroll is needed with the given new X and Y values
-	/// </summary>
-	/// <param name="newX">New X value</param>
-	/// <param name="newY">New Y value</param>
-	/// <param name="rect">Rectangle of the current scroll view</param>
-	/// <returns>True if needed and false otherwise</returns>
-	static bool ScrollIsNeeded(double newX, double newY, Rect rect)
-	{
-		var xInRect = newX >= rect.Left && newX < rect.Right;
-		var yInRect = newY >= rect.Top && newY < rect.Bottom;
-		return !xInRect || !yInRect;
-	}
-
-	/// <summary>
-	/// Scrolls the given position without any binding
-	/// </summary>
-	/// <param name="scrollViewer">Scroll viewer to scroll</param>
-	/// <param name="newPosition">New position to scroll</param>
-	static void ScrollWithoutBinding(ScrollViewer scrollViewer, Vector newPosition)
-	{
-		var indexerBinding = scrollViewer[!ScrollViewer.OffsetProperty];
-		scrollViewer[!ScrollViewer.OffsetProperty] = new Binding();
-		scrollViewer.Offset = newPosition;
-		scrollViewer[!ScrollViewer.OffsetProperty] = indexerBinding;
 	}
 
 	/// <summary>
