@@ -197,7 +197,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var (x, y) = scrollViewerMain.Offset;
-		scrollViewerMain.Offset = new Vector(x - dayInOffset, y);
+		ScrollWithoutBinding(scrollViewerMain, new Vector(x - dayInOffset, y));
 	}
 
 	/// <summary>
@@ -211,7 +211,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var (x, y) = scrollViewerMain.Offset;
-		scrollViewerMain.Offset = new Vector(x + dayInOffset, y);
+		ScrollWithoutBinding(scrollViewerMain, new Vector(x + dayInOffset, y));
 	}
 
 	/// <summary>
@@ -321,7 +321,8 @@ public class CalendarControl : ContentControl, IStyleable
 		if (double.IsNaN(x) && double.IsNaN(y)) return;
 		x = !double.IsNaN(x) ? x : 0.0d;
 		y = !double.IsNaN(y) ? y : 0.0d;
-		Dispatcher.UIThread.Post(() => scrollViewerMain.Offset = new Vector(x, y));
+
+		Dispatcher.UIThread.Post(() => ScrollWithoutBinding(scrollViewerMain, new Vector(x, y)));
 	}
 
 	/// <summary>
@@ -347,7 +348,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var x = daysOffset.TotalDays / daysPerWeek * scrollableGridRect.Width;
 		var y  = begin * scrollableGridRect.Height;
 		if (ScrollIsNeeded(x, y, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
-			scrollViewerMain.Offset = new Vector(x, y);
+			ScrollWithoutBinding(scrollViewerMain, new Vector(x, y));
 	}
 
 	/// <summary>
@@ -653,6 +654,19 @@ public class CalendarControl : ContentControl, IStyleable
 		var xInRect = newX >= rect.Left && newX < rect.Right;
 		var yInRect = newY >= rect.Top && newY < rect.Bottom;
 		return !xInRect || !yInRect;
+	}
+
+	/// <summary>
+	/// Scrolls the given position without any binding
+	/// </summary>
+	/// <param name="scrollViewer">Scroll viewer to scroll</param>
+	/// <param name="newPosition">New position to scroll</param>
+	static void ScrollWithoutBinding(ScrollViewer scrollViewer, Vector newPosition)
+	{
+		var indexerBinding = scrollViewer[!ScrollViewer.OffsetProperty];
+		scrollViewer[!ScrollViewer.OffsetProperty] = new Binding();
+		scrollViewer.Offset = newPosition;
+		scrollViewer[!ScrollViewer.OffsetProperty] = indexerBinding;
 	}
 
 	/// <summary>
