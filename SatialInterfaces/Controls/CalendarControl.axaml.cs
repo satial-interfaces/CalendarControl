@@ -71,8 +71,13 @@ public class CalendarControl : ContentControl, IStyleable
 	public CalendarControl()
 	{
 		AvaloniaXamlLoader.Load(this);
+		itemsGrid = this.FindControl<Grid>("ItemsGrid");
+		scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
+		scrollableGrid = this.FindControl<Grid>("ScrollableGrid");
+		weekGrid = this.FindControl<Grid>("WeekGrid");
+		dayGrid = this.FindControl<Grid>("DayGrid");
+		hourGrid = this.FindControl<Grid>("HourGrid");
 
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		scrollViewerMain.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
 		CreateWeek(CurrentWeek);
 		UpdateItems(Items, SelectedIndex);
@@ -195,7 +200,6 @@ public class CalendarControl : ContentControl, IStyleable
 	void PreviousDayButtonClick(object? sender, RoutedEventArgs e)
 #pragma warning restore RCS1213
 	{
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var (x, y) = scrollViewerMain.Offset;
 		scrollViewerMain.ScrollWithoutBinding(new Vector(x - dayInOffset, y));
 	}
@@ -209,7 +213,6 @@ public class CalendarControl : ContentControl, IStyleable
 	void NextDayButtonClick(object? sender, RoutedEventArgs e)
 #pragma warning restore RCS1213
 	{
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var (x, y) = scrollViewerMain.Offset;
 		scrollViewerMain.ScrollWithoutBinding(new Vector(x + dayInOffset, y));
 	}
@@ -220,7 +223,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="step">Step to take</param>
 	void SelectNext(int step)
 	{
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
 		if (appointments.Count == 0) return;
 		var appointmentIndex = appointments.FindIndex(x => x.Index == SelectedIndex);
@@ -285,8 +287,6 @@ public class CalendarControl : ContentControl, IStyleable
 	void UpdateScrollViewer(Rect rect, TimeSpan beginOfDay, TimeSpan endOfDay, bool weekendVisible, bool forceScroll)
 	{
 		if (rect.Width < 0 || rect.Height < 0) return;
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
-		var scrollableGrid = this.FindControl<Grid>("ScrollableGrid");
 
 		var x = double.NaN;
 		var y = double.NaN;
@@ -335,9 +335,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var item = list[index].GetFirstLogicalDescendant<IAppointmentControl>();
 		CurrentWeek = item.Begin;
 
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		var scrollViewerMainRect = scrollViewerMain.Bounds;
-		var scrollableGrid = this.FindControl<Grid>("ScrollableGrid");
 		var scrollableGridRect = scrollableGrid.Bounds;
 
 		var beginWeek = CurrentWeek.GetBeginWeek(FirstDayOfWeek);
@@ -346,7 +344,7 @@ public class CalendarControl : ContentControl, IStyleable
 
 		var begin = (item.Begin - beginDate).TotalDays;
 		var x = daysOffset.TotalDays / daysPerWeek * scrollableGridRect.Width;
-		var y  = begin * scrollableGridRect.Height;
+		var y = begin * scrollableGridRect.Height;
 		var v = new Vector(x, y);
 		if (!GeometryHelper.IsInRect(v, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
 			scrollViewerMain.ScrollWithoutBinding(v);
@@ -358,7 +356,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="selectedIndex">Index of the selected item</param>
 	void SetSelection(int selectedIndex)
 	{
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
 		var appointmentIndex = appointments.FindIndex(x => x.Index == selectedIndex);
 
@@ -385,7 +382,6 @@ public class CalendarControl : ContentControl, IStyleable
 	protected void BeginOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not TimeSpan value) return;
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		UpdateScrollViewer(scrollViewerMain.Bounds, value, EndOfTheDay, WeekendIsVisible, true);
 	}
 
@@ -407,7 +403,6 @@ public class CalendarControl : ContentControl, IStyleable
 	protected void EndOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not TimeSpan value) return;
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, value, WeekendIsVisible, true);
 	}
 
@@ -441,7 +436,6 @@ public class CalendarControl : ContentControl, IStyleable
 	protected void WeekendIsVisibleChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not bool value) return;
-		var scrollViewerMain = this.FindControl<ScrollViewer>("MainScrollViewer");
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, EndOfTheDay, value, true);
 	}
 
@@ -486,7 +480,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="selectedIndex">Index of appointment to select</param>
 	void UpdateItems(IEnumerable enumerable, int selectedIndex)
 	{
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 
 		internalItems = Convert(enumerable);
@@ -615,7 +608,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	void ClearItemsGrid()
 	{
-		var itemsGrid = this.FindControl<Grid>("ItemsGrid");
 		itemsGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
@@ -667,7 +659,6 @@ public class CalendarControl : ContentControl, IStyleable
 		CreateHourTexts();
 		CreateDayTexts(week);
 
-		var weekGrid = this.FindControl<Grid>("WeekGrid");
 		weekGrid.Children.Clear();
 
 		var columnDefinitions = new ColumnDefinitions();
@@ -705,7 +696,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="week">The current week</param>
 	void CreateDayTexts(DateTime week)
 	{
-		var dayGrid = this.FindControl<Grid>("DayGrid");
 		dayGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
 		var firstDayOfWeek = FirstDayOfWeek;
@@ -729,7 +719,6 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	void CreateHourTexts()
 	{
-		var hourGrid = this.FindControl<Grid>("HourGrid");
 		hourGrid.Children.Clear();
 		var rowDefinitions = new RowDefinitions();
 		for (var j = 0; j < hoursPerDay; j++)
@@ -770,5 +759,18 @@ public class CalendarControl : ContentControl, IStyleable
 	bool skipSelectedIndexChanged;
 	/// <summary>Skip handling the selected item changed event flag</summary>
 	bool skipSelectedItemChanged;
-	private double dayInOffset;
+	/// <summary>A day in offset (device units)</summary>
+	double dayInOffset;
+	/// <summary>Items grid</summary>
+	readonly Grid itemsGrid;
+	/// <summary>Scroll viewer main</summary>
+	readonly ScrollViewer scrollViewerMain;
+	/// <summary>scrollable grid</summary>
+	readonly Grid scrollableGrid;
+	/// <summary>Week grid</summary>
+	readonly Grid weekGrid;
+	/// <summary>Day grid</summary>
+	readonly Grid dayGrid;
+	/// <summary>Hour grid</summary>
+	readonly Grid hourGrid;
 }
