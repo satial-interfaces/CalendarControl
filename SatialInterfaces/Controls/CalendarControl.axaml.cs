@@ -271,10 +271,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Scroll viewer bounds changed: adjust scrollable grid as well
 	/// /// </summary>
 	/// <param name="rect">Rectangle of the scroll viewer</param>
-	void OnScrollViewerBoundsChanged(Rect rect)
-	{
-		UpdateScrollViewer(rect, BeginOfTheDay, EndOfTheDay, WeekendIsVisible, false);
-	}
+	void OnScrollViewerBoundsChanged(Rect rect) => UpdateScrollViewer(rect, BeginOfTheDay, EndOfTheDay, WeekendIsVisible, false);
 
 	/// <summary>
 	/// Update the scroll viewers
