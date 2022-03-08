@@ -363,9 +363,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var appointmentIndex = appointments.FindIndex(x => x.Index == selectedIndex);
 
 		for (var i = 0; i < appointments.Count; i++)
-		{
 			appointments[i].IsSelected = i == appointmentIndex;
-		}
 	}
 
 	/// <summary>
@@ -511,7 +509,7 @@ public class CalendarControl : ContentControl, IStyleable
 			{
 				var item = todayList[j].GetFirstLogicalDescendant<IAppointmentControl>();
 				var (begin, _) = item.GetFractionOfDay();
-				AddEmptyRow(rowDefinitions, dayControls, previousEnd, begin);
+				RowDefinitionsHelper.AddEmptyRow(rowDefinitions, dayControls, previousEnd, begin);
 
 				var appointmentGroup = GetAppointmentGroup(todayList, j);
 				dayControls.Add(appointmentGroup.Control);
@@ -521,8 +519,8 @@ public class CalendarControl : ContentControl, IStyleable
 			}
 
 			// Tail
-			AddEmptyRowTail(rowDefinitions, dayControls, previousEnd);
-			AddRows(dayColumn, rowDefinitions, dayControls);
+			RowDefinitionsHelper.AddEmptyRowTail(rowDefinitions, dayControls, previousEnd);
+			GridHelper.AddRows(dayColumn, rowDefinitions, dayControls);
 		}
 		SetSelection(selectedIndex);
 	}
@@ -591,58 +589,6 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>
-	/// Adds an empty row for the tail (if applicable)
-	/// </summary>
-	/// <param name="rowDefinitions">List of row definitions to add to</param>
-	/// <param name="controls">List of controls to add to</param>
-	/// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
-	static void AddEmptyRowTail(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd)
-	{
-		if (!double.IsNaN(previousEnd) && previousEnd >= 1.0d)
-			return;
-
-		controls.Add(null);
-		rowDefinitions.Add(new RowDefinition(1.0d - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d), GridUnitType.Star));
-	}
-
-	/// <summary>
-	/// Adds an empty row (if applicable)
-	/// </summary>
-	/// <param name="rowDefinitions">List of row definitions to add to</param>
-	/// <param name="controls">List of controls to add to</param>
-	/// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
-	/// <param name="begin">Begin of the current appointment (as a fraction of the day)</param>
-	static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd, double begin)
-	{
-		var emptyLength = begin - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d);
-		if (emptyLength <= 0.0d)
-			return;
-
-		controls.Add(null);
-		rowDefinitions.Add(new RowDefinition(emptyLength, GridUnitType.Star));
-	}
-
-	/// <summary>
-	/// Adds controls to the given grid's rows
-	/// </summary>
-	/// <param name="grid">Grid to add to</param>
-	/// <param name="rowDefinitions">List of row definitions</param>
-	/// <param name="controls">Controls to adds</param>
-	static void AddRows(Grid grid, RowDefinitions rowDefinitions, IReadOnlyList<IControl?> controls)
-	{
-		grid.RowDefinitions = rowDefinitions;
-		grid.Children.Clear();
-		foreach (var control in controls.Where(x => x != null))
-			grid.Children.Add(control);
-
-		for (var i = 0; i < controls.Count; i++)
-		{
-			if (controls[i] != null)
-				Grid.SetRow(controls[i] as Control, i);
-		}
-	}
-
-	/// <summary>
 	/// Converts the given items to a handleable format
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
@@ -696,7 +642,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var firstDayOfWeek = FirstDayOfWeek;
 		for (var i = 0; i < daysPerWeek; i++)
 		{
-			var day = AddDay(firstDayOfWeek, i);
+			var day = DayOfWeekHelper.AddDay(firstDayOfWeek, i);
 			if (weekendVisible)
 			{
 				result.Add(i);
@@ -729,7 +675,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
 		foreach (var i in visibleDaysPerWeek)
 		{
-			var day = AddDay(firstDayOfWeek, i);
+			var day = DayOfWeekHelper.AddDay(firstDayOfWeek, i);
 			var dayState = ControlFactory.CreateDayState(day);
 			var dayColumn = ControlFactory.CreateColumn();
 			var rowDefinitions = new RowDefinitions();
@@ -767,7 +713,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
 		foreach (var i in visibleDaysPerWeek)
 		{
-			var day = AddDay(firstDayOfWeek, i);
+			var day = DayOfWeekHelper.AddDay(firstDayOfWeek, i);
 			var text = DateTimeHelper.DayOfWeekToString(day) + " " + beginWeek.AddDays(i).Day;
 			var dayText = new TextBlock { Text = text };
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
@@ -797,14 +743,6 @@ public class CalendarControl : ContentControl, IStyleable
 
 		hourGrid.RowDefinitions = rowDefinitions;
 	}
-
-	/// <summary>
-	/// Adds a number of days to a day in the week
-	/// </summary>
-	/// <param name="dayOfWeek">Day of the week</param>
-	/// <param name="i">Number of days to add</param>
-	/// <returns>New day of week</returns>
-	static DayOfWeek AddDay(DayOfWeek dayOfWeek, int i) => (DayOfWeek)(((int)dayOfWeek + i) % 7);
 
 	/// <summary>Days per week</summary>
 	const int daysPerWeek = 7;
