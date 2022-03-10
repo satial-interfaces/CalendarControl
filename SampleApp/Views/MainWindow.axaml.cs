@@ -14,7 +14,7 @@ namespace SampleApp;
 
 public class ColorConverter : IValueConverter
 {
-	public static IValueConverter Instance = new ColorConverter();
+	public static readonly ColorConverter Instance = new();
 
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
