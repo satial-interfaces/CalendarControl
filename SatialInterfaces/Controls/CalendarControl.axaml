@@ -7,15 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <ContentControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <sic:XOffsetThresholdConverter x:Key="XOffsetThresholdConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </ContentControl.Resources>
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*">
         <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="1*,1*" IsVisible="{Binding !$parent[si:CalendarControl].WeekendIsVisible}" Name="NavigationGrid">
             <Button Grid.Row="0" Grid.Column="0" Click="PreviousDayButtonClick" Name="PreviousDayButton" />
@@ -27,7 +18,7 @@
         <ScrollViewer Grid.Row="1" Grid.Column="0" Name="HourScrollViewer" Offset="{Binding #MainScrollViewer.Offset}" VerticalScrollBarVisibility="Hidden" >
             <Grid Name="HourGrid" Height="{Binding #ScrollableGrid.Bounds.Height}" />
         </ScrollViewer>
-        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="MainScrollViewer" Offset="{Binding Path=$self.Offset, Converter={StaticResource XOffsetThresholdConverter}, ConverterParameter={StaticResource XOffsetThreshold}}">
+        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="MainScrollViewer">
             <Grid Name="ScrollableGrid">
                 <Grid Name="WeekGrid" />
                 <Grid Name="ItemsGrid" />

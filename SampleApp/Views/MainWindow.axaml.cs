@@ -14,6 +14,8 @@ namespace SampleApp;
 
 public class ColorConverter : IValueConverter
 {
+	public static IValueConverter Instance = new ColorConverter();
+
 	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value is not Status s) return Colors.Transparent;

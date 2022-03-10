@@ -1,8 +1,16 @@
 <Styles xmlns="https://github.com/avaloniaui"
     xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
+    xmlns:sic="clr-namespace:SatialInterfaces.Converters;assembly=CalendarControl"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <sic:XOffsetThresholdConverter x:Key="XOffsetThresholdConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
 		<s:Double x:Key="XOffsetThreshold">8.0</s:Double>
     </Styles.Resources>
     <Style Selector="si|AppointmentControl">
@@ -82,6 +90,9 @@
  	</Style>
    <Style Selector="si|CalendarControl ScrollViewer#DayScrollViewer">
 		<Setter Property="Height" Value="20" />
+    </Style>
+    <Style Selector="si|CalendarControl ScrollViewer#MainScrollViewer">
+        <Setter Property="Offset" Value="{Binding Path=$self.Offset, Converter={StaticResource XOffsetThresholdConverter}, ConverterParameter={StaticResource XOffsetThreshold}}" />
     </Style>
 	<Style Selector="si|CalendarControl TextBlock">
 		<Setter Property="Margin" Value="4,0,4,0" />
