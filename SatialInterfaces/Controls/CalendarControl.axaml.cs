@@ -261,7 +261,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Gets the items as a list
 	/// </summary>
 	/// <returns></returns>
-	IList GetItemsAsList() => (Items is IList list) ? list : Items.ToList();
+	IList GetItemsAsList() => Items is IList list ? list : Items.ToList();
 
 	/// <summary>
 	/// Scroll viewer bounds changed: adjust scrollable grid as well

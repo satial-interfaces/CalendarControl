@@ -1,6 +1,5 @@
 <Styles xmlns="https://github.com/avaloniaui"
     xmlns:si="clr-namespace:SatialInterfaces.Controls"
-    xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style Selector="si|AppointmentControl">
         <Setter Property="BorderThickness" Value="0" />
