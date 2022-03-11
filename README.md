@@ -42,6 +42,7 @@ Then add the control to your Window.axaml
     xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl">
     <Grid>
         <si:CalendarControl>
+            <si:CalendarControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <si:AppointmentControl Begin="{Binding Begin}" End="{Binding End}" Text="{Binding Text}" Color="{Binding Color}" />
