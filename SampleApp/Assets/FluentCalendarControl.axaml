@@ -4,13 +4,7 @@
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Styles.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <sic:XOffsetThresholdConverter x:Key="XOffsetThresholdConverter" />
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <sic:XOffsetThresholdConverter x:Key="XOffsetThresholdConverter" />
 		<s:Double x:Key="XOffsetThreshold">8.0</s:Double>
     </Styles.Resources>
     <Style Selector="si|AppointmentControl">
