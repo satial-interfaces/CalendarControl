@@ -17,7 +17,7 @@ public static class ScrollViewerHelper
 	public static void ScrollWithoutBinding(this ScrollViewer scrollViewer, Vector offset)
 	{
 		var indexerBinding = scrollViewer[!ScrollViewer.OffsetProperty];
-		scrollViewer[!ScrollViewer.OffsetProperty] = emptyBinding;
+		scrollViewer[!ScrollViewer.OffsetProperty] = EmptyBinding;
 		scrollViewer.Offset = offset;
 		scrollViewer[!ScrollViewer.OffsetProperty] = indexerBinding;
 	}
@@ -25,5 +25,5 @@ public static class ScrollViewerHelper
 	/// <summary>
 	/// Empty binding
 	/// </summary>
-	static readonly Binding emptyBinding = new();
+	static readonly Binding EmptyBinding = new();
 }

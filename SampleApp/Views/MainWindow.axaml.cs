@@ -16,7 +16,7 @@ public class ColorConverter : IValueConverter
 {
 	public static readonly ColorConverter Instance = new();
 
-	public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+	public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 	{
 		if (value is not Status s) return Colors.Transparent;
 		return s switch
@@ -28,7 +28,7 @@ public class ColorConverter : IValueConverter
 		};
 	}
 
-	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
+	public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }
 
 public enum Status
@@ -47,7 +47,7 @@ public class AppointmentViewModel
 	public Status Status { get; set; }
 }
 
-public partial class MainWindow : Window
+public class MainWindow : Window
 {
 #pragma warning disable CS8618
 	public MainWindow()
@@ -67,7 +67,9 @@ public partial class MainWindow : Window
 		RandomCalendar();
 	}
 
+#pragma warning disable RCS1213
 	void CalendarControlSelectionChanged(object? sender, CalendarSelectionChangedEventArgs e)
+#pragma warning restore RCS1213
 	{
 		var info = this.FindControl<TextBlock>("Info");
 		if (e.SelectedIndex >= 0)
@@ -81,15 +83,25 @@ public partial class MainWindow : Window
 		}
 	}
 
+#pragma warning disable RCS1213
 	void RandomButtonClick(object? sender, RoutedEventArgs e) => RandomCalendar();
+#pragma warning restore RCS1213
 
+#pragma warning disable RCS1213
 	void PreviousButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
+#pragma warning restore RCS1213
 
+#pragma warning disable RCS1213
 	void ThisWeekButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = DateTime.Now;
+#pragma warning restore RCS1213
 
+#pragma warning disable RCS1213
 	void NextButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
+#pragma warning restore RCS1213
 
+#pragma warning disable RCS1213
 	void NewButtonClick(object? sender, RoutedEventArgs e)
+#pragma warning restore RCS1213
 	{
 		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek).AddDays(7 + 3);
 		var begin = GetRandom(0, 24 * 4) / 4.0d;
@@ -136,7 +148,7 @@ public partial class MainWindow : Window
 		calendarControl.SelectedIndex = 0;
 	}
 
-	static int GetRandom(int minVal, int maxVal) => random.Next(minVal, maxVal + 1);
+	static int GetRandom(int minVal, int maxVal) => Random.Next(minVal, maxVal + 1);
 
 	static Status GetRandom() => (Status)GetRandom((int)Status.None, (int)Status.Error);
 
@@ -147,7 +159,7 @@ public partial class MainWindow : Window
 		var begin = diff <= 0 ? dateTime.AddDays(diff) : dateTime.AddDays(diff - 7);
 		return begin.Date;
 	}
-	static readonly Random random = new();
+	static readonly Random Random = new();
 	CalendarControl calendarControl;
 	List<AppointmentViewModel> list = new();
 }

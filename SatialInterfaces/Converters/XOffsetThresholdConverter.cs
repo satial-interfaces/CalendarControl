@@ -38,7 +38,7 @@ public class XOffsetThresholdConverter : IValueConverter
 	}
 
 	/// <inheritdoc />
-	public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => BindingOperations.DoNothing;
+	public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => BindingOperations.DoNothing;
 
 	/// <summary>
 	/// Check if last value is set

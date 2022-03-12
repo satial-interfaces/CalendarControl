@@ -295,16 +295,16 @@ public class CalendarControl : ContentControl, IStyleable
 			scrollableGrid.Height = rect.Height;
 		}
 		var visibleDaysPerWeek = GetDaysPerWeek(weekendVisible);
-		if (visibleDaysPerWeek.Count != daysPerWeek)
+		if (visibleDaysPerWeek.Count != DaysPerWeek)
 		{
-			var width = daysPerWeek / (double)visibleDaysPerWeek.Count * rect.Width;
+			var width = DaysPerWeek / (double)visibleDaysPerWeek.Count * rect.Width;
 			scrollableGrid.Width = width;
 
 			var allDaysPerWeek = GetDaysPerWeek(true);
-			var offsetFrac = (visibleDaysPerWeek[0] - allDaysPerWeek[0]) / (double)daysPerWeek;
+			var offsetFrac = (visibleDaysPerWeek[0] - allDaysPerWeek[0]) / (double)DaysPerWeek;
 
 			x = forceScroll || scrollViewerMain.Offset.X == 0.0d ? offsetFrac * width : scrollViewerMain.Offset.X;
-			dayInOffset = 1 / (double)daysPerWeek * width;
+			dayInOffset = 1 / (double)DaysPerWeek * width;
 		}
 		else
 		{
@@ -336,7 +336,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var daysOffset = beginDate - beginWeek;
 
 		var begin = (item.Begin - beginDate).TotalDays;
-		var x = daysOffset.TotalDays / daysPerWeek * scrollableGridRect.Width;
+		var x = daysOffset.TotalDays / DaysPerWeek * scrollableGridRect.Width;
 		var y = begin * scrollableGridRect.Height;
 		var v = new Vector(x, y);
 		if (!GeometryHelper.IsInRect(v, new Rect(scrollViewerMain.Offset.X, scrollViewerMain.Offset.Y, scrollViewerMainRect.Width, scrollViewerMainRect.Height)))
@@ -478,7 +478,7 @@ public class CalendarControl : ContentControl, IStyleable
 		internalItems = Convert(enumerable);
 		var weekList = internalItems.
 		Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).
-		OrderBy(x => x.GetFirstLogicalDescendant<IAppointmentControl>().Begin);
+		OrderBy(x => x.GetFirstLogicalDescendant<IAppointmentControl>().Begin).ToList();
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
 		foreach (var i in visibleDaysPerWeek)
 		{
@@ -601,7 +601,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="param">Parameter to supply to the item template builder</param>
 	/// <returns>The item</returns>
-	IControl? BuildItem(object param)
+	IControl BuildItem(object param)
 	{
 		var result = ItemTemplate?.Build(param);
 		return result ?? new AppointmentControl
@@ -642,7 +642,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		var result = new List<int>();
 		var firstDayOfWeek = FirstDayOfWeek;
-		for (var i = 0; i < daysPerWeek; i++)
+		for (var i = 0; i < DaysPerWeek; i++)
 		{
 			var day = DayOfWeekHelper.AddDay(firstDayOfWeek, i);
 			if (weekendVisible)
@@ -680,7 +680,7 @@ public class CalendarControl : ContentControl, IStyleable
 			var dayState = ControlFactory.CreateDayState(day);
 			var dayColumn = ControlFactory.CreateColumn();
 			var rowDefinitions = new RowDefinitions();
-			for (var j = 0; j < hoursPerDay; j++)
+			for (var j = 0; j < HoursPerDay; j++)
 			{
 				var hourCell = ControlFactory.CreateHourCell();
 				dayColumn.Children.Add(hourCell);
@@ -731,7 +731,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		hourGrid.Children.Clear();
 		var rowDefinitions = new RowDefinitions();
-		for (var j = 0; j < hoursPerDay; j++)
+		for (var j = 0; j < HoursPerDay; j++)
 		{
 			var text = new DateTime(1970, 1, 1, j, 0, 0).ToShortTimeString();
 			var hourText = new TextBlock { Text = text };
@@ -744,9 +744,9 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>Days per week</summary>
-	const int daysPerWeek = 7;
+	const int DaysPerWeek = 7;
 	/// <summary>Hours per day</summary>
-	const int hoursPerDay = 24;
+	const int HoursPerDay = 24;
 	/// <summary>Allow delete</summary>
 	bool allowDelete;
 	/// <summary>Begin of the day</summary>
