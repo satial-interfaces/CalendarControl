@@ -7,7 +7,7 @@
         <TrimMode>copyused</TrimMode>
     </PropertyGroup>
     <ItemGroup>
-        <AvaloniaResource Include="Assets/**" />
+        <AvaloniaResource Include="Themes/**" />
         <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>

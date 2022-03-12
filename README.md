@@ -15,7 +15,7 @@ First add a style to your App.axaml
     xmlns:f="using:FluentAvalonia.Styling">
     <Application.Styles>
         <f:FluentAvaloniaTheme />
-        <StyleInclude Source="avares://SampleApp/Assets/FluentCalendarControl.axaml" />
+        <StyleInclude Source="avares://SampleApp/Themes/FluentCalendarControl.axaml" />
     </Application.Styles>
 </Application>
 ````
@@ -44,9 +44,7 @@ Then add the control to your Window.axaml
         <si:CalendarControl>
             <si:CalendarControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <si:AppointmentControl Begin="{Binding Begin}" End="{Binding End}" Text="{Binding Text}" Color="{Binding Color}" />
-                    </Grid>
+                    <si:AppointmentControl Begin="{Binding Begin}" End="{Binding End}" Text="{Binding Text}" />
                 </DataTemplate>
             </si:CalendarControl.ItemTemplate>
         </si:CalendarControl>
