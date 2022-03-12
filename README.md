@@ -18,10 +18,9 @@ Second add a style to your App.axaml (from the sample app)
 ````Xml
 <Application
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:f="using:FluentAvalonia.Styling">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Styles>
-        <f:FluentAvaloniaTheme />
+        <!-- Overall style goes here: <FluentTheme Mode="Light"/> -->
         <StyleInclude Source="avares://SampleApp/Themes/FluentCalendarControl.axaml" />
     </Application.Styles>
 </Application>
@@ -32,10 +31,9 @@ Or use the default one
 ````Xml
 <Application
     xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:f="using:FluentAvalonia.Styling">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Styles>
-        <f:FluentAvaloniaTheme />
+        <!-- Overall style goes here: <FluentTheme Mode="Light"/> -->
         <StyleInclude Source="avares://CalendarControl/Themes/Default.axaml" />
     </Application.Styles>
 </Application>
@@ -53,7 +51,7 @@ Then add the control to your Window.axaml (minimum)
 </Window>
 ````
 
-It's even better to specify the item template
+It's even better to specify the item template with binding to your view model
 
 ````Xml
 <Window xmlns="https://github.com/avaloniaui"
