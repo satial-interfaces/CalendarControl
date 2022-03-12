@@ -8,7 +8,7 @@ This is a calendar control (week view) for Avalonia. See and run the sample app 
 
 First add the package to your project. Use NuGet to get it: https://www.nuget.org/packages/CalendarControl.Avalonia/
 
-Or use this commands in the Package Manager console to install the package manually:
+Or use this commands in the Package Manager console to install the package manually
 ```
 Install-Package CalendarControl.Avalonia
 ```
