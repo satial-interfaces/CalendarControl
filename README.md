@@ -6,7 +6,14 @@ This is a calendar control (week view) for Avalonia. See and run the sample app 
 
 ## How to use
 
-First add a style to your App.axaml
+First add the package to your project. Use NuGet to get it: https://www.nuget.org/packages/CalendarControl.Avalonia/
+
+Or use this commands in the Package Manager console to install the package manually:
+```
+Install-Package CalendarControl.Avalonia
+```
+
+Second add a style to your App.axaml (from the sample app)
 
 ````Xml
 <Application
@@ -34,7 +41,19 @@ Or use the default one
 </Application>
 ````
 
-Then add the control to your Window.axaml
+Then add the control to your Window.axaml (minimum)
+
+````Xml
+<Window xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl">
+    <Grid>
+        <si:CalendarControl />
+    </Grid>
+</Window>
+````
+
+It's even better to specify the item template
 
 ````Xml
 <Window xmlns="https://github.com/avaloniaui"

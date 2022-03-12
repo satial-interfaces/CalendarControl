@@ -586,7 +586,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var i = 0;
 		foreach (var e in enumerable)
 		{
-			if (ItemTemplate?.Build(e) is not { } p || !p.HasFirstLogicalDescendant<IAppointmentControl>()) continue;
+			if (BuildItem(e) is not { } p || !p.HasFirstLogicalDescendant<IAppointmentControl>()) continue;
 			var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
 			item.Index = i;
 			p.DataContext = e;
@@ -594,6 +594,23 @@ public class CalendarControl : ContentControl, IStyleable
 			i++;
 		}
 		return result;
+	}
+
+	/// <summary>
+	/// Builds the item (control)
+	/// </summary>
+	/// <param name="param">Parameter to supply to the item template builder</param>
+	/// <returns>The item</returns>
+	IControl? BuildItem(object param)
+	{
+		var result = ItemTemplate?.Build(param);
+		return result ?? new AppointmentControl
+		{
+			[!AppointmentControl.BeginProperty] = new Binding("Begin"),
+			[!AppointmentControl.EndProperty] = new Binding("End"),
+			[!AppointmentControl.TextProperty] = new Binding("Text"),
+			[!AppointmentControl.ColorProperty] = new Binding("Color")
+		};
 	}
 
 	/// <summary>
