@@ -10,7 +10,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using SatialInterfaces.Controls;
 
-namespace SampleApp;
+namespace SampleApp.Views;
 
 public class ColorConverter : IValueConverter
 {
