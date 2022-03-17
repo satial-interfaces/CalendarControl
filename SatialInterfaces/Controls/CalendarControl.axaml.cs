@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using Avalonia;
@@ -362,6 +364,14 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
 	{
+		_collectionChangeSubscription?.Dispose();
+		_collectionChangeSubscription = null;
+
+		// Add handler for newValue.CollectionChanged (if possible)
+		if (e.NewValue is INotifyCollectionChanged newValueINotifyCollectionChanged)
+		{
+			_collectionChangeSubscription = newValueINotifyCollectionChanged.WeakSubscribe(ItemsCollectionChanged);
+		}
 		if (skipItemsChanged) return;
 		ClearItemsGrid();
 		if (e.NewValue is not IEnumerable value) return;
@@ -397,6 +407,16 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		if (e.NewValue is not TimeSpan value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, value, WeekendIsVisible, true);
+	}
+
+	/// <summary>
+	/// Method that handles the ObservableCollection.CollectionChanged event for the ItemsSource property.
+	/// </summary>
+	/// <param name="sender">The object that raised the event.</param>
+	/// <param name="e">The event data.</param>
+	void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+	{
+		UpdateItems(Items, SelectedIndex);
 	}
 
 	/// <summary>
@@ -771,6 +791,8 @@ public class CalendarControl : ContentControl, IStyleable
 	bool skipSelectedItemChanged;
 	/// <summary>A day in offset (device units)</summary>
 	double dayInOffset;
+	/// <summary>Collection changed subscription</summary>
+	IDisposable? _collectionChangeSubscription;
 	/// <summary>Items grid</summary>
 	readonly Grid itemsGrid;
 	/// <summary>Scroll viewer main</summary>

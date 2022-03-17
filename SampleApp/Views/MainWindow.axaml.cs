@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
@@ -115,8 +115,8 @@ public class MainWindow : Window
 			Status = GetRandom()
 		};
 		list.Add(item);
-		list = new List<AppointmentViewModel>(list);
-		calendarControl.Items = list;
+		// list = new List<AppointmentViewModel>(list);
+		// calendarControl.Items = list;
 		calendarControl.ScrollIntoView(item);
 	}
 
@@ -125,7 +125,7 @@ public class MainWindow : Window
 		calendarControl.CurrentWeek = DateTime.Now;
 		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek);
 
-		list = new List<AppointmentViewModel>();
+		list = new AvaloniaList<AppointmentViewModel>();
 		const int weeks = 1;
 		const int heads = weeks / 2;
 		const int tails = weeks - heads;
@@ -161,5 +161,5 @@ public class MainWindow : Window
 	}
 	static readonly Random Random = new();
 	CalendarControl calendarControl;
-	List<AppointmentViewModel> list = new();
+	AvaloniaList<AppointmentViewModel> list = new();
 }
