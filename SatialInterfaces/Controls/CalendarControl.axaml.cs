@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
@@ -364,13 +363,13 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	protected void ItemsChanged(AvaloniaPropertyChangedEventArgs e)
 	{
-		_collectionChangeSubscription?.Dispose();
-		_collectionChangeSubscription = null;
+		collectionChangeSubscription?.Dispose();
+		collectionChangeSubscription = null;
 
 		// Add handler for newValue.CollectionChanged (if possible)
 		if (e.NewValue is INotifyCollectionChanged newValueINotifyCollectionChanged)
 		{
-			_collectionChangeSubscription = newValueINotifyCollectionChanged.WeakSubscribe(ItemsCollectionChanged);
+			collectionChangeSubscription = newValueINotifyCollectionChanged.WeakSubscribe(ItemsCollectionChanged);
 		}
 		if (skipItemsChanged) return;
 		ClearItemsGrid();
@@ -792,7 +791,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>A day in offset (device units)</summary>
 	double dayInOffset;
 	/// <summary>Collection changed subscription</summary>
-	IDisposable? _collectionChangeSubscription;
+	IDisposable? collectionChangeSubscription;
 	/// <summary>Items grid</summary>
 	readonly Grid itemsGrid;
 	/// <summary>Scroll viewer main</summary>

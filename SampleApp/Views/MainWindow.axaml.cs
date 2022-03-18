@@ -49,6 +49,8 @@ public class AppointmentViewModel
 
 public class MainWindow : Window
 {
+	public static readonly DirectProperty<MainWindow, AvaloniaList<AppointmentViewModel>> ItemsProperty = AvaloniaProperty.RegisterDirect<MainWindow, AvaloniaList<AppointmentViewModel>>(nameof(Items), o => o.Items, (o, v) => o.Items = v);
+
 #pragma warning disable CS8618
 	public MainWindow()
 #pragma warning restore CS8618
@@ -58,7 +60,7 @@ public class MainWindow : Window
 		this.AttachDevTools();
 #endif
 	}
-
+	public AvaloniaList<AppointmentViewModel> Items { get => items; set => SetAndRaise(ItemsProperty, ref items, value); }
 	void InitializeComponent()
 	{
 		AvaloniaXamlLoader.Load(this);
@@ -74,7 +76,7 @@ public class MainWindow : Window
 		var info = this.FindControl<TextBlock>("Info");
 		if (e.SelectedIndex >= 0)
 		{
-			var item = list[e.SelectedIndex];
+			var item = items[e.SelectedIndex];
 			info.Text = item.Text + ": " + item.Begin.ToShortTimeString() + " - " + item.End.ToShortTimeString();
 		}
 		else
@@ -111,12 +113,10 @@ public class MainWindow : Window
 		{
 			Begin = beginOfWeek.AddHours(begin),
 			End = beginOfWeek.AddHours(begin + length),
-			Text = $"New Appointment {list.Count}",
+			Text = $"New Appointment {items.Count}",
 			Status = GetRandom()
 		};
-		list.Add(item);
-		// list = new List<AppointmentViewModel>(list);
-		// calendarControl.Items = list;
+		items.Add(item);
 		calendarControl.ScrollIntoView(item);
 	}
 
@@ -125,7 +125,7 @@ public class MainWindow : Window
 		calendarControl.CurrentWeek = DateTime.Now;
 		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek);
 
-		list = new AvaloniaList<AppointmentViewModel>();
+		items.Clear();
 		const int weeks = 1;
 		const int heads = weeks / 2;
 		const int tails = weeks - heads;
@@ -141,10 +141,9 @@ public class MainWindow : Window
 				Text = $"Appointment {i}",
 				Status = GetRandom()
 			};
-			list.Add(item);
+			items.Add(item);
 		}
 
-		calendarControl.Items = list;
 		calendarControl.SelectedIndex = 0;
 	}
 
@@ -161,5 +160,5 @@ public class MainWindow : Window
 	}
 	static readonly Random Random = new();
 	CalendarControl calendarControl;
-	AvaloniaList<AppointmentViewModel> list = new();
+	AvaloniaList<AppointmentViewModel> items = new();
 }
