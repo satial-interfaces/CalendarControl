@@ -5,7 +5,7 @@
     xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl"
     xmlns:v="clr-namespace:SampleApp.Views" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="SampleApp.Views.MainWindow" Title="SampleApp">
     <Grid Margin="8,8,8,8" ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
-        <si:CalendarControl Name="CalendarControl" AllowDelete="True" Items="{Binding $parent[Window].Items}" SelectionChanged="CalendarControlSelectionChanged" WeekendIsVisible="False">
+        <si:CalendarControl Name="CalendarControl" AutoScrollToSelectedItem="True" AllowDelete="True" Items="{Binding $parent[Window].Items}" SelectionChanged="CalendarControlSelectionChanged" WeekendIsVisible="False">
             <Design.DataContext>
                 <v:AppointmentViewModel />
             </Design.DataContext>

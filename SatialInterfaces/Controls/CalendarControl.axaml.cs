@@ -25,6 +25,8 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public class CalendarControl : ContentControl, IStyleable
 {
+	/// <summary>Auto scrol to selected item property</summary>
+	public static readonly DirectProperty<CalendarControl, bool> AutoScrollToSelectedItemProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AutoScrollToSelectedItem), o => o.AutoScrollToSelectedItem, (o, v) => o.AutoScrollToSelectedItem = v);
 	/// <summary>Allow delete property</summary>
 	public static readonly DirectProperty<CalendarControl, bool> AllowDeleteProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AllowDelete), o => o.AllowDelete, (o, v) => o.AllowDelete = v);
 	/// <summary>Margin around the appointment group property</summary>
@@ -86,6 +88,8 @@ public class CalendarControl : ContentControl, IStyleable
 
 	/// <inheritdoc />
 	Type IStyleable.StyleKey => typeof(CalendarControl);
+	/// <summary>Auto scroll to selected item property</summary>
+	public bool AutoScrollToSelectedItem { get => autoScrollToSelectedItem; set => SetAndRaise(AutoScrollToSelectedItemProperty, ref autoScrollToSelectedItem, value); }
 	/// <summary>Allow delete property</summary>
 	public bool AllowDelete { get => allowDelete; set => SetAndRaise(AllowDeleteProperty, ref allowDelete, value); }
 	/// <summary>Margin around the appointment group</summary>
@@ -426,6 +430,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		if (skipSelectedIndexChanged || e.NewValue is not int value) return;
 		SetSelection(value);
+		AutoScrollToSelectedItemIfNecessary(value);
 		RaiseSelectionChanged(value);
 	}
 
@@ -438,6 +443,7 @@ public class CalendarControl : ContentControl, IStyleable
 		if (skipSelectedItemChanged || e.NewValue is not { } value) return;
 		var index = GetItemsAsList().IndexOf(value);
 		SetSelection(index);
+		AutoScrollToSelectedItemIfNecessary(index);
 		RaiseSelectionChanged(value);
 	}
 
@@ -762,10 +768,24 @@ public class CalendarControl : ContentControl, IStyleable
 		hourGrid.RowDefinitions = rowDefinitions;
 	}
 
+	/// <summary>
+	/// Atuomatically scroll to the selected item if necessary
+	/// </summary>
+	/// <param name="index">The index of the item.</param>
+	void AutoScrollToSelectedItemIfNecessary(int index)
+	{
+		if (!AutoScrollToSelectedItem)
+			return;
+
+		ScrollIntoView(index);
+	}
+
 	/// <summary>Days per week</summary>
 	const int DaysPerWeek = 7;
 	/// <summary>Hours per day</summary>
 	const int HoursPerDay = 24;
+	/// <summary>Auto scroll to selected item</summary>
+	bool autoScrollToSelectedItem;
 	/// <summary>Allow delete</summary>
 	bool allowDelete;
 	/// <summary>Begin of the day</summary>
