@@ -615,7 +615,7 @@ public class CalendarControl : ContentControl, IStyleable
 			var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
 			item.Index = i;
 			p.DataContext = e;
-			if (!IsValid(item))
+			if (!item.IsValid())
 				return new List<IControl>();
 			result.Add(p);
 			i++;
@@ -782,20 +782,6 @@ public class CalendarControl : ContentControl, IStyleable
 		ScrollIntoView(index);
 	}
 
-	/// <summary>
-	/// Checks if the given appointment control is valid
-	/// </summary>
-	/// <param name="item">Given appointment control</param>
-	/// <returns>True if it is and false otherwise</returns>
-	static bool IsValid(IAppointmentControl item)
-	{
-		if (item.Begin == EmptyDateTime || item.End == EmptyDateTime)
-			return false;
-		return item.End > item.Begin;
-	}
-
-	/// <summary>An empty date/time</summary>
-	static readonly DateTime EmptyDateTime = new();
 	/// <summary>Days per week</summary>
 	const int DaysPerWeek = 7;
 	/// <summary>Hours per day</summary>

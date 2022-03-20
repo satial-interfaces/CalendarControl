@@ -46,6 +46,11 @@ public interface IAppointmentControl : IControl
 	/// <param name="dateTime">date/time for the given day</param>
 	/// <returns>True if it is and false otherwise</returns>
 	bool IsInDay(DateTime dateTime);
+	/// <summary>
+	/// Checks if this instance is valid
+	/// </summary>
+	/// <returns>True if it is and false otherwise</returns>
+	bool IsValid();
 }
 
 /// <summary>
@@ -99,11 +104,21 @@ public class AppointmentControl : Border, ISelectable, IAppointmentControl
 	}
 
 	/// <inheritdoc />
+	public bool IsValid()
+	{
+		if (Begin == EmptyDateTime || End == EmptyDateTime)
+			return false;
+		return End > Begin;
+	}
+
+	/// <inheritdoc />
 	public bool HasOverlap(IAppointmentControl other) => (other.Begin >= Begin && other.Begin < End) || (Begin >= other.Begin && Begin < other.End);
 
 	/// <inheritdoc />
 	public bool IsInWeek(DateTime beginWeek) => Begin >= beginWeek && Begin < beginWeek.AddDays(7);
 
+	/// <summary>An empty date/time</summary>
+	static readonly DateTime EmptyDateTime = new();
 	/// <summary>Is selected</summary>
 	bool isSelected;
 	/// <summary>Begin</summary>
