@@ -49,12 +49,12 @@ public class CalendarControl : ContentControl, IStyleable
 	public static readonly StyledProperty<object?> SelectedItemProperty = AvaloniaProperty.Register<CalendarControl, object?>(nameof(SelectedItem));
 	/// <summary>Weekend is visible property</summary>
 	public static readonly DirectProperty<CalendarControl, bool> WeekendIsVisibleProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(WeekendIsVisible), o => o.WeekendIsVisible, (o, v) => o.WeekendIsVisible = v);
+	/// <summary>Use default items template property</summary>
+	public static readonly DirectProperty<CalendarControl, bool> UseDefaultItemsTemplateProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(UseDefaultItemsTemplate), o => o.UseDefaultItemsTemplate, (o, v) => o.UseDefaultItemsTemplate = v);
 	/// <summary>The selection changed event</summary>
 	public static readonly RoutedEvent<CalendarSelectionChangedEventArgs> SelectionChangedEvent = RoutedEvent.Register<CalendarControl, CalendarSelectionChangedEventArgs>(nameof(SelectionChanged), RoutingStrategies.Bubble);
 
-	/// <summary>
-	/// Initializes static members of the <see cref="CalendarControl" /> class.
-	/// </summary>
+	/// <summary>Initializes static members of the <see cref="CalendarControl" /> class</summary>
 	static CalendarControl()
 	{
 		FocusableProperty.OverrideDefaultValue<CalendarControl>(true);
@@ -118,6 +118,8 @@ public class CalendarControl : ContentControl, IStyleable
 	public int SelectedIndex { get => GetValue(SelectedIndexProperty); set => SetValue(SelectedIndexProperty, value); }
 	/// <summary>Selected item</summary>
 	public object? SelectedItem { get => GetValue(SelectedItemProperty); set => SetValue(SelectedItemProperty, value); }
+	/// <summary>Use default items template property</summary>
+	public bool UseDefaultItemsTemplate { get => useDefaultItemsTemplate; set => SetAndRaise(UseDefaultItemsTemplateProperty, ref useDefaultItemsTemplate, value); }
 	/// <summary>Weekend is visible property</summary>
 	public bool WeekendIsVisible { get => weekendIsVisible; set => SetAndRaise(WeekendIsVisibleProperty, ref weekendIsVisible, value); }
 	/// <summary>Occurs when selection changed</summary>
@@ -607,6 +609,7 @@ public class CalendarControl : ContentControl, IStyleable
 	IList<IControl> Convert(IEnumerable enumerable)
 	{
 		var result = new List<IControl>();
+		if (!CanBuildItem()) return result;
 
 		var i = 0;
 		foreach (var e in enumerable)
@@ -622,6 +625,12 @@ public class CalendarControl : ContentControl, IStyleable
 		}
 		return result;
 	}
+
+	/// <summary>
+	/// Checks if an item can be built
+	/// </summary>
+	/// <returns>True if it can and false otherwise</returns>
+	bool CanBuildItem() => ItemTemplate != null || useDefaultItemsTemplate;
 
 	/// <summary>
 	/// Builds the item (control)
@@ -800,6 +809,8 @@ public class CalendarControl : ContentControl, IStyleable
 	IList<IControl> internalItems = new List<IControl>();
 	/// <summary>Items</summary>
 	IEnumerable items = new AvaloniaList<object>();
+	/// <summary>Use default items template</summary>
+	bool useDefaultItemsTemplate = true;
 	/// <summary>Weekend is visible</summary>
 	bool weekendIsVisible = true;
 	/// <summary>State of the left mouse button</summary>
