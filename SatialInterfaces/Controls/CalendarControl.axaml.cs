@@ -83,7 +83,7 @@ public class CalendarControl : ContentControl, IStyleable
 
 		scrollViewerMain.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
 		CreateWeek(CurrentWeek);
-		UpdateItems(Items, SelectedIndex);
+		UpdateItems(Items, SelectedIndex, true);
 	}
 
 	/// <inheritdoc />
@@ -374,13 +374,11 @@ public class CalendarControl : ContentControl, IStyleable
 
 		// Add handler for newValue.CollectionChanged (if possible)
 		if (e.NewValue is INotifyCollectionChanged newValueINotifyCollectionChanged)
-		{
 			collectionChangeSubscription = newValueINotifyCollectionChanged.WeakSubscribe(ItemsCollectionChanged);
-		}
 		if (skipItemsChanged) return;
 		ClearItemsGrid();
 		if (e.NewValue is not IEnumerable value) return;
-		UpdateItems(value, SelectedIndex);
+		UpdateItems(value, SelectedIndex, true);
 	}
 
 	/// <summary>
@@ -401,7 +399,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		if (e.NewValue is not DateTime value) return;
 		CreateWeek(value);
-		UpdateItems(Items, SelectedIndex);
+		UpdateItems(Items, SelectedIndex, true);
 	}
 
 	/// <summary>
@@ -421,7 +419,11 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">The event data.</param>
 	void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 	{
-		UpdateItems(Items, SelectedIndex);
+		if (e.NewItems == null) return;
+		var newItems = Convert(e.NewItems);
+		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
+		var weekList = newItems.Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).ToList();
+		UpdateItems(Items, SelectedIndex, weekList.Count > 0);
 	}
 
 	/// <summary>
@@ -498,11 +500,12 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
 	/// <param name="selectedIndex">Index of appointment to select</param>
-	void UpdateItems(IEnumerable enumerable, int selectedIndex)
+	/// <param name="updateView">Set to true to update the view and false otherwise</param>
+	void UpdateItems(IEnumerable enumerable, int selectedIndex, bool updateView)
 	{
-		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
-
 		internalItems = Convert(enumerable);
+		if (!updateView) return;
+		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 		var weekList = internalItems.
 		Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).
 		OrderBy(x => x.GetFirstLogicalDescendant<IAppointmentControl>().Begin).ToList();
