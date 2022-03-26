@@ -612,7 +612,7 @@ public class CalendarControl : ContentControl, IStyleable
 	IList<IControl> Convert(IEnumerable enumerable)
 	{
 		var result = new List<IControl>();
-		if (!CanBuildItem()) return result;
+		if (!CanBuildItems()) return result;
 
 		var i = 0;
 		foreach (var e in enumerable)
@@ -633,7 +633,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Checks if an item can be built
 	/// </summary>
 	/// <returns>True if it can and false otherwise</returns>
-	bool CanBuildItem() => ItemTemplate != null || useDefaultItemsTemplate;
+	bool CanBuildItems() => ItemTemplate != null || useDefaultItemsTemplate;
 
 	/// <summary>
 	/// Builds the item (control)
