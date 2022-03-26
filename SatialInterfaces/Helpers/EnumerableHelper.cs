@@ -21,5 +21,5 @@ internal static class EnumerableHelper
 	/// </summary>
 	/// <param name="source">The IEnumerable to convert.</param>
 	/// <returns>The list</returns>
-	public static List<object> ToList(this IEnumerable source) => Enumerable.ToList(source.Cast<object>());
+	public static List<object> ToList(this IEnumerable source) => source != null ? Enumerable.ToList(source.Cast<object>()) : new List<object>();
 }
