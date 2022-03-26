@@ -25,7 +25,7 @@ namespace SatialInterfaces.Controls;
 /// </summary>
 public class CalendarControl : ContentControl, IStyleable
 {
-	/// <summary>Auto scrol to selected item property</summary>
+	/// <summary>Auto scroll to selected item property</summary>
 	public static readonly DirectProperty<CalendarControl, bool> AutoScrollToSelectedItemProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AutoScrollToSelectedItem), o => o.AutoScrollToSelectedItem, (o, v) => o.AutoScrollToSelectedItem = v);
 	/// <summary>Allow delete property</summary>
 	public static readonly DirectProperty<CalendarControl, bool> AllowDeleteProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AllowDelete), o => o.AllowDelete, (o, v) => o.AllowDelete = v);
@@ -783,7 +783,7 @@ public class CalendarControl : ContentControl, IStyleable
 	}
 
 	/// <summary>
-	/// Atuomatically scroll to the selected item if necessary
+	/// Automatically scroll to the selected item if necessary
 	/// </summary>
 	/// <param name="index">The index of the item.</param>
 	void AutoScrollToSelectedItemIfNecessary(int index)
