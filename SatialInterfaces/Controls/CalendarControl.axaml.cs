@@ -83,7 +83,7 @@ public class CalendarControl : ContentControl, IStyleable
 
 		scrollViewerMain.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
 		CreateWeek(CurrentWeek);
-		UpdateItems(Items, SelectedIndex, true);
+		UpdateItems(Items, SelectedIndex);
 	}
 
 	/// <inheritdoc />
@@ -131,8 +131,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="index">The index of the item.</param>
 	public void ScrollIntoView(int index)
 	{
-		if (index < 0 || index >= internalItems.Count) return;
-		ScrollIntoView(internalItems, index);
+		var items = GetItemsAsList();
+		if (index < 0 || index >= items.Count) return;
+		InnerScrollIntoView(index);
 	}
 
 	/// <summary>
@@ -141,9 +142,10 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="item">The item</param>
 	public void ScrollIntoView(object item)
 	{
-		var index = GetItemsAsList().IndexOf(item);
-		if (index < 0 || index >= internalItems.Count) return;
-		ScrollIntoView(internalItems, index);
+		var items = GetItemsAsList();
+		var index = items.IndexOf(item);
+		if (index < 0 || index >= items.Count) return;
+		InnerScrollIntoView(index);
 	}
 
 	/// <inheritdoc />
@@ -328,11 +330,12 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>
 	/// Scrolls the specified item into view.
 	/// </summary>
-	/// <param name="list">List of the item</param>
 	/// <param name="index">Index of the item</param>
-	void ScrollIntoView(IList<IControl> list, int index)
+	void InnerScrollIntoView(int index)
 	{
-		var item = list[index].GetFirstLogicalDescendant<IAppointmentControl>();
+		var control = Convert(GetItemsAsList()[index], index);
+		if (control == null) return;
+		var item = control.GetFirstLogicalDescendant<IAppointmentControl>();
 		CurrentWeek = item.Begin;
 
 		var scrollViewerMainRect = scrollViewerMain.Bounds;
@@ -378,7 +381,7 @@ public class CalendarControl : ContentControl, IStyleable
 		if (skipItemsChanged) return;
 		ClearItemsGrid();
 		if (e.NewValue is not IEnumerable value) return;
-		UpdateItems(value, SelectedIndex, true);
+		UpdateItems(value, SelectedIndex);
 	}
 
 	/// <summary>
@@ -399,7 +402,7 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		if (e.NewValue is not DateTime value) return;
 		CreateWeek(value);
-		UpdateItems(Items, SelectedIndex, true);
+		UpdateItems(Items, SelectedIndex);
 	}
 
 	/// <summary>
@@ -423,7 +426,8 @@ public class CalendarControl : ContentControl, IStyleable
 		var newItems = Convert(e.NewItems);
 		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 		var weekList = newItems.Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).ToList();
-		UpdateItems(Items, SelectedIndex, weekList.Count > 0);
+		if (weekList.Count == 0) return;
+		UpdateItems(Items, SelectedIndex);
 	}
 
 	/// <summary>
@@ -500,11 +504,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
 	/// <param name="selectedIndex">Index of appointment to select</param>
-	/// <param name="updateView">Set to true to update the view and false otherwise</param>
-	void UpdateItems(IEnumerable enumerable, int selectedIndex, bool updateView)
+	void UpdateItems(IEnumerable enumerable, int selectedIndex)
 	{
-		internalItems = Convert(enumerable);
-		if (!updateView) return;
+		var internalItems = Convert(enumerable);
 		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 		var weekList = internalItems.
 		Where(x => x.GetFirstLogicalDescendant<IAppointmentControl>().IsInWeek(beginWeek)).
@@ -617,16 +619,28 @@ public class CalendarControl : ContentControl, IStyleable
 		var i = 0;
 		foreach (var e in enumerable)
 		{
-			if (BuildItem(e) is not { } p || !p.HasFirstLogicalDescendant<IAppointmentControl>()) continue;
-			var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
-			item.Index = i;
-			p.DataContext = e;
-			if (!item.IsValid())
-				return new List<IControl>();
-			result.Add(p);
+			var p = Convert(e, i);
+			if (p != null) result.Add(p);
 			i++;
 		}
 		return result;
+	}
+
+	/// <summary>
+	/// Converts an item from the source (items) to its equivalent control
+	/// </summary>
+	/// <param name="o">Object from items</param>
+	/// <param name="index">Index to use for control</param>
+	/// <returns>The control or null otherwise</returns>
+	IControl? Convert(object o, int index)
+	{
+		if (BuildItem(o) is not { } p || !p.HasFirstLogicalDescendant<IAppointmentControl>()) return null;
+		var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
+		item.Index = index;
+		p.DataContext = o;
+		if (!item.IsValid())
+			return null;
+		return p;
 	}
 
 	/// <summary>
@@ -808,8 +822,6 @@ public class CalendarControl : ContentControl, IStyleable
 	DateTime currentWeek = DateTime.Now;
 	/// <summary>End of the day</summary>
 	TimeSpan endOfTheDay = new(0, 0, 0);
-	/// <summary>Items</summary>
-	IList<IControl> internalItems = new List<IControl>();
 	/// <summary>Items</summary>
 	IEnumerable items = new AvaloniaList<object>();
 	/// <summary>Use default items template</summary>
