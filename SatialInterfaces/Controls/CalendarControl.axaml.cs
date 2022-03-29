@@ -131,8 +131,8 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="index">The index of the item.</param>
 	public void ScrollIntoView(int index)
 	{
-		var items = GetItemsAsList();
-		if (index < 0 || index >= items.Count) return;
+		var list = GetItemsAsList();
+		if (index < 0 || index >= list.Count) return;
 		InnerScrollIntoView(index);
 	}
 
@@ -142,9 +142,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="item">The item</param>
 	public void ScrollIntoView(object item)
 	{
-		var items = GetItemsAsList();
-		var index = items.IndexOf(item);
-		if (index < 0 || index >= items.Count) return;
+		var list = GetItemsAsList();
+		var index = list.IndexOf(item);
+		if (index < 0 || index >= list.Count) return;
 		InnerScrollIntoView(index);
 	}
 
@@ -611,7 +611,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
 	/// <returns>Internal handleable format</returns>
-	IList<IControl> Convert(IEnumerable enumerable)
+	IEnumerable<IControl> Convert(IEnumerable enumerable)
 	{
 		var result = new List<IControl>();
 		if (!CanBuildItems()) return result;
@@ -638,9 +638,7 @@ public class CalendarControl : ContentControl, IStyleable
 		var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
 		item.Index = index;
 		p.DataContext = o;
-		if (!item.IsValid())
-			return null;
-		return p;
+		return item.IsValid() ? p : null;
 	}
 
 	/// <summary>
