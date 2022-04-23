@@ -388,7 +388,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Begin of the day changed event
 	/// </summary>
 	/// <param name="e">Argument for the event</param>
-	protected void BeginOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
+	void BeginOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not TimeSpan value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, value, EndOfTheDay, WeekendIsVisible, true);
@@ -398,7 +398,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Current week changed event
 	/// </summary>
 	/// <param name="e">Argument for the event</param>
-	protected void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
+	void CurrentWeekChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not DateTime value) return;
 		CreateWeek(value);
@@ -409,7 +409,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// End of the day changed event
 	/// </summary>
 	/// <param name="e">Argument for the event</param>
-	protected void EndOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
+	void EndOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not TimeSpan value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, value, WeekendIsVisible, true);
@@ -459,7 +459,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Current week changed event
 	/// </summary>
 	/// <param name="e">Argument for the event</param>
-	protected void WeekendIsVisibleChanged(AvaloniaPropertyChangedEventArgs e)
+	void WeekendIsVisibleChanged(AvaloniaPropertyChangedEventArgs e)
 	{
 		if (e.NewValue is not bool value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, EndOfTheDay, value, true);
