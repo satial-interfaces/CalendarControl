@@ -171,8 +171,15 @@ public class CalendarControl : ContentControl, IStyleable
 		leftButtonDown = false;
 		base.OnPointerReleased(e);
 		var previousIndex = SelectedIndex;
+		var currentAutoScrollToSelectedItem = false;
+		if (index >= 0)
+		{
+			currentAutoScrollToSelectedItem = autoScrollToSelectedItem;
+			autoScrollToSelectedItem = false;
+		}
 		SelectedIndex = index;
-
+		if (index >= 0 && currentAutoScrollToSelectedItem)
+			autoScrollToSelectedItem = currentAutoScrollToSelectedItem;
 		// Force re-trigger
 		if (index == previousIndex)
 			RaiseSelectionChanged(index);
