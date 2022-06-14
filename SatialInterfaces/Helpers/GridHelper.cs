@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Avalonia.Controls;
 
 namespace SatialInterfaces.Helpers;
@@ -19,13 +18,17 @@ public static class GridHelper
 	{
 		grid.RowDefinitions = rowDefinitions;
 		grid.Children.Clear();
-		foreach (var control in controls.Where(x => x != null))
-			grid.Children.Add(control);
 
+		List<IControl> controlsToAdd = new();
 		for (var i = 0; i < controls.Count; i++)
 		{
-			if (controls[i] != null)
-				Grid.SetRow(controls[i] as Control, i);
+			if (controls[i] is Control controlToAdd)
+			{
+				Grid.SetRow(controlToAdd, i);
+				controlsToAdd.Add(controlToAdd);
+			}
 		}
+
+		grid.Children.AddRange(controlsToAdd);
 	}
 }
