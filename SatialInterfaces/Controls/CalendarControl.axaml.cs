@@ -679,15 +679,17 @@ public class CalendarControl : ContentControl, IStyleable
 		itemsGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
+		List<Grid> dayColumnsToAdd = new();
 		foreach (var i in visibleDaysPerWeek)
 		{
 			var dayColumn = ControlFactory.CreateColumn();
 			dayColumn.RowDefinitions = new RowDefinitions();
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
-			itemsGrid.Children.Add(dayColumn);
+			dayColumnsToAdd.Add(dayColumn);
 			Grid.SetColumn(dayColumn, i - visibleDaysPerWeek[0]);
 		}
 
+		itemsGrid.Children.AddRange(dayColumnsToAdd);
 		itemsGrid.ColumnDefinitions = columnDefinitions;
 	}
 
@@ -732,28 +734,32 @@ public class CalendarControl : ContentControl, IStyleable
 		var columnDefinitions = new ColumnDefinitions();
 		var firstDayOfWeek = FirstDayOfWeek;
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
+		List<Control> weekItemsToAdd = new();
 		foreach (var i in visibleDaysPerWeek)
 		{
 			var day = DayOfWeekHelper.AddDay(firstDayOfWeek, i);
 			var dayState = ControlFactory.CreateDayState(day);
 			var dayColumn = ControlFactory.CreateColumn();
 			var rowDefinitions = new RowDefinitions();
+			List<Border> hourCellToAdd = new();
 			for (var j = 0; j < HoursPerDay; j++)
 			{
 				var hourCell = ControlFactory.CreateHourCell();
-				dayColumn.Children.Add(hourCell);
+				hourCellToAdd.Add(hourCell);
 				Grid.SetRow(hourCell, j);
 				rowDefinitions.Add(new RowDefinition(1.0d, GridUnitType.Star));
 			}
 
+			dayColumn.Children.AddRange(hourCellToAdd);
 			dayColumn.RowDefinitions = rowDefinitions;
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
-			weekGrid.Children.Add(dayState);
-			weekGrid.Children.Add(dayColumn);
+			weekItemsToAdd.Add(dayState);
+			weekItemsToAdd.Add(dayColumn);
 			Grid.SetColumn(dayColumn, i - visibleDaysPerWeek[0]);
 			Grid.SetColumn(dayState, i - visibleDaysPerWeek[0]);
 		}
 
+		weekGrid.Children.AddRange(weekItemsToAdd);
 		weekGrid.ColumnDefinitions = columnDefinitions;
 		ClearItemsGrid();
 	}
@@ -769,16 +775,18 @@ public class CalendarControl : ContentControl, IStyleable
 		var firstDayOfWeek = FirstDayOfWeek;
 		var beginWeek = week.GetBeginWeek(firstDayOfWeek);
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
+		List<TextBlock> dayTextsToAdd = new();
 		foreach (var i in visibleDaysPerWeek)
 		{
 			var day = DayOfWeekHelper.AddDay(firstDayOfWeek, i);
 			var text = DateTimeHelper.DayOfWeekToString(day) + " " + beginWeek.AddDays(i).Day;
 			var dayText = new TextBlock { Text = text };
 			columnDefinitions.Add(new ColumnDefinition(1.0d, GridUnitType.Star));
-			dayGrid.Children.Add(dayText);
+			dayTextsToAdd.Add(dayText);
 			Grid.SetColumn(dayText, i - visibleDaysPerWeek[0]);
 		}
 
+		dayGrid.Children.AddRange(dayTextsToAdd);
 		dayGrid.ColumnDefinitions = columnDefinitions;
 	}
 
@@ -789,15 +797,16 @@ public class CalendarControl : ContentControl, IStyleable
 	{
 		hourGrid.Children.Clear();
 		var rowDefinitions = new RowDefinitions();
+		List<TextBlock> hourTextsToAdd = new();
 		for (var j = 0; j < HoursPerDay; j++)
 		{
 			var text = new DateTime(1970, 1, 1, j, 0, 0).ToShortTimeString();
 			var hourText = new TextBlock { Text = text };
-			hourGrid.Children.Add(hourText);
+			hourTextsToAdd.Add(hourText);
 			Grid.SetRow(hourText, j);
 			rowDefinitions.Add(new RowDefinition(1.0d, GridUnitType.Star));
 		}
-
+		hourGrid.Children.AddRange(hourTextsToAdd);
 		hourGrid.RowDefinitions = rowDefinitions;
 	}
 
