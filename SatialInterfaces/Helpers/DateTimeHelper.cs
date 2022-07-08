@@ -102,8 +102,7 @@ internal static class DateTimeHelper
 	public static string DayOfWeekToString(DayOfWeek dayOfWeek) => GetCurrentDateFormat().AbbreviatedDayNames[(int)dayOfWeek];
 
 	/// <summary>
-	/// Return if the passed in day of the week is a weekend. note: state pulled from
-	/// http://en.wikipedia.org/wiki/Workweek_and_weekend
+	/// Return if the passed in day of the week is a weekend. note: state pulled from http://en.wikipedia.org/wiki/Workweek_and_weekend
 	/// </summary>
 	/// <param name="obj">The CultureInfo this object.</param>
 	/// <param name="dayOfWeek">The Day of the week to return the state of.</param>
