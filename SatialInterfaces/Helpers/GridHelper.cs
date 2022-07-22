@@ -22,11 +22,9 @@ public static class GridHelper
 		List<IControl> controlsToAdd = new();
 		for (var i = 0; i < controls.Count; i++)
 		{
-			if (controls[i] is Control controlToAdd)
-			{
-				Grid.SetRow(controlToAdd, i);
-				controlsToAdd.Add(controlToAdd);
-			}
+			if (controls[i] is not Control controlToAdd) continue;
+			Grid.SetRow(controlToAdd, i);
+			controlsToAdd.Add(controlToAdd);
 		}
 
 		grid.Children.AddRange(controlsToAdd);
