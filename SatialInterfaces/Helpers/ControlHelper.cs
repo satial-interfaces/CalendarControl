@@ -5,9 +5,7 @@ using Avalonia.LogicalTree;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains control helper methods
-/// </summary>
+/// <summary>This class contains control helper methods.</summary>
 public static class ControlHelper
 {
 	/// <summary>

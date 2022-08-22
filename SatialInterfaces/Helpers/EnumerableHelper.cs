@@ -4,9 +4,7 @@ using System.Linq;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains IEnumerable methods.
-/// </summary>
+/// <summary>This class contains IEnumerable methods.</summary>
 internal static class EnumerableHelper
 {
 	/// <summary>

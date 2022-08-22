@@ -2,9 +2,7 @@ using Avalonia;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains geometry methods.
-/// </summary>
+/// <summary>This class contains geometry methods.</summary>
 public static class GeometryHelper
 {
 	/// <summary>

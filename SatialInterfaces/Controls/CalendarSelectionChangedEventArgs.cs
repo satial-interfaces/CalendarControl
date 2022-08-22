@@ -2,9 +2,7 @@ using Avalonia.Interactivity;
 
 namespace SatialInterfaces.Controls;
 
-/// <summary>
-/// Expansion of the RoutedEventArgs class by providing a selected index;
-/// </summary>
+/// <summary>Expansion of the RoutedEventArgs class by providing a selected index;.</summary>
 public class CalendarSelectionChangedEventArgs : RoutedEventArgs
 {
 	/// <summary>

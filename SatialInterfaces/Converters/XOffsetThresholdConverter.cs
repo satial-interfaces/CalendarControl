@@ -6,9 +6,7 @@ using Avalonia.Data.Converters;
 
 namespace SatialInterfaces.Converters;
 
-/// <summary>
-/// This converter converts an X Offset (from a scroll viewer) to a new X Offset using a threshold.
-/// </summary>
+/// <summary>This converter converts an X Offset (from a scroll viewer) to a new X Offset using a threshold.</summary>
 public class XOffsetThresholdConverter : IValueConverter
 {
 	/// <inheritdoc />

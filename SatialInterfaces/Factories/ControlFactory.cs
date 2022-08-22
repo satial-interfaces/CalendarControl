@@ -6,9 +6,7 @@ using SatialInterfaces.Helpers;
 
 namespace SatialInterfaces.Factories;
 
-/// <summary>
-/// This class contains control factory methods.
-/// </summary>
+/// <summary>This class contains control factory methods.</summary>
 public static class ControlFactory
 {
 	/// <summary>

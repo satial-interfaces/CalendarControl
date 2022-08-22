@@ -3,9 +3,7 @@ using System.Globalization;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// Date/time helper class: it provides methods and extension methods
-/// </summary>
+/// <summary>Date/time helper class: it provides methods and extension methods.</summary>
 internal static class DateTimeHelper
 {
 	/// <summary>

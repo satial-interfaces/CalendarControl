@@ -2,9 +2,7 @@ using System;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains day of week helper methods
-/// </summary>
+/// <summary>This class contains day of week helper methods.</summary>
 public static class DayOfWeekHelper
 {
 	/// <summary>

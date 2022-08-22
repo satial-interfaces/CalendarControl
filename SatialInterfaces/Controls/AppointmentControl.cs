@@ -6,9 +6,7 @@ using Avalonia.Media;
 
 namespace SatialInterfaces.Controls;
 
-/// <summary>
-/// This interface represents an appointment
-/// </summary>
+/// <summary>This interface represents an appointment.</summary>
 public interface IAppointmentControl : IControl
 {
 	/// <summary>Begin property</summary>
@@ -53,9 +51,7 @@ public interface IAppointmentControl : IControl
 	bool IsValid();
 }
 
-/// <summary>
-/// This class represents an appointment and extends Border
-/// </summary>
+/// <summary>This class represents an appointment and extends Border.</summary>
 [PseudoClasses(":pressed", ":selected")]
 public class AppointmentControl : Border, ISelectable, IAppointmentControl
 {

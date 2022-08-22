@@ -4,9 +4,7 @@ using SatialInterfaces.Controls;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains appointment group methods
-/// </summary>
+/// <summary>This class contains appointment group methods.</summary>
 internal static class AppointmentGroupHelper
 {
 	/// <summary>

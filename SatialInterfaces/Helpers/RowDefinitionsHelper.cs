@@ -3,9 +3,7 @@ using Avalonia.Controls;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains RowDefinitions helpers method
-/// </summary>
+/// <summary>This class contains RowDefinitions helpers method.</summary>
 public static class RowDefinitionsHelper
 {
 	/// <summary>

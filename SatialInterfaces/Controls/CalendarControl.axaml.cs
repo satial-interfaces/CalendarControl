@@ -20,9 +20,7 @@ using SatialInterfaces.Helpers;
 
 namespace SatialInterfaces.Controls;
 
-/// <summary>
-/// This class represents a calendar control (week view)
-/// </summary>
+/// <summary>This class represents a calendar control (week view).</summary>
 public class CalendarControl : ContentControl, IStyleable
 {
 	/// <summary>Auto scroll to selected item property</summary>

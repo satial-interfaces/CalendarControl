@@ -4,9 +4,7 @@ using Avalonia.Data;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains ScrollViewer methods.
-/// </summary>
+/// <summary>This class contains ScrollViewer methods.</summary>
 public static class ScrollViewerHelper
 {
 	/// <summary>

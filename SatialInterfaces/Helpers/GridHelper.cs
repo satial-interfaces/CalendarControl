@@ -3,9 +3,7 @@ using Avalonia.Controls;
 
 namespace SatialInterfaces.Helpers;
 
-/// <summary>
-/// This class contains Grid helper methods
-/// </summary>
+/// <summary>This class contains Grid helper methods.</summary>
 public static class GridHelper
 {
 	/// <summary>
