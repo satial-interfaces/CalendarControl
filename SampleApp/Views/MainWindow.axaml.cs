@@ -65,7 +65,7 @@ public class MainWindow : Window
 	{
 		AvaloniaXamlLoader.Load(this);
 		calendarControl = this.FindControl<CalendarControl>("CalendarControl");
-		Dispatcher.UIThread.Post(() => calendarControl.Focus());
+		Dispatcher.UIThread.Post(() => calendarControl?.Focus());
 		RandomCalendar();
 	}
 
@@ -74,6 +74,7 @@ public class MainWindow : Window
 #pragma warning restore RCS1213
 	{
 		var info = this.FindControl<TextBlock>("Info");
+		if (info == null) return;
 		if (e.SelectedIndex >= 0)
 		{
 			var item = items[e.SelectedIndex];
@@ -90,21 +91,34 @@ public class MainWindow : Window
 #pragma warning restore RCS1213
 
 #pragma warning disable RCS1213
-	void PreviousButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
+	void PreviousButtonClick(object? sender, RoutedEventArgs e)
+	{
+		if (calendarControl == null) return;
+		calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(-7);
+	}
 #pragma warning restore RCS1213
 
 #pragma warning disable RCS1213
-	void ThisWeekButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = DateTime.Now;
+	void ThisWeekButtonClick(object? sender, RoutedEventArgs e)
+	{
+		if (calendarControl == null) return;
+		calendarControl.CurrentWeek = DateTime.Now;
+	}
 #pragma warning restore RCS1213
 
 #pragma warning disable RCS1213
-	void NextButtonClick(object? sender, RoutedEventArgs e) => calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
+	void NextButtonClick(object? sender, RoutedEventArgs e)
+	{
+		if (calendarControl == null) return;
+		calendarControl.CurrentWeek = calendarControl.CurrentWeek.AddDays(7);
+	}
 #pragma warning restore RCS1213
 
 #pragma warning disable RCS1213
 	void NewButtonClick(object? sender, RoutedEventArgs e)
 #pragma warning restore RCS1213
 	{
+		if (calendarControl == null) return;
 		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek).AddDays(7 + 3);
 		var begin = GetRandom(0, 24 * 4) / 4.0d;
 		var length = GetRandom(1, 8);
@@ -122,6 +136,7 @@ public class MainWindow : Window
 
 	void RandomCalendar()
 	{
+		if (calendarControl == null) return;
 		calendarControl.CurrentWeek = DateTime.Now;
 		var beginOfWeek = GetBeginWeek(calendarControl.CurrentWeek, calendarControl.FirstDayOfWeek);
 
@@ -159,6 +174,6 @@ public class MainWindow : Window
 		return begin.Date;
 	}
 	static readonly Random Random = new();
-	CalendarControl calendarControl;
+	CalendarControl? calendarControl;
 	AvaloniaList<AppointmentViewModel> items = new();
 }

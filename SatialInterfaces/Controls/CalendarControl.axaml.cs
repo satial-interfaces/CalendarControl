@@ -79,7 +79,7 @@ public class CalendarControl : ContentControl, IStyleable
 		dayGrid = this.FindControl<Grid>("DayGrid");
 		hourGrid = this.FindControl<Grid>("HourGrid");
 
-		scrollViewerMain.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
+		scrollViewerMain?.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
 		CreateWeek(CurrentWeek);
 		UpdateItems(Items, SelectedIndex);
 	}
@@ -214,6 +214,7 @@ public class CalendarControl : ContentControl, IStyleable
 	void PreviousDayButtonClick(object? sender, RoutedEventArgs e)
 #pragma warning restore RCS1213
 	{
+		if (scrollViewerMain == null) return;
 		var (x, y) = scrollViewerMain.Offset;
 		scrollViewerMain.ScrollWithoutBinding(new Vector(x - dayInOffset, y));
 	}
@@ -227,6 +228,7 @@ public class CalendarControl : ContentControl, IStyleable
 	void NextDayButtonClick(object? sender, RoutedEventArgs e)
 #pragma warning restore RCS1213
 	{
+		if (scrollViewerMain == null) return;
 		var (x, y) = scrollViewerMain.Offset;
 		scrollViewerMain.ScrollWithoutBinding(new Vector(x + dayInOffset, y));
 	}
@@ -237,6 +239,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="step">Step to take</param>
 	void SelectNext(int step)
 	{
+		if (itemsGrid == null) return;
 		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
 		if (appointments.Count == 0) return;
 		var appointmentIndex = appointments.FindIndex(x => x.Index == SelectedIndex);
@@ -293,6 +296,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="forceScroll">Force to scroll or not</param>
 	void UpdateScrollViewer(Rect rect, TimeSpan beginOfDay, TimeSpan endOfDay, bool weekendVisible, bool forceScroll)
 	{
+		if (scrollableGrid == null || scrollViewerMain == null) return;
 		if (rect.Width < 0 || rect.Height < 0) return;
 
 		var x = double.NaN;
@@ -338,6 +342,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="index">Index of the item</param>
 	void InnerScrollIntoView(int index)
 	{
+		if (scrollableGrid == null || scrollViewerMain == null) return;
 		var control = Convert(GetItemsAsList()[index], index);
 		if (control == null) return;
 		var item = control.GetFirstLogicalDescendant<IAppointmentControl>();
@@ -364,6 +369,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="selectedIndex">Index of the selected item</param>
 	void SetSelection(int selectedIndex)
 	{
+		if (itemsGrid == null) return;
 		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
 		var appointmentIndex = appointments.FindIndex(x => x.Index == selectedIndex);
 
@@ -395,6 +401,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void BeginOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
+		if (scrollViewerMain == null) return;
 		if (e.NewValue is not TimeSpan value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, value, EndOfTheDay, WeekendIsVisible, true);
 	}
@@ -416,6 +423,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void EndOfTheDayChanged(AvaloniaPropertyChangedEventArgs e)
 	{
+		if (scrollViewerMain == null) return;
 		if (e.NewValue is not TimeSpan value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, value, WeekendIsVisible, true);
 	}
@@ -466,6 +474,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="e">Argument for the event</param>
 	void WeekendIsVisibleChanged(AvaloniaPropertyChangedEventArgs e)
 	{
+		if (scrollViewerMain == null) return;
 		if (e.NewValue is not bool value) return;
 		UpdateScrollViewer(scrollViewerMain.Bounds, BeginOfTheDay, EndOfTheDay, value, true);
 	}
@@ -511,6 +520,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="selectedIndex">Index of appointment to select</param>
 	void UpdateItems(IEnumerable enumerable, int selectedIndex)
 	{
+		if (itemsGrid == null) return;
 		var internalItems = Convert(enumerable);
 		var beginWeek = currentWeek.GetBeginWeek(FirstDayOfWeek);
 		var weekList = internalItems.
@@ -674,6 +684,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	void ClearItemsGrid()
 	{
+		if (itemsGrid == null) return;
 		itemsGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
 		var visibleDaysPerWeek = GetDaysPerWeek(true);
@@ -724,6 +735,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="week">The current week</param>
 	void CreateWeek(DateTime week)
 	{
+		if (weekGrid == null) return;
 		CreateHourTexts();
 		CreateDayTexts(week);
 
@@ -768,6 +780,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="week">The current week</param>
 	void CreateDayTexts(DateTime week)
 	{
+		if (dayGrid == null) return;
 		dayGrid.Children.Clear();
 		var columnDefinitions = new ColumnDefinitions();
 		var firstDayOfWeek = FirstDayOfWeek;
@@ -793,6 +806,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	void CreateHourTexts()
 	{
+		if (hourGrid == null) return;
 		hourGrid.Children.Clear();
 		var rowDefinitions = new RowDefinitions();
 		List<TextBlock> hourTextsToAdd = new();
@@ -853,15 +867,15 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <summary>Collection changed subscription</summary>
 	IDisposable? collectionChangeSubscription;
 	/// <summary>Items grid</summary>
-	readonly Grid itemsGrid;
+	readonly Grid? itemsGrid;
 	/// <summary>Scroll viewer main</summary>
-	readonly ScrollViewer scrollViewerMain;
+	readonly ScrollViewer? scrollViewerMain;
 	/// <summary>scrollable grid</summary>
-	readonly Grid scrollableGrid;
+	readonly Grid? scrollableGrid;
 	/// <summary>Week grid</summary>
-	readonly Grid weekGrid;
+	readonly Grid? weekGrid;
 	/// <summary>Day grid</summary>
-	readonly Grid dayGrid;
+	readonly Grid? dayGrid;
 	/// <summary>Hour grid</summary>
-	readonly Grid hourGrid;
+	readonly Grid? hourGrid;
 }

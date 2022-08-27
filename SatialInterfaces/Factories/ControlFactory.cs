@@ -64,7 +64,10 @@ public static class ControlFactory
 
 		grid.ColumnDefinitions = columnDefinitions;
 		for (var i = 0; i < columnCount; i++)
-			Grid.SetColumn(grid.Children[i] as Control, i);
+		{
+			if (grid.Children[i] is not Control column) continue;
+			Grid.SetColumn(column, i);
+		}
 		return grid;
 	}
 }

@@ -19,11 +19,16 @@ public static class ControlHelper
 		grid.RowDefinitions = rowDefinitions;
 		grid.Children.Clear();
 		foreach (var control in controls.Where(x => x != null))
+		{
+			if (control == null) continue;
 			grid.Children.Add(control);
+		}
 		for (var i = 0; i < controls.Count; i++)
 		{
-			if (controls[i] != null)
-				Grid.SetRow(controls[i] as Control, i);
+			if (controls[i] is not Control c)
+				continue;
+
+			Grid.SetRow(c, i);
 		}
 	}
 
