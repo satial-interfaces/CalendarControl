@@ -12,7 +12,7 @@ public static class RowDefinitionsHelper
 	/// <param name="rowDefinitions">List of row definitions to add to</param>
 	/// <param name="controls">List of controls to add to</param>
 	/// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
-	public static void AddEmptyRowTail(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd)
+	public static void AddEmptyRowTail(RowDefinitions rowDefinitions, ICollection<Control?> controls, double previousEnd)
 	{
 		if (!double.IsNaN(previousEnd) && previousEnd >= 1.0d)
 			return;
@@ -28,7 +28,7 @@ public static class RowDefinitionsHelper
 	/// <param name="controls">List of controls to add to</param>
 	/// <param name="previousEnd">End of the previous appointment (as a fraction of the day)</param>
 	/// <param name="begin">Begin of the current appointment (as a fraction of the day)</param>
-	public static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<IControl?> controls, double previousEnd, double begin)
+	public static void AddEmptyRow(RowDefinitions rowDefinitions, ICollection<Control?> controls, double previousEnd, double begin)
 	{
 		var emptyLength = begin - (!double.IsNaN(previousEnd) ? previousEnd : 0.0d);
 		if (emptyLength <= 0.0d)

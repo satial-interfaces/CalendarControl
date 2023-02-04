@@ -2,12 +2,13 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 
 namespace SatialInterfaces.Controls;
 
 /// <summary>This interface represents an appointment.</summary>
-public interface IAppointmentControl : IControl
+public interface IAppointmentControl : ILogical, IDataContextProvider, ISelectable
 {
 	/// <summary>Begin property</summary>
 	DateTime Begin { get; set; }
@@ -53,7 +54,7 @@ public interface IAppointmentControl : IControl
 
 /// <summary>This class represents an appointment and extends Border.</summary>
 [PseudoClasses(":pressed", ":selected")]
-public class AppointmentControl : Border, ISelectable, IAppointmentControl
+public class AppointmentControl : Border, IAppointmentControl
 {
 	/// <summary>Begin property</summary>
 	public static readonly DirectProperty<AppointmentControl, DateTime> BeginProperty = AvaloniaProperty.RegisterDirect<AppointmentControl, DateTime>(nameof(Begin), o => o.Begin, (o, v) => o.Begin = v);

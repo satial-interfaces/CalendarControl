@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using SatialInterfaces.Controls;
 
 namespace SatialInterfaces.Helpers;
@@ -11,21 +12,21 @@ internal static class AppointmentControlListHelper
 	/// Applies the indentation of the appointment list (based on avoiding overlap)
 	/// </summary>
 	/// <param name="list">Appointment list to process</param>
-	public static void ApplyIndentation(IEnumerable<IControl> list)
+	public static void ApplyIndentation(IEnumerable<Control> list)
 	{
-		var listOfLists = new List<List<IControl>>();
+		var listOfLists = new List<List<Control>>();
 
 		foreach (var item in list)
 		{
 			var index = GetIndent(listOfLists, item);
-			List<IControl> indentList;
+			List<Control> indentList;
 			if (index >= 0)
 			{
 				indentList = listOfLists[index];
 			}
 			else
 			{
-				indentList = new List<IControl>();
+				indentList = new List<Control>();
 				listOfLists.Add(indentList);
 			}
 
@@ -47,7 +48,7 @@ internal static class AppointmentControlListHelper
 	/// <param name="listOfLists">List with indentations</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>The index or -1 otherwise</returns>
-	static int GetIndent(IReadOnlyList<List<IControl>> listOfLists, IControl item)
+	static int GetIndent(IReadOnlyList<List<Control>> listOfLists, ILogical item)
 	{
 		for (var i = 0; i < listOfLists.Count; i++)
 		{
@@ -64,7 +65,7 @@ internal static class AppointmentControlListHelper
 	/// <param name="list">List to check in</param>
 	/// <param name="item">Item to check</param>
 	/// <returns>True if it fits and false otherwise</returns>
-	static bool FitsIn(IEnumerable<IControl> list, IControl item)
+	static bool FitsIn(IEnumerable<Control> list, ILogical item)
 	{
 		var item2 = item.GetFirstLogicalDescendant<IAppointmentControl>();
 		return list.All(x => !x.GetFirstLogicalDescendant<IAppointmentControl>().HasOverlap(item2));

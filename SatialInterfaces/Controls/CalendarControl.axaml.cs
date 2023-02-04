@@ -79,7 +79,7 @@ public class CalendarControl : ContentControl, IStyleable
 		dayGrid = this.FindControl<Grid>("DayGrid");
 		hourGrid = this.FindControl<Grid>("HourGrid");
 
-		scrollViewerMain?.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
+        scrollViewerMain?.GetObservable(BoundsProperty).Subscribe(OnScrollViewerBoundsChanged);
 		CreateWeek(CurrentWeek);
 		UpdateItems(Items, SelectedIndex);
 	}
@@ -120,8 +120,8 @@ public class CalendarControl : ContentControl, IStyleable
 	public bool UseDefaultItemsTemplate { get => useDefaultItemsTemplate; set => SetAndRaise(UseDefaultItemsTemplateProperty, ref useDefaultItemsTemplate, value); }
 	/// <summary>Weekend is visible property</summary>
 	public bool WeekendIsVisible { get => weekendIsVisible; set => SetAndRaise(WeekendIsVisibleProperty, ref weekendIsVisible, value); }
-	/// <summary>Occurs when selection changed</summary>
-	public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
+    /// <summary>Occurs when selection changed</summary>
+    public event EventHandler<CalendarSelectionChangedEventArgs> SelectionChanged { add => AddHandler(SelectionChangedEvent, value); remove => RemoveHandler(SelectionChangedEvent, value); }
 
 	/// <summary>
 	/// Scrolls the specified item into view.
@@ -164,7 +164,7 @@ public class CalendarControl : ContentControl, IStyleable
 		}
 
 		var control = e.Pointer.Captured as ILogical;
-		var appointment = control?.FindLogicalAncestorOfType<AppointmentControl>();
+		var appointment = control?.FindLogicalAncestorOfType<IAppointmentControl>();
 		var index = appointment?.Index ?? -1;
 		leftButtonDown = false;
 		base.OnPointerReleased(e);
@@ -240,7 +240,7 @@ public class CalendarControl : ContentControl, IStyleable
 	void SelectNext(int step)
 	{
 		if (itemsGrid == null) return;
-		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
+		var appointments = itemsGrid.GetLogicalDescendants().OfType<IAppointmentControl>().ToList();
 		if (appointments.Count == 0) return;
 		var appointmentIndex = appointments.FindIndex(x => x.Index == SelectedIndex);
 		appointmentIndex += step;
@@ -370,7 +370,7 @@ public class CalendarControl : ContentControl, IStyleable
 	void SetSelection(int selectedIndex)
 	{
 		if (itemsGrid == null) return;
-		var appointments = itemsGrid.GetLogicalDescendants().OfType<AppointmentControl>().ToList();
+		var appointments = itemsGrid.GetLogicalDescendants().OfType<IAppointmentControl>().ToList();
 		var appointmentIndex = appointments.FindIndex(x => x.Index == selectedIndex);
 
 		for (var i = 0; i < appointments.Count; i++)
@@ -536,7 +536,7 @@ public class CalendarControl : ContentControl, IStyleable
 			var rowDefinitions = new RowDefinitions();
 
 			var previousEnd = double.NaN;
-			var dayControls = new List<IControl?>();
+			var dayControls = new List<Control?>();
 			var j = 0;
 			while (j < todayList.Count)
 			{
@@ -567,7 +567,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// Index to continue in next iteration, the begin (fraction of day), the length (fraction of day) and the
 	/// containing control
 	/// </returns>
-	(int Index, double Begin, double Length, IControl Control) GetAppointmentGroup(IList<IControl> list, int beginIndex)
+	(int Index, double Begin, double Length, Control Control) GetAppointmentGroup(IList<Control> list, int beginIndex)
 	{
 		var item = list[beginIndex].GetFirstLogicalDescendant<IAppointmentControl>();
 		var (begin, _) = item.GetFractionOfDay();
@@ -585,7 +585,7 @@ public class CalendarControl : ContentControl, IStyleable
 			var indentItems = AppointmentGroupHelper.GetIndentationItems(list, beginIndex, count, i);
 			if (indentItems.Count == 0)
 				continue;
-			var groupControls = new List<IControl?>();
+			var groupControls = new List<Control?>();
 			var rowDefinitions = new RowDefinitions();
 			var previous = double.NaN;
 			foreach (var indentItem in indentItems)
@@ -626,9 +626,9 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="enumerable">Items to process</param>
 	/// <returns>Internal handleable format</returns>
-	IEnumerable<IControl> Convert(IEnumerable enumerable)
+	IEnumerable<Control> Convert(IEnumerable enumerable)
 	{
-		var result = new List<IControl>();
+		var result = new List<Control>();
 		if (!CanBuildItems()) return result;
 
 		var i = 0;
@@ -647,7 +647,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// <param name="o">Object from items</param>
 	/// <param name="index">Index to use for control</param>
 	/// <returns>The control or null otherwise</returns>
-	IControl? Convert(object o, int index)
+	Control? Convert(object o, int index)
 	{
 		if (BuildItem(o) is not { } p || !p.HasFirstLogicalDescendant<IAppointmentControl>()) return null;
 		var item = p.GetFirstLogicalDescendant<IAppointmentControl>();
@@ -667,7 +667,7 @@ public class CalendarControl : ContentControl, IStyleable
 	/// </summary>
 	/// <param name="param">Parameter to supply to the item template builder</param>
 	/// <returns>The item</returns>
-	IControl BuildItem(object param)
+	Control BuildItem(object param)
 	{
 		var result = ItemTemplate?.Build(param);
 		return result ?? new AppointmentControl

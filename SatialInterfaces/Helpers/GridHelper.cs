@@ -12,17 +12,17 @@ public static class GridHelper
 	/// <param name="grid">Grid to add to</param>
 	/// <param name="rowDefinitions">List of row definitions</param>
 	/// <param name="controls">Controls to adds</param>
-	public static void AddRows(Grid grid, RowDefinitions rowDefinitions, IReadOnlyList<IControl?> controls)
+	public static void AddRows(Grid grid, RowDefinitions rowDefinitions, IReadOnlyList<Control?> controls)
 	{
 		grid.RowDefinitions = rowDefinitions;
 		grid.Children.Clear();
 
-		List<IControl> controlsToAdd = new();
+		List<Control> controlsToAdd = new();
 		for (var i = 0; i < controls.Count; i++)
 		{
-			if (controls[i] is not Control controlToAdd) continue;
-			Grid.SetRow(controlToAdd, i);
-			controlsToAdd.Add(controlToAdd);
+			if (controls[i] is not { } control) continue;
+			Grid.SetRow(control, i);
+			controlsToAdd.Add(control);
 		}
 
 		grid.Children.AddRange(controlsToAdd);
