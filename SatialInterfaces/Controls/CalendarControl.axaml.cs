@@ -21,7 +21,7 @@ using SatialInterfaces.Helpers;
 namespace SatialInterfaces.Controls;
 
 /// <summary>This class represents a calendar control (week view).</summary>
-public class CalendarControl : ContentControl, IStyleable
+public partial class CalendarControl : ContentControl, IStyleable
 {
 	/// <summary>Auto scroll to selected item property</summary>
 	public static readonly DirectProperty<CalendarControl, bool> AutoScrollToSelectedItemProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AutoScrollToSelectedItem), o => o.AutoScrollToSelectedItem, (o, v) => o.AutoScrollToSelectedItem = v);
