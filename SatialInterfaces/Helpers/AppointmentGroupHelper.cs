@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
-using SatialInterfaces.Controls;
+using SatialInterfaces.Controls.Calendar;
 
 namespace SatialInterfaces.Helpers;
 

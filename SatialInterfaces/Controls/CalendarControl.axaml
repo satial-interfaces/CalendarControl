@@ -1,6 +1,6 @@
-<ContentControl x:Class="SatialInterfaces.Controls.CalendarControl"
+<ContentControl x:Class="SatialInterfaces.Controls.Calendar.CalendarControl"
     xmlns="https://github.com/avaloniaui"
-    xmlns:si="clr-namespace:SatialInterfaces.Controls"
+    xmlns:si="clr-namespace:SatialInterfaces.Controls.Calendar"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

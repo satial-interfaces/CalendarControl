@@ -8,7 +8,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
-using SatialInterfaces.Controls;
+using SatialInterfaces.Controls.Calendar;
 
 namespace SampleApp.Views;
 

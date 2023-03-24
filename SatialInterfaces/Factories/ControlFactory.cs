@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using Avalonia.Controls;
-using SatialInterfaces.Controls;
+using SatialInterfaces.Controls.Calendar;
 using SatialInterfaces.Helpers;
 
 namespace SatialInterfaces.Factories;

@@ -5,7 +5,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 
-namespace SatialInterfaces.Controls;
+namespace SatialInterfaces.Controls.Calendar;
 
 /// <summary>This interface represents an appointment.</summary>
 public interface IAppointmentControl : ILogical, IDataContextProvider, ISelectable

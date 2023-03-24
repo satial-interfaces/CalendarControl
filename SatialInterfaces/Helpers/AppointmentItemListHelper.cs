@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
-using SatialInterfaces.Controls;
+using SatialInterfaces.Controls.Calendar;
 
 namespace SatialInterfaces.Helpers;
 

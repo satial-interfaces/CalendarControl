@@ -18,7 +18,7 @@ using Avalonia.Threading;
 using SatialInterfaces.Factories;
 using SatialInterfaces.Helpers;
 
-namespace SatialInterfaces.Controls;
+namespace SatialInterfaces.Controls.Calendar;
 
 /// <summary>This class represents a calendar control (week view).</summary>
 public partial class CalendarControl : ContentControl, IStyleable
