@@ -4,6 +4,10 @@ This is a calendar control (week view) for Avalonia. See and run the sample app 
 
 ![CalendarControl screenshot](/Images/CalendarControl.png)
 
+## Note for Avalonia 11.0
+
+Since Avalonia 11.0 (preview 7) there's a breaking change: the namespace changed from SatialInterfaces.Controls to SatialInterfaces.Controls.Calendar. Please update your code.
+
 ## How to use
 
 First add the package to your project. Use NuGet to get it: https://www.nuget.org/packages/CalendarControl.Avalonia/
