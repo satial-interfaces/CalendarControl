@@ -21,7 +21,7 @@ using SatialInterfaces.Helpers;
 namespace SatialInterfaces.Controls.Calendar;
 
 /// <summary>This class represents a calendar control (week view).</summary>
-public partial class CalendarControl : ContentControl, IStyleable
+public partial class CalendarControl : ContentControl
 {
 	/// <summary>Auto scroll to selected item property</summary>
 	public static readonly DirectProperty<CalendarControl, bool> AutoScrollToSelectedItemProperty = AvaloniaProperty.RegisterDirect<CalendarControl, bool>(nameof(AutoScrollToSelectedItem), o => o.AutoScrollToSelectedItem, (o, v) => o.AutoScrollToSelectedItem = v);
@@ -84,8 +84,6 @@ public partial class CalendarControl : ContentControl, IStyleable
 		UpdateItems(Items, SelectedIndex);
 	}
 
-	/// <inheritdoc />
-	Type IStyleable.StyleKey => typeof(CalendarControl);
 	/// <summary>Auto scroll to selected item property</summary>
 	public bool AutoScrollToSelectedItem { get => autoScrollToSelectedItem; set => SetAndRaise(AutoScrollToSelectedItemProperty, ref autoScrollToSelectedItem, value); }
 	/// <summary>Allow delete property</summary>
@@ -204,6 +202,9 @@ public partial class CalendarControl : ContentControl, IStyleable
 
 		base.OnKeyDown(e);
 	}
+
+	/// <inheritdoc />
+	protected override Type StyleKeyOverride => typeof(CalendarControl);
 
 	/// <summary>
 	/// Select previous day click
