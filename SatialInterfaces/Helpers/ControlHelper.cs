@@ -14,7 +14,7 @@ public static class ControlHelper
 	/// <param name="grid">Grid to add to</param>
 	/// <param name="controls">Controls to add</param>
 	/// <param name="rowDefinitions">Row definitions</param>
-	public static void AddControlsToRows(Grid grid, List<IControl?> controls, RowDefinitions rowDefinitions)
+	public static void AddControlsToRows(Grid grid, List<Control?> controls, RowDefinitions rowDefinitions)
 	{
 		grid.RowDefinitions = rowDefinitions;
 		grid.Children.Clear();
@@ -25,7 +25,7 @@ public static class ControlHelper
 		}
 		for (var i = 0; i < controls.Count; i++)
 		{
-			if (controls[i] is not Control c)
+			if (controls[i] is not {} c)
 				continue;
 
 			Grid.SetRow(c, i);
@@ -38,7 +38,7 @@ public static class ControlHelper
 	/// <param name="obj">Object to act on</param>
 	/// <typeparam name="T">Type to search for</typeparam>
 	/// <returns>True if it does and false otherwise</returns>
-	public static bool HasFirstLogicalDescendant<T>(this IControl obj) where T : IControl
+	public static bool HasFirstLogicalDescendant<T>(this ILogical obj) where T : ILogical
 	{
 		if (obj is T) return true;
 		return obj.GetLogicalDescendants().OfType<T>().FirstOrDefault() != null;
@@ -50,7 +50,7 @@ public static class ControlHelper
 	/// <param name="obj">Object to act on</param>
 	/// <typeparam name="T">Type to search for</typeparam>
 	/// <returns>The first match or null otherwise</returns>
-	public static T GetFirstLogicalDescendant<T>(this IControl obj) where T : IControl
+	public static T GetFirstLogicalDescendant<T>(this ILogical obj) where T : ILogical
 	{
 		if (obj is T t) return t;
 		return obj.GetLogicalDescendants().OfType<T>().FirstOrDefault()!;

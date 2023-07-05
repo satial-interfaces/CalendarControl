@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Avalonia.Controls;
-using SatialInterfaces.Controls;
+using SatialInterfaces.Controls.Calendar;
 
 namespace SatialInterfaces.Helpers;
 
@@ -13,7 +13,7 @@ internal static class AppointmentGroupHelper
 	/// <param name="list">List to get group from</param>
 	/// <param name="beginIndex">Index to start from</param>
 	/// <returns>The group count</returns>
-	public static int GetGroupCount(IList<IControl> list, int beginIndex)
+	public static int GetGroupCount(IList<Control> list, int beginIndex)
 	{
 		var item = list[beginIndex].GetFirstLogicalDescendant<IAppointmentControl>();
 		var (begin, length) = item.GetFractionOfDay();
@@ -43,9 +43,9 @@ internal static class AppointmentGroupHelper
 	/// <param name="count">Count of group</param>
 	/// <param name="indent">Indentation to get count for</param>
 	/// <returns>List with items matching the indentation</returns>
-	public static IList<IControl> GetIndentationItems(IList<IControl> list, int beginIndex, int count, int indent)
+	public static IList<Control> GetIndentationItems(IList<Control> list, int beginIndex, int count, int indent)
 	{
-		var result = new List<IControl>();
+		var result = new List<Control>();
 		for (var i = beginIndex; i < beginIndex + count; i++)
 		{
 			var item = list[i].GetFirstLogicalDescendant<IAppointmentControl>();
@@ -63,7 +63,7 @@ internal static class AppointmentGroupHelper
 	/// <param name="beginIndex">Begin index of group</param>
 	/// <param name="count">Count of group</param>
 	/// <returns>The end as a fraction of the day</returns>
-	public static double GetEnd(IList<IControl> list, int beginIndex, int count)
+	public static double GetEnd(IList<Control> list, int beginIndex, int count)
 	{
 		var item = list[beginIndex].GetFirstLogicalDescendant<IAppointmentControl>();
 		var (begin, length) = item.GetFractionOfDay();
@@ -88,7 +88,7 @@ internal static class AppointmentGroupHelper
 	/// <param name="beginIndex">Begin index of group</param>
 	/// <param name="count">Count of group</param>
 	/// <returns>Indentation count</returns>
-	public static int GetIndentationCount(IList<IControl> list, int beginIndex, int count)
+	public static int GetIndentationCount(IList<Control> list, int beginIndex, int count)
 	{
 		var result = 0;
 		for (var i = beginIndex; i < beginIndex + count; i++)

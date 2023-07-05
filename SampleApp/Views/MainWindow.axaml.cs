@@ -8,7 +8,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
-using SatialInterfaces.Controls;
+using SatialInterfaces.Controls.Calendar;
 
 namespace SampleApp.Views;
 
@@ -47,7 +47,7 @@ public class AppointmentViewModel
 	public Status Status { get; set; }
 }
 
-public class MainWindow : Window
+public partial class MainWindow : Window
 {
 	public static readonly DirectProperty<MainWindow, AvaloniaList<AppointmentViewModel>> ItemsProperty = AvaloniaProperty.RegisterDirect<MainWindow, AvaloniaList<AppointmentViewModel>>(nameof(Items), o => o.Items, (o, v) => o.Items = v);
 

@@ -6,7 +6,7 @@ This is a calendar control (week view) for Avalonia. See and run the sample app 
 
 ## Note for Avalonia 11.0
 
-Since Avalonia 11.0 (preview 7) there's a breaking change: the namespace changed from SatialInterfaces.Controls to SatialInterfaces.Controls.Calendar. Please update your code.
+Since Avalonia 11.0 there's a breaking change: the namespace changed from SatialInterfaces.Controls to SatialInterfaces.Controls.Calendar. Please update your code.
 
 ## How to use
 
@@ -48,7 +48,7 @@ Then add the control to your Window.axaml (minimum)
 ````Xml
 <Window xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl">
+    xmlns:si="clr-namespace:SatialInterfaces.Controls.Calendar;assembly=CalendarControl">
     <Grid>
         <si:CalendarControl />
     </Grid>
@@ -60,7 +60,7 @@ It's even better to specify the item template with binding to your view model
 ````Xml
 <Window xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:si="clr-namespace:SatialInterfaces.Controls;assembly=CalendarControl">
+    xmlns:si="clr-namespace:SatialInterfaces.Controls.Calendar;assembly=CalendarControl">
     <Grid>
         <si:CalendarControl>
             <si:CalendarControl.ItemTemplate>
