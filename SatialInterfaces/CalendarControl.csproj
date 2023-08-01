@@ -2,6 +2,7 @@
     <PropertyGroup>
         <Authors>Satial Interfaces</Authors>
         <Company>Satial Interfaces</Company>
+        <Description>CalendarControl is a calendar control (week view) for Avalonia.</Description>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
         <PackageId>CalendarControl.Avalonia</PackageId>
