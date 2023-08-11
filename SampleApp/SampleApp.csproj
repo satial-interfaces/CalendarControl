@@ -11,10 +11,10 @@
         <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.2" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.2" />
-        <PackageReference Include="FluentAvaloniaUI" Version="2.0.0" />
+        <PackageReference Include="Avalonia" Version="11.0.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.3" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.3" />
+        <PackageReference Include="FluentAvaloniaUI" Version="2.0.1" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="../SatialInterfaces/CalendarControl.csproj" />
