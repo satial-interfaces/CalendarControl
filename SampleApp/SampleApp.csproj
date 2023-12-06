@@ -3,7 +3,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <TrimMode>copyused</TrimMode>
     </PropertyGroup>
     <ItemGroup>
@@ -11,9 +11,9 @@
         <None Remove=".gitignore" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.0.5" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
+        <PackageReference Include="Avalonia" Version="11.0.6" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.0.6" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.0.4" />
     </ItemGroup>
     <ItemGroup>
