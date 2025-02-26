@@ -57,6 +57,7 @@ public partial class CalendarControl : ContentControl
 	{
 		FocusableProperty.OverrideDefaultValue<CalendarControl>(true);
 
+		FirstDayOfWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.FirstDayOfWeekChanged(e));
 		ItemsProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.ItemsChanged(e));
 		BeginOfTheDayProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.BeginOfTheDayChanged(e));
 		CurrentWeekProperty.Changed.AddClassHandler<CalendarControl>((x, e) => x.CurrentWeekChanged(e));
@@ -376,6 +377,17 @@ public partial class CalendarControl : ContentControl
 
 		for (var i = 0; i < appointments.Count; i++)
 			appointments[i].IsSelected = i == appointmentIndex;
+	}
+
+	/// <summary>
+	/// First day of week changed event
+	/// </summary>
+	/// <param name="e">Argument for the event</param>
+	void FirstDayOfWeekChanged(AvaloniaPropertyChangedEventArgs e)
+	{
+		if (e.NewValue is not DayOfWeek _) return;
+		CreateWeek(CurrentWeek);
+		UpdateItems(Items, SelectedIndex);
 	}
 
 	/// <summary>
